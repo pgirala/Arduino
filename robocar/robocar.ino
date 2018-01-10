@@ -1,46 +1,52 @@
-#include <IRremote.h>
-
-int US_PIN = 7;
-int MOTOR_PIN = 11;
-int RC_PIN = 8;
+//#include <IRremote.h>
 
 // Control remoto IR
-int ACELERAR = 20655;
-int FRENAR = 4335;
-int PARAR_ARRANCAR = -24481;
+const int RC_PIN = 8;
+const int ACELERAR = 20655;
+const int FRENAR = 4335;
+const int PARAR_ARRANCAR = -24481;
 
-IRrecv irrecv(RC_PIN);
+//IRrecv irrecv(RC_PIN);
 
 // Control de velocidad
-int VELOCIDAD_MAXIMA = 255;
-int VARIACION_VELOCIDAD = 5;
+const int VELOCIDAD_MAXIMA = 255;
+const int VARIACION_VELOCIDAD = 5;
 
 // Control de distancia
-int DISTANCIA_SEGURIDAD = 20; // centímetros
+const int ECHO_PIN= 5;
+const int TRIGGER_PIN = 6;
+const int DISTANCIA_SEGURIDAD = 20; // centímetros
+
+// Motor
+const int MOTOR_PIN = 11;
 
 void setup()
 {
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, LOW);    // desactiva el led de prueba que, en caso contrario, quedaría encendido
 
-  pinMode(US_PIN, INPUT);
+  pinMode(TRIGGER_PIN, OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
   pinMode(MOTOR_PIN, OUTPUT);
-  irrecv.enableIRIn(); // Start the receiver
+  
+//  irrecv.enableIRIn(); // Start the receiver
   
   Serial.begin(9600);
   
   while (! Serial);
-    Serial.println("Speed 0 to " + VELOCIDAD_MAXIMA);
+    Serial.println("Speed 0 to 255");
 }
 
 void loop()
 {
+  Serial.println(hayObstaculo());
   ajustarVelocidad(leerVelocidad(), recibirOrdenCR());
 }
 
 int recibirOrdenCR()
 {
-  decode_results results;
+  return FRENAR;
+/*  decode_results results;
   int ordenRC = -1;
   
   if (irrecv.decode(&results))
@@ -49,7 +55,7 @@ int recibirOrdenCR()
     irrecv.resume(); // Receive the next value
   }
 
-  return ordenRC;
+  return ordenRC;*/
 }
 
 int leerVelocidad()
@@ -57,6 +63,7 @@ int leerVelocidad()
   if (Serial.available()) // se ha suministrado una nueva velocidad
   {
     int nuevaVelocidad = Serial.parseInt();
+
     if (nuevaVelocidad >= 0 && nuevaVelocidad <= 255) 
       return nuevaVelocidad;
   }  
@@ -93,25 +100,21 @@ int determinarVelocidad(int velocidadActual, int velocidadSolicitada, int ordenR
 
 boolean hayObstaculo() 
 {
-  long cm = readUltrasonicDistanceSpace(US_PIN);
+  long cm = ping(TRIGGER_PIN, ECHO_PIN);
   return cm >= 0 and cm <= DISTANCIA_SEGURIDAD;
 }
 
-long readUltrasonicDistanceSpace(int pin)
-{
-  return 0.01723 * readUltrasonicDistanceTime(pin); // in centimeters
-}
-
-long readUltrasonicDistanceTime(int pin)
-{
-  pinMode(pin, OUTPUT);  // Clear the trigger
-  digitalWrite(pin, LOW);
-  delayMicroseconds(2);
-  // Sets the pin on HIGH state for 10 micro seconds
-  digitalWrite(pin, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(pin, LOW);
-  pinMode(pin, INPUT);
-  // Reads the pin, and returns the sound wave travel time in microseconds
-  return pulseIn(pin, HIGH);
+int ping(int TriggerPin, int EchoPin) {
+   long duration, distanceCm;
+   
+   digitalWrite(TriggerPin, LOW);  //para generar un pulso limpio ponemos a LOW 4us
+   delayMicroseconds(4);
+   digitalWrite(TriggerPin, HIGH);  //generamos Trigger (disparo) de 10us
+   delayMicroseconds(10);
+   digitalWrite(TriggerPin, LOW);
+   
+   duration = pulseIn(EchoPin, HIGH);  //medimos el tiempo entre pulsos, en microsegundos
+   
+   distanceCm = duration * 10 / 292/ 2;   //convertimos a distancia, en cm
+   return distanceCm;
 }
