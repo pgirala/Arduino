@@ -1,12 +1,15 @@
-//#include <IRremote.h>
+#include <IRremote.h>
 
 // Control remoto IR
-const int RC_PIN = 8;
-const int ACELERAR = 20655;
-const int FRENAR = 4335;
-const int PARAR_ARRANCAR = -24481;
+const int RC_PIN = 9;
+const int KEY_PLUS = 0xFFA857;
+const int KEY_MINUS = 0xFFE01F;
+const int KEY_PAUSE = 0xFFC23D;
+const int KEY_REPEAT = 0xFFFFFFFF;
 
-//IRrecv irrecv(RC_PIN);
+// Infrarrojos
+const int RECV_PIN = 7;
+IRrecv irrecv(RC_PIN);
 
 // Control de velocidad
 const int VELOCIDAD_MAXIMA = 255;
@@ -18,18 +21,23 @@ const int TRIGGER_PIN = 6;
 const int DISTANCIA_SEGURIDAD = 20; // centímetros
 
 // Motor
-const int MOTOR_PIN = 11;
+const int SEGUIR = 0;
+const int ACELERAR = 1;
+const int FRENAR = 2;
+const int PARAR_ARRANCAR = 3;
+const int MOTOR_PIN = 4;
 
 void setup()
 {
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, LOW);    // desactiva el led de prueba que, en caso contrario, quedaría encendido
 
-  pinMode(TRIGGER_PIN, OUTPUT);
+  pinMode(TRIGGER_PIN, OUTPUT); // Ultrasonidos
   pinMode(ECHO_PIN, INPUT);
-  pinMode(MOTOR_PIN, OUTPUT);
   
-//  irrecv.enableIRIn(); // Start the receiver
+  pinMode(MOTOR_PIN, OUTPUT); // Motor
+  
+  irrecv.enableIRIn(); // Start the IR receiver
   
   Serial.begin(9600);
   
@@ -39,23 +47,38 @@ void setup()
 
 void loop()
 {
-  Serial.println(hayObstaculo());
   ajustarVelocidad(leerVelocidad(), recibirOrdenCR());
 }
 
 int recibirOrdenCR()
 {
-  return FRENAR;
-/*  decode_results results;
-  int ordenRC = -1;
+  decode_results results;
+  
+  int ordenRC = SEGUIR;
   
   if (irrecv.decode(&results))
   {
-    ordenRC = results.value;
+    int valorDevuelto = results.value;
+    
+    switch (valorDevuelto)
+    {
+      case KEY_PLUS:
+        ordenRC = ACELERAR;
+        break;
+      case KEY_MINUS:
+        ordenRC = FRENAR;
+        break;
+      case KEY_PAUSE:
+        ordenRC = PARAR_ARRANCAR;
+        break;
+      case KEY_REPEAT:
+        ordenRC = SEGUIR;
+        break;
+    }
     irrecv.resume(); // Receive the next value
   }
 
-  return ordenRC;*/
+  return ordenRC;
 }
 
 int leerVelocidad()
@@ -73,15 +96,17 @@ int leerVelocidad()
 void ajustarVelocidad(int velocidadSolicitada, int ordenRC)
 {
   static int velocidad = 0;
-  
-  velocidad = determinarVelocidad(velocidad, velocidadSolicitada, ordenRC);
-  analogWrite(MOTOR_PIN, (hayObstaculo() ? 0 : velocidad)); // si hay un obstaculo se para
+  velocidad = (hayObstaculo() ? 0 : determinarVelocidad(velocidad, velocidadSolicitada, ordenRC));
+  analogWrite(MOTOR_PIN, velocidad); // si hay un obstaculo se para
 }
 
 int determinarVelocidad(int velocidadActual, int velocidadSolicitada, int ordenRC)
 {
   if (velocidadSolicitada >= 0 && velocidadActual != velocidadSolicitada)
     return velocidadSolicitada;
+
+  if (ordenRC == SEGUIR)
+    return velocidadActual;
   
   if (ordenRC == ACELERAR)
     return (velocidadActual + VARIACION_VELOCIDAD >= VELOCIDAD_MAXIMA ? VELOCIDAD_MAXIMA : velocidadActual + VARIACION_VELOCIDAD);
@@ -97,6 +122,8 @@ int determinarVelocidad(int velocidadActual, int velocidadSolicitada, int ordenR
   
   return velocidadActual;
 }
+
+// Ultrasonidos
 
 boolean hayObstaculo() 
 {
