@@ -1,23 +1,20 @@
 #include <IRremote.h>
 
 // Control remoto IR
-const int RC_PIN = 9;
+const int RC_PIN = 31;
+IRrecv irrecv(RC_PIN);
 const int KEY_PLUS = 0xFFA857;
 const int KEY_MINUS = 0xFFE01F;
 const int KEY_PAUSE = 0xFFC23D;
 const int KEY_REPEAT = 0xFFFFFFFF;
-
-// Infrarrojos
-const int RECV_PIN = 7;
-IRrecv irrecv(RC_PIN);
 
 // Control de velocidad
 const int VELOCIDAD_MAXIMA = 255;
 const int VARIACION_VELOCIDAD = 5;
 
 // Control de distancia
-const int ECHO_PIN= 5;
-const int TRIGGER_PIN = 6;
+const int ECHO_PIN= 33;
+const int TRIGGER_PIN = 35;
 const int DISTANCIA_SEGURIDAD = 20; // centímetros
 
 // Motor
@@ -97,6 +94,7 @@ void ajustarVelocidad(int velocidadSolicitada, int ordenRC)
 {
   static int velocidad = 0;
   velocidad = (hayObstaculo() ? 0 : determinarVelocidad(velocidad, velocidadSolicitada, ordenRC));
+Serial.println(velocidad);
   analogWrite(MOTOR_PIN, velocidad); // si hay un obstaculo se para
 }
 
