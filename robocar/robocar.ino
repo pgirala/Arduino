@@ -1,4 +1,5 @@
 #include <IRremote.h>
+#include <AFMotor.h>
 
 // Control remoto IR
 const int RC_PIN = 31;
@@ -18,6 +19,14 @@ const int TRIGGER_PIN = 35;
 const int DISTANCIA_SEGURIDAD = 20; // centímetros
 
 // Motor
+#define MAX_SPEED 120 // sets speed of DC traction motors to 120/256 or about 47% of full speed - to reduce power draining.
+#define MOTORS_CALIBRATION_OFFSET 3 // this sets offset to allow for differences between the DC motors
+
+AF_DCMotor leftBackMotor(1, MOTOR34_1KHZ); // create motor #1 using M1 output on Motor Drive Shield, set to 1kHz PWM frequency
+AF_DCMotor rightBackMotor(2, MOTOR34_1KHZ); // create motor #2 using M2 output on Motor Drive Shield, set to 1kHz PWM frequency
+AF_DCMotor rightFrontMotor(3, MOTOR34_1KHZ); // create motor #3 using M3 output on Motor Drive Shield, set to 1kHz PWM frequency
+AF_DCMotor leftFrontMotor(4, MOTOR34_1KHZ); // create motor #4 using M4 output on Motor Drive Shield, set to 1kHz PWM frequency
+
 const int SEGUIR = 0;
 const int ACELERAR = 1;
 const int FRENAR = 2;
