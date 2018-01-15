@@ -1,5 +1,6 @@
 #include <IRremote.h>
 #include <AFMotor.h>
+#include "Coche.h"
 
 // Teclas del control remoto por IR
 #define RC_PIN 31
@@ -9,6 +10,9 @@
 #define KEY_REPEAT 0xFFFFFFFF
 
 IRrecv irrecv(RC_PIN);
+
+// Coche
+Coche coche;
 
 // Control de distancia por ultrasonidos
 #define ECHO_PIN 33
