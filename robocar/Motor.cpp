@@ -2,9 +2,15 @@
  * Motor.cpp - abstracción del motor de un coche robótico
  */
  
-#include "Arduino.h"
-
 #include "Motor.h"
+
+Motor::Motor(int posicionHorizontal, int posicionVertical, int ajuste = 0) : 
+              _posicionHorizontal (posicionHorizontal), 
+              _posicionVertical (posicionVertical),
+              _ajuste (ajuste) {
+  setVelocidad(0); // parado
+  setReverso(false); // modo directo
+}
 
 void Motor::setVelocidad(int velocidad) {
   _velocidad = velocidad;

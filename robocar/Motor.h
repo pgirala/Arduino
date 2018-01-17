@@ -6,6 +6,7 @@
 #define Motor_h
  
 #include "Arduino.h"
+#include <AFMotor.h>
 
 //posiciones horizontales
 #define IZQUIERDA 0
@@ -24,7 +25,11 @@ class Motor {
     // posicionamiento
     int _posicionHorizontal; // izquierda o derecha
     int _posicionVertical; // delante o detrás
+    // motor real
+    AF_DCMotor * motorReal; // el motor de verdad
   public:
+    Motor(int posicionHorizontal, int posicionVertical, int ajuste = 0);
+  
     void setVelocidad(int velocidad);
     int getVelocidad();
 
