@@ -10,6 +10,7 @@ void Coche::setVelocidad(int velocidad) {
 
 void Coche::setVelocidadMotores(int velocidad, int posicionHorizontal, int posicionVertical) {
   for (int i = 1; NUMERO_MOTORES; i++)
-    _motores[i].setVelocidad(velocidad);
+    if (_motores[i].isColocado(posicionHorizontal, posicionVertical))
+      _motores[i].setVelocidad(velocidad);
 }
 
