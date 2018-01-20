@@ -4,12 +4,21 @@
  
 #include "Motor.h"
 
-Motor::Motor(int posicionHorizontal, int posicionVertical, int ajuste = 0) : 
+Motor::Motor(int numero, int posicionHorizontal, int posicionVertical, int ajuste = 0) : 
               _posicionHorizontal (posicionHorizontal), 
               _posicionVertical (posicionVertical),
               _ajuste (ajuste) {
+  _motorReal = new AF_DCMotor(numero, MOTOR34_1KHZ);
+  setSentidoGiro(INDEFINIDO);
   setVelocidad(0); // parado
-  setReverso(false); // modo directo
+}
+
+void Motor::setSentidoGiro(int sentidoGiro) {
+  _sentidoGiro = sentidoGiro;
+}
+
+int Motor::getSentidoGiro() {
+  return _sentidoGiro;
 }
 
 void Motor::setVelocidad(int velocidad) {
@@ -26,18 +35,6 @@ void Motor::setAjuste(int Ajuste) {
 
 int Motor::getAjuste() {
   return _ajuste;
-}
-
-void Motor::setReverso(boolean reverso) {
-  _reverso = reverso;
-}
-
-boolean Motor::isReverso() {
-  return _reverso;
-}
-
-boolean Motor::isDirecto() {
-  return !isReverso();
 }
 
 void Motor::setPosicionHorizontal(int posicionHorizontal) {
