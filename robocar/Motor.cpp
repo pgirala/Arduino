@@ -3,6 +3,7 @@
  */
  
 #include "Motor.h"
+#include "Coche.h"
 
 Motor::Motor(int numero, int posicionHorizontal, int posicionVertical, int ajuste = 0) : 
               _posicionHorizontal (posicionHorizontal), 
@@ -52,4 +53,9 @@ void Motor::setPosicionVertical(int posicionVertical) {
 
 int Motor::getPosicionVertical() {
   return _posicionVertical;
+}
+
+boolean Motor::isColocado(int posicionHorizontal, int posicionVertical) {
+  return (posicionHorizontal == INDIFERENTE || posicionHorizontal == getPosicionHorizontal())
+        and (posicionVertical == INDIFERENTE || posicionVertical == getPosicionVertical());
 }

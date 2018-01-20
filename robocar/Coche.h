@@ -11,13 +11,16 @@
 
 #define NUMERO_MOTORES 4
 
-//posiciones horizontales en el chasis
-#define IZQUIERDA 0
-#define DERECHA 1
+// posiciones en el chasis
+#define INDIFERENTE 0
 
-//posiciones verticales en el chasis
-#define DELANTE 0
-#define DETRAS 1
+// horizontales
+#define IZQUIERDA 1
+#define DERECHA 2
+
+// verticales
+#define DELANTE 1
+#define DETRAS 2
 
 class Coche {
   private:
