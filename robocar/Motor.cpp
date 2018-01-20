@@ -23,6 +23,7 @@ int Motor::getSentidoGiro() {
 
 void Motor::setVelocidad(int velocidad) {
   _velocidad = velocidad;
+  _motorReal->setSpeed(velocidad);
 }
 
 int Motor::getVelocidad() {
