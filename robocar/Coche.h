@@ -9,9 +9,11 @@
 
 #include "Motor.h"
 
+// motores
+
 #define NUMERO_MOTORES 4
 
-// posiciones en el chasis
+// posiciones en el chasis de los motores
 #define INDIFERENTE 0
 
 // horizontales
@@ -21,6 +23,16 @@
 // verticales
 #define DELANTE 1
 #define DETRAS 2
+
+// direcciones del movimiento
+
+// horizontales
+#define GIRO_IZQUIERDA 1
+#define GIRO_DERECHA 2
+
+// verticales
+#define ADELANTE 1
+#define ATRAS 2
 
 class Coche {
   private:
