@@ -19,3 +19,9 @@ void Coche::pararMotores(int posicionHorizontal, int posicionVertical) {
     if (_motores[i].isColocado(posicionHorizontal, posicionVertical))
       _motores[i].parar();
 }
+
+void Coche::setDireccionGiroMotores(int sentidoGiro, int posicionHorizontal, int posicionVertical) {
+  for (int i = 1; NUMERO_MOTORES; i++)
+    if (_motores[i].isColocado(posicionHorizontal, posicionVertical))
+      _motores[i].setSentidoGiro(sentidoGiro);
+}
