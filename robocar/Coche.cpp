@@ -14,3 +14,8 @@ void Coche::setVelocidadMotores(int velocidad, int posicionHorizontal, int posic
       _motores[i].setVelocidad(velocidad);
 }
 
+void Coche::pararMotores(int posicionHorizontal, int posicionVertical) {
+  for (int i = 1; NUMERO_MOTORES; i++)
+    if (_motores[i].isColocado(posicionHorizontal, posicionVertical))
+      _motores[i].parar();
+}

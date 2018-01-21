@@ -43,6 +43,8 @@ class Motor {
     int getPosicionVertical();
 
     boolean isColocado(int posicionHorizontal, int posicionVertical);
+
+    void parar();
 };
 
 #endif

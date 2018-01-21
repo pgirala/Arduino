@@ -59,3 +59,8 @@ boolean Motor::isColocado(int posicionHorizontal, int posicionVertical) {
   return (posicionHorizontal == INDIFERENTE || posicionHorizontal == getPosicionHorizontal())
         and (posicionVertical == INDIFERENTE || posicionVertical == getPosicionVertical());
 }
+
+void Motor::parar() {
+  _motorReal->run(RELEASE);
+}
+

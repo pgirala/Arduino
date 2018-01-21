@@ -27,7 +27,9 @@ class Coche {
     int _velocidad;
     Motor _motores[NUMERO_MOTORES] = {Motor(1, IZQUIERDA, DETRAS), Motor(2, DERECHA, DETRAS), Motor(3, DERECHA, DELANTE), Motor(4, IZQUIERDA, DELANTE)};
     void setVelocidadMotores(int velocidad, int posicionHorizontal, int posicionVertical);
-    
+    void pararMotores(int posicionHorizontal, int posicionVertical);
+    void irAdelante(int posicionHorizontal, int posicionVertical);
+    void irAtrás(int posicionHorizontal, int posicionVertical);
   public:
     void setVelocidad(int velocidad);
 };
