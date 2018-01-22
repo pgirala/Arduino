@@ -10,16 +10,16 @@ Motor::Motor(int numero, int posicionHorizontal, int posicionVertical, int ajust
               _posicionVertical (posicionVertical),
               _ajuste (ajuste) {
   _motorReal = new AF_DCMotor(numero, MOTOR34_1KHZ);
-  setSentidoGiro(INDEFINIDO);
+  setSentidoRotacion(SentidoRotacion::Directa);
   setVelocidad(0); // parado
 }
 
-void Motor::setSentidoGiro(int sentidoGiro) {
-  _sentidoGiro = sentidoGiro;
+void Motor::setSentidoRotacion(SentidoRotacion sentidoRotacion) {
+  _sentidoRotacion = sentidoRotacion;
 }
 
-int Motor::getSentidoGiro() {
-  return _sentidoGiro;
+SentidoRotacion Motor::getSentidoRotacion() {
+  return _sentidoRotacion;
 }
 
 void Motor::setVelocidad(int velocidad) {

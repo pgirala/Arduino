@@ -8,15 +8,12 @@
 #include "Arduino.h"
 #include <AFMotor.h>
 
-//dirección de giro
-#define INDEFINIDO 0
-#define DIRECTO 1
-#define REVERSO 2
+enum class SentidoRotacion {Directa, Reversa};
 
 class Motor {
   private:
-    // giro
-    int _sentidoGiro = INDEFINIDO;
+    // Rotación del eje del motor
+    SentidoRotacion _sentidoRotacion;
     int _velocidad = 0;
     int _ajuste = 0; // para calibrar diferencias en el comportamiento de los motores
     // posicionamiento
@@ -27,8 +24,8 @@ class Motor {
   public:
     Motor(int numero, int posicionHorizontal, int posicionVertical, int ajuste = 0);
   
-    void setSentidoGiro(int sentidoGiro);
-    int getSentidoGiro();
+    void setSentidoRotacion(SentidoRotacion sentidoRotacion);
+    SentidoRotacion getSentidoRotacion();
 
     void setVelocidad(int velocidad);
     int getVelocidad();

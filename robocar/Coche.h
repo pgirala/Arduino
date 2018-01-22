@@ -14,6 +14,7 @@
 #define NUMERO_MOTORES 4
 
 // posiciones en el chasis de los motores
+
 #define INDIFERENTE 0
 
 // horizontales
@@ -39,7 +40,7 @@ class Coche {
     int _velocidad;
     Motor _motores[NUMERO_MOTORES] = {Motor(1, IZQUIERDA, DETRAS), Motor(2, DERECHA, DETRAS), Motor(3, DERECHA, DELANTE), Motor(4, IZQUIERDA, DELANTE)};
     // acciones dirigidas a los motores
-    void setSentidoGiroMotores(int sentidoGiro, int posicionHorizontal, int posicionVertical);
+    void setSentidoRotacion(SentidoRotacion sentidoRotacion, int posicionHorizontal, int posicionVertical);
     void setVelocidadMotores(int velocidad, int posicionHorizontal, int posicionVertical);
     void pararMotores(int posicionHorizontal, int posicionVertical);
   public:
