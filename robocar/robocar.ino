@@ -1,18 +1,13 @@
-#include <IRremote.h>
-#include <AFMotor.h>
 #include "Coche.h"
+#include "ControlRemoto.h"
 
-// Teclas del control remoto por IR
-#define RC_PIN 31
-#define KEY_PLUS 0xFFA857
-#define KEY_MINUS 0xFFE01F
-#define KEY_PAUSE 0xFFC23D
-#define KEY_REPEAT 0xFFFFFFFF
-
-IRrecv irrecv(RC_PIN);
-
-// Coche
+// coche
 Coche coche;
+
+// control remoto
+#define CR_PIN 31
+
+ControlRemoto controlRemoto(CR_PIN);
 
 // Control de distancia por ultrasonidos
 #define ECHO_PIN 33
@@ -21,27 +16,16 @@ Coche coche;
 #define COLL_DIST 20 // sets distance at which the Obstacle avoiding Robot stops and reverses to 10cm
 #define TURN_DIST COLL_DIST+10 // sets distance at which the Obstacle avoiding Robot looks away from object (not reverse) to 20cm (10+10)
 
-// Motor
-#define MAX_SPEED 120  // sets speed of DC traction motors to 120/256 or about 47% of full speed - to reduce power draining.
-#define MOTORS_CALIBRATION_OFFSET 3 // this sets offset to allow for differences between the DC motors
-#define VARIACION_VELOCIDAD 5
-
 // Ordenes
-#define IR_ADELANTE 0
-#define IR_ATRAS 1
-#define PARAR_ARRANCAR 2 // para si está en funcionamiento o arranca si está parado
-#define GIRAR_IZDA 3
-#define GIRAR_DCHA 4
-#define ACELERAR 5
-#define FRENAR 6
-
-AF_DCMotor leftRearMotor(1, MOTOR34_1KHZ); // create motor #1 using M1 output on Motor Drive Shield, set to 1kHz PWM frequency
-AF_DCMotor rightRearMotor(2, MOTOR34_1KHZ); // create motor #2 using M2 output on Motor Drive Shield, set to 1kHz PWM frequency
-AF_DCMotor rightFrontMotor(3, MOTOR34_1KHZ); // create motor #3 using M3 output on Motor Drive Shield, set to 1kHz PWM frequency
-AF_DCMotor leftFrontMotor(4, MOTOR34_1KHZ); // create motor #4 using M4 output on Motor Drive Shield, set to 1kHz PWM frequency
-
-int ordenActiva;
-int velocidadActiva;
+#define INDEFINIDA 0
+#define PARAR 1 
+#define ARRANCAR 2 
+#define IR_ADELANTE 3
+#define IR_ATRAS 4
+#define GIRAR_IZDA 5
+#define GIRAR_DCHA 6
+#define ACELERAR 7
+#define FRENAR 8
 
 //-------------------------------------------------------------------------------------------------------------------------------------
 
@@ -53,44 +37,34 @@ void setup()
   pinMode(TRIG_PIN, OUTPUT); // Ultrasonidos
   pinMode(ECHO_PIN, INPUT);
   
-  irrecv.enableIRIn(); // Start the IR receiver
+//  irrecv.enableIRIn(); // Start the IR receiver
   
   Serial.begin(9600);
   
-  while (! Serial);
-    Serial.println("Speed 0 to 255");
-
-  // inicia los motores
-  ordenActiva = IR_ADELANTE;
-  velocidadActiva = 0;
-  moveForward(); // parado con tendencia a moverse hacia adelante
+  // recibir orden (por IR, teclado o cualquier otro medio; método de este módulo; habrá un conjunto de órdenes; para el sensor de IR se necesitará un método que transforme las teclas pulsadas en órdenes)
+  // obedecer orden (método de Coche)
+  //    1. obtener el estado solicitado aplicando la orden al actual estado solicitado.
+  //    2. sincronizar el estado solicitado respecto al estado actual. Provocará tomar acciones:
+  //        2.1. Parar motor, girar izquierda, girar derecha, ir hacia adelante, ir hacia atrás (cada una de ellas usará los métodos de Motor para que se lleven a cabo). Cuando se cumplimente una acción se actualizará el estado actual.
+  //        2.2. Las acciones que provoquen movimiento (es decir, todas salvo parar) comprobarán que no haya un obstáculo consultando el sensor de obstáculos que controle su existencia en el sentido de la marcha. Como todavía no hay sensor trasero siempre impedirá el movimiento hacia atrás.
+  //
+  // hay que hacer una prueba, para ello:
+  //    1. Probará que se dan las órdenes adecuadas a los motores según las situaciones posibles que se pueden dar.
+  //    2. Cuando se ejecute en modo prueba se desactivarán totalmente los motores (accionadores) y los sensores tomarán los valores establecidos por la prueba, es decir, el código deberá tener directivas que se aplicarán en función del modo de ejecución.
 }
 
 void loop()
 {
-  ajustarVelocidad(leerVelocidad(), recibirOrdenCR());
+  coche.funcionar(recibirOrden());
 }
 
-//-------------------------------------------------------------------------------------------------------------------------------------
-
-// Puerto serie
-
-int leerVelocidad()
-{
-  if (Serial.available()) // se ha suministrado una nueva velocidad
-  {
-    int nuevaVelocidad = Serial.parseInt();
-
-    if (nuevaVelocidad >= 0 && nuevaVelocidad <= 255) 
-      return nuevaVelocidad;
-  }  
-  return -1;
+int recibirOrden() {
+  // órdenes procedentes del control de infrarrojos
+  return INDEFINIDA;
 }
-
-//-------------------------------------------------------------------------------------------------------------------------------------
 
 // Ultrasonidos
-
+/*
 int recibirOrdenCR()
 {
   decode_results results;
@@ -109,8 +83,8 @@ int recibirOrdenCR()
       case KEY_MINUS:
         ordenRC = FRENAR;
         break;
-      case KEY_PAUSE:
-        ordenRC = PARAR_ARRANCAR;
+//      case KEY_PAUSE:
+//        ordenRC = PARAR_ARRANCAR;
         break;
       case KEY_REPEAT:
         ordenRC = IR_ADELANTE;
@@ -121,7 +95,7 @@ int recibirOrdenCR()
 
   return ordenRC;
 }
-
+*/
 //-------------------------------------------------------------------------------------------------------------------------------------
 
 boolean hayObstaculo() 
@@ -146,7 +120,7 @@ int ping(int TriggerPin, int EchoPin) {
    distanceCm = duration * 10 / 292/ 2;   //convertimos a distancia, en cm
    return distanceCm;
 }
-
+/*
 //-------------------------------------------------------------------------------------------------------------------------------------
 
 // Motores
@@ -176,34 +150,30 @@ int determinarVelocidad(int velocidadActual, int velocidadSolicitada, int ordenR
     return (velocidadActual - VARIACION_VELOCIDAD <= 0 ? 0 : velocidadActual - VARIACION_VELOCIDAD);
 
   if (ordenRC == PARAR_ARRANCAR)
-    if (velocidadActual == 0)
+    if (velocidadActual != 0)
       return VARIACION_VELOCIDAD;
     else
       return 0;
   
   return velocidadActual;
-}
+}*/
 
 //-------------------------------------------------------------------------------------------------------------------------------------
-
+/*
 void checkForward() {
-  if (ordenActiva == IR_ADELANTE) {
-    leftFrontMotor.run(FORWARD);  // ensure motors are going forward
-    leftRearMotor.run(FORWARD); 
-    rightFrontMotor.run(FORWARD);
-    rightRearMotor.run(FORWARD);
-  }
+  leftFrontMotor.run(FORWARD);  // ensure motors are going forward
+  leftRearMotor.run(FORWARD); 
+  rightFrontMotor.run(FORWARD);
+  rightRearMotor.run(FORWARD);
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------
 
 void checkBackward() {
-  if (ordenActiva == IR_ATRAS) {
-    leftFrontMotor.run(BACKWARD);  // ensure motors are going backward
-    leftRearMotor.run(BACKWARD);
-    rightFrontMotor.run(BACKWARD);
-    rightRearMotor.run(BACKWARD);
-  }
+  leftFrontMotor.run(BACKWARD);  // ensure motors are going backward
+  leftRearMotor.run(BACKWARD);
+  rightFrontMotor.run(BACKWARD);
+  rightRearMotor.run(BACKWARD);
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------
@@ -223,11 +193,10 @@ void setSpeed(int speedSet) {
   rightFrontMotor.setSpeed(speedSet);
   rightRearMotor.setSpeed(speedSet);
 }
-
+*/
 //-------------------------------------------------------------------------------------------------------------------------------------
-
+/*
 void moveForward() {
-  ordenActiva = IR_ADELANTE;
   leftFrontMotor.run(FORWARD);      // turn it on going forward
   leftRearMotor.run(FORWARD);      // turn it on going forward
   rightFrontMotor.run(FORWARD);      // turn it on going forward
@@ -239,11 +208,10 @@ void moveForward() {
     delay(5);
   }
 }
-
+*/
 //-------------------------------------------------------------------------------------------------------------------------------------
-
+/*
 void moveBackward() {
-  ordenActiva = IR_ATRAS;
   leftFrontMotor.run(BACKWARD);      // turn it on going forward
   leftRearMotor.run(BACKWARD);      // turn it on going forward
   rightFrontMotor.run(BACKWARD);     // turn it on going forward
@@ -255,17 +223,15 @@ void moveBackward() {
     delay(5);
   }
 }
-
+*/
 //-------------------------------------------------------------------------------------------------------------------------------------
-
+/*
 void turnRight() {
-  ordenActiva = GIRAR_DCHA;
   leftFrontMotor.run(FORWARD);     // turn left motors forward
   leftRearMotor.run(FORWARD); 
   rightFrontMotor.run(BACKWARD);      // turn right motors backward
   rightRearMotor.run(BACKWARD); 
   delay(400); // run motors this way for 400ms
-  ordenActiva = IR_ADELANTE;
   leftFrontMotor.run(FORWARD);      // turn it on going forward
   leftRearMotor.run(FORWARD);
   rightFrontMotor.run(FORWARD); 
@@ -274,13 +240,11 @@ void turnRight() {
 
 //-------------------------------------------------------------------------------------------------------------------------------------
 void turnLeft() {
-  ordenActiva = GIRAR_IZDA;
   leftFrontMotor.run(BACKWARD);     // turn left motors backward
   leftRearMotor.run(BACKWARD); 
   rightFrontMotor.run(FORWARD);      // turn right motors forward
   rightRearMotor.run(FORWARD); 
   delay(400); // run motors this way for 400ms
-  ordenActiva = IR_ADELANTE;
   leftFrontMotor.run(FORWARD);      // turn it on going forward
   leftRearMotor.run(FORWARD);
   rightFrontMotor.run(FORWARD); 
@@ -306,7 +270,7 @@ void lookLeft() {
   leftFrontMotor.run(FORWARD);
   leftRearMotor.run(FORWARD);
 }
-
+*/
 //-------------------------------------------------------------------------------------------------------------------------------------
 
 

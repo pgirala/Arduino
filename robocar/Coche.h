@@ -45,6 +45,7 @@ class Coche {
   public:
     // acciones dirigidas al coche
     void setVelocidad(int velocidad);
+    void funcionar(int orden);
 };
 
 #endif
