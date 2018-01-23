@@ -3,9 +3,8 @@
  */
  
 #include "Motor.h"
-#include "Coche.h"
 
-Motor::Motor(int numero, int posicionHorizontal, int posicionVertical, int ajuste = 0) : 
+Motor::Motor(int numero, PosicionChasisHorizontal posicionHorizontal, PosicionChasisVertical posicionVertical, int ajuste = 0) : 
               _posicionHorizontal (posicionHorizontal), 
               _posicionVertical (posicionVertical),
               _ajuste (ajuste) {
@@ -31,33 +30,9 @@ int Motor::getVelocidad() {
   return _velocidad;
 }
 
-void Motor::setAjuste(int Ajuste) {
-  _ajuste = Ajuste;
-}
-
-int Motor::getAjuste() {
-  return _ajuste;
-}
-
-void Motor::setPosicionHorizontal(int posicionHorizontal) {
-  _posicionHorizontal = posicionHorizontal;
-}
-
-int Motor::getPosicionHorizontal() {
-  return _posicionHorizontal;
-}
-
-void Motor::setPosicionVertical(int posicionVertical) {
-  _posicionVertical = posicionVertical;
-}
-
-int Motor::getPosicionVertical() {
-  return _posicionVertical;
-}
-
-boolean Motor::isColocado(int posicionHorizontal, int posicionVertical) {
-  return (posicionHorizontal == INDIFERENTE || posicionHorizontal == getPosicionHorizontal())
-        and (posicionVertical == INDIFERENTE || posicionVertical == getPosicionVertical());
+boolean Motor::isColocado(PosicionChasisHorizontal posicionHorizontal, PosicionChasisVertical posicionVertical) {
+  return (posicionHorizontal == PosicionChasisHorizontal::Indiferente || posicionHorizontal == _posicionHorizontal)
+        and (posicionVertical == PosicionChasisVertical::Indiferente || posicionVertical == _posicionVertical); 
 }
 
 void Motor::parar() {

@@ -5,20 +5,35 @@
 #ifndef EstadoMarcha_h
 #define EstadoMarcha_h
 
+// movimiento
+
+#define INCREMENTO_VELOCIDAD 10
+#define VELOCIDAD_MINIMA 0
+#define VELOCIDAD_MAXIMA 200
+
+enum class DireccionMovimientoHorizontal {Nula, Izquierda, Derecha};
+enum class DireccionMovimientoVertical {Adelante, Atras};
+
+// Ordenes que afectan al estado de la marcha
+
+enum class Orden {Indefinida, Parar, Arrancar, IrAdelante, IrAtras, GirarIzquierda, GirarDerecha, Acelerar, Frenar};
+
 class EstadoMarcha {
   private:
-    int _velocidad;
-    int _direccionHorizontal;
-    int _direccionVertical;
+    int _velocidad = 0;
+    DireccionMovimientoHorizontal _direccionHorizontal = DireccionMovimientoHorizontal::Nula;
+    DireccionMovimientoVertical _direccionVertical = DireccionMovimientoVertical::Adelante;
   public:
     void setVelocidad(int velocidad);
     int getVelocidad();
 
-    void setDireccionHorizontal(int direccionHorizontal);
-    int getDireccionHorizontal();
+    void setDireccionHorizontal(DireccionMovimientoHorizontal direccionHorizontal);
+    DireccionMovimientoHorizontal getDireccionHorizontal();
 
-    void setDireccionVertical(int direccionVertical);
-    int getDireccionVertical();
+    void setDireccionVertical(DireccionMovimientoVertical direccionVertical);
+    DireccionMovimientoVertical getDireccionVertical();
+
+    void asumir(Orden orden);
 };
 
 #endif

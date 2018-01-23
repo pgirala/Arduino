@@ -16,17 +16,6 @@ ControlRemoto controlRemoto(CR_PIN);
 #define COLL_DIST 20 // sets distance at which the Obstacle avoiding Robot stops and reverses to 10cm
 #define TURN_DIST COLL_DIST+10 // sets distance at which the Obstacle avoiding Robot looks away from object (not reverse) to 20cm (10+10)
 
-// Ordenes
-#define INDEFINIDA 0
-#define PARAR 1 
-#define ARRANCAR 2 
-#define IR_ADELANTE 3
-#define IR_ATRAS 4
-#define GIRAR_IZDA 5
-#define GIRAR_DCHA 6
-#define ACELERAR 7
-#define FRENAR 8
-
 //-------------------------------------------------------------------------------------------------------------------------------------
 
 void setup()
@@ -36,8 +25,6 @@ void setup()
 
   pinMode(TRIG_PIN, OUTPUT); // Ultrasonidos
   pinMode(ECHO_PIN, INPUT);
-  
-//  irrecv.enableIRIn(); // Start the IR receiver
   
   Serial.begin(9600);
   
@@ -58,44 +45,13 @@ void loop()
   coche.funcionar(recibirOrden());
 }
 
-int recibirOrden() {
+Orden recibirOrden() {
   // órdenes procedentes del control de infrarrojos
-  return INDEFINIDA;
+  return controlRemoto.obtenerOrden();
 }
 
 // Ultrasonidos
-/*
-int recibirOrdenCR()
-{
-  decode_results results;
-  
-  int ordenRC = IR_ADELANTE;
-  
-  if (irrecv.decode(&results))
-  {
-    int valorDevuelto = results.value;
-    
-    switch (valorDevuelto)
-    {
-      case KEY_PLUS:
-        ordenRC = ACELERAR;
-        break;
-      case KEY_MINUS:
-        ordenRC = FRENAR;
-        break;
-//      case KEY_PAUSE:
-//        ordenRC = PARAR_ARRANCAR;
-        break;
-      case KEY_REPEAT:
-        ordenRC = IR_ADELANTE;
-        break;
-    }
-    irrecv.resume(); // Receive the next value
-  }
 
-  return ordenRC;
-}
-*/
 //-------------------------------------------------------------------------------------------------------------------------------------
 
 boolean hayObstaculo() 

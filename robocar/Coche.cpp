@@ -4,28 +4,25 @@
  
 #include "Coche.h"
 
-void Coche::setVelocidad(int velocidad) {
-  _velocidad = velocidad;
+void Coche::funcionar(Orden orden) {
+  _estadoOrdenado.asumir(orden);
 }
 
-void Coche::funcionar(int orden) {
-  // TODO
+void Coche::establecerSentidoRotacion(SentidoRotacion sentidoRotacion, PosicionChasisHorizontal posicionHorizontal, PosicionChasisVertical posicionVertical) {
+  for (int i = 1; NUMERO_MOTORES; i++)
+    if (_motores[i].isColocado(posicionHorizontal, posicionVertical))
+      _motores[i].setSentidoRotacion(sentidoRotacion);
 }
 
-void Coche::setVelocidadMotores(int velocidad, int posicionHorizontal, int posicionVertical) {
+void Coche::establecerVelocidadMotores(int velocidad, PosicionChasisHorizontal posicionHorizontal, PosicionChasisVertical posicionVertical) {
   for (int i = 1; NUMERO_MOTORES; i++)
     if (_motores[i].isColocado(posicionHorizontal, posicionVertical))
       _motores[i].setVelocidad(velocidad);
 }
 
-void Coche::pararMotores(int posicionHorizontal, int posicionVertical) {
+void Coche::pararMotores(PosicionChasisHorizontal posicionHorizontal, PosicionChasisVertical posicionVertical) {
   for (int i = 1; NUMERO_MOTORES; i++)
     if (_motores[i].isColocado(posicionHorizontal, posicionVertical))
       _motores[i].parar();
 }
 
-void Coche::setSentidoRotacion(SentidoRotacion sentidoRotacion, int posicionHorizontal, int posicionVertical) {
-  for (int i = 1; NUMERO_MOTORES; i++)
-    if (_motores[i].isColocado(posicionHorizontal, posicionVertical))
-      _motores[i].setSentidoRotacion(sentidoRotacion);
-}

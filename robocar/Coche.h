@@ -7,46 +7,28 @@
  
 #include "Arduino.h"
 
+#include "EstadoMarcha.h"
 #include "Motor.h"
 
 // motores
 
 #define NUMERO_MOTORES 4
 
-// posiciones en el chasis de los motores
-
-#define INDIFERENTE 0
-
-// horizontales
-#define IZQUIERDA 1
-#define DERECHA 2
-
-// verticales
-#define DELANTE 1
-#define DETRAS 2
-
-// direcciones del movimiento
-
-// horizontales
-#define GIRO_IZQUIERDA 1
-#define GIRO_DERECHA 2
-
-// verticales
-#define ADELANTE 1
-#define ATRAS 2
-
 class Coche {
   private:
-    int _velocidad;
-    Motor _motores[NUMERO_MOTORES] = {Motor(1, IZQUIERDA, DETRAS), Motor(2, DERECHA, DETRAS), Motor(3, DERECHA, DELANTE), Motor(4, IZQUIERDA, DELANTE)};
+    Motor _motores[NUMERO_MOTORES] = {Motor(1, PosicionChasisHorizontal::Izquierda, PosicionChasisVertical::Detras), 
+                                      Motor(2, PosicionChasisHorizontal::Derecha, PosicionChasisVertical::Detras), 
+                                      Motor(3, PosicionChasisHorizontal::Derecha, PosicionChasisVertical::Delante), 
+                                      Motor(4, PosicionChasisHorizontal::Izquierda, PosicionChasisVertical::Delante)};
+    // estados de la marcha
+    EstadoMarcha _estadoActual;
+    EstadoMarcha _estadoOrdenado;
     // acciones dirigidas a los motores
-    void setSentidoRotacion(SentidoRotacion sentidoRotacion, int posicionHorizontal, int posicionVertical);
-    void setVelocidadMotores(int velocidad, int posicionHorizontal, int posicionVertical);
-    void pararMotores(int posicionHorizontal, int posicionVertical);
+    void establecerSentidoRotacion(SentidoRotacion sentidoRotacion, PosicionChasisHorizontal posicionHorizontal, PosicionChasisVertical posicionVertical);
+    void establecerVelocidadMotores(int velocidad, PosicionChasisHorizontal posicionHorizontal, PosicionChasisVertical posicionVertical);
+    void pararMotores(PosicionChasisHorizontal posicionHorizontal, PosicionChasisVertical posicionVertical);
   public:
-    // acciones dirigidas al coche
-    void setVelocidad(int velocidad);
-    void funcionar(int orden);
+    void funcionar(Orden orden);
 };
 
 #endif
