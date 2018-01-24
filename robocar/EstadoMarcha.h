@@ -33,7 +33,8 @@ class EstadoMarcha {
     void setDireccionVertical(DireccionMovimientoVertical direccionVertical);
     DireccionMovimientoVertical getDireccionVertical();
 
-    void asumir(Orden orden);
+    void actualizar(Orden orden);
+    Orden sincronizar(EstadoMarcha estadoObjetivo);
 };
 
 #endif

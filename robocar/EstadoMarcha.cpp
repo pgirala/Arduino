@@ -27,7 +27,7 @@ DireccionMovimientoVertical EstadoMarcha::getDireccionVertical() {
   return _direccionVertical;
 }
 
-void EstadoMarcha::asumir(Orden orden) {
+void EstadoMarcha::actualizar(Orden orden) {
   switch (orden)
   {
     case Orden::Indefinida:
@@ -58,5 +58,11 @@ void EstadoMarcha::asumir(Orden orden) {
       _velocidad = (_velocidad - INCREMENTO_VELOCIDAD > VELOCIDAD_MINIMA ? VELOCIDAD_MINIMA :_velocidad - INCREMENTO_VELOCIDAD);
       break;
    };
+}
+
+Orden EstadoMarcha::sincronizar(EstadoMarcha estadoObjetivo) {
+  // actualiza el estado con las propiedades del estado objetivo y genera la acción a realizar por el coche
+  // para que se comporte según el cambio producido
+  return Orden::Indefinida; // TODO
 }
 

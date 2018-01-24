@@ -5,7 +5,13 @@
 #include "Coche.h"
 
 void Coche::funcionar(Orden orden) {
-  _estadoOrdenado.asumir(orden);
+  _estadoOrdenado.actualizar(orden);
+  Orden ordenEfectiva = _estadoActual.sincronizar(_estadoOrdenado);
+  asumir(ordenEfectiva);
+}
+
+void Coche::asumir(Orden orden) {
+  // TODO
 }
 
 void Coche::establecerSentidoRotacion(SentidoRotacion sentidoRotacion, PosicionChasisHorizontal posicionHorizontal, PosicionChasisVertical posicionVertical) {
