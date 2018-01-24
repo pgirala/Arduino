@@ -3,7 +3,6 @@
  */
  
 #include "EstadoMarcha.h"
-#include "Coche.h"
 
 void EstadoMarcha::setVelocidad(int velocidad) {
   _velocidad = velocidad;
