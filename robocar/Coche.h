@@ -28,9 +28,9 @@ class Coche {
     void establecerVelocidadMotores(int velocidad, PosicionChasisHorizontal posicionHorizontal, PosicionChasisVertical posicionVertical);
     void pararMotores(PosicionChasisHorizontal posicionHorizontal, PosicionChasisVertical posicionVertical);
     // acciones del coche
-    void asumir(Orden orden);
+    void actualizarEstado();
   public:
-    void funcionar(Orden orden);
+    void reaccionar(Orden orden);
 };
 
 #endif

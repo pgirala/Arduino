@@ -60,9 +60,9 @@ void EstadoMarcha::actualizar(Orden orden) {
    };
 }
 
-Orden EstadoMarcha::sincronizar(EstadoMarcha estadoObjetivo) {
-  // actualiza el estado con las propiedades del estado objetivo y genera la acción a realizar por el coche
-  // para que se comporte según el cambio producido
-  return Orden::Indefinida; // TODO
+bool EstadoMarcha::igual(EstadoMarcha otroEstado) {
+  return getVelocidad() == otroEstado.getVelocidad()
+        and getDireccionVertical() == otroEstado.getDireccionVertical()
+        and getDireccionHorizontal() == otroEstado.getDireccionHorizontal();
 }
 

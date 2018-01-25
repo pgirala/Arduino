@@ -42,7 +42,7 @@ void setup()
 
 void loop()
 {
-  coche.funcionar(recibirOrden());
+  coche.reaccionar(recibirOrden());
 }
 
 Orden recibirOrden() {

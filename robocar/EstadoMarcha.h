@@ -11,12 +11,12 @@
 #define VELOCIDAD_MINIMA 0
 #define VELOCIDAD_MAXIMA 200
 
-enum class DireccionMovimientoHorizontal {Nula, Izquierda, Derecha};
-enum class DireccionMovimientoVertical {Adelante, Atras};
-
 // Ordenes que afectan al estado de la marcha
 
 enum class Orden {Indefinida, Parar, Arrancar, IrAdelante, IrAtras, GirarIzquierda, GirarDerecha, Acelerar, Frenar};
+
+enum class DireccionMovimientoHorizontal {Nula, Izquierda, Derecha};
+enum class DireccionMovimientoVertical {Adelante, Atras};
 
 class EstadoMarcha {
   private:
@@ -34,7 +34,8 @@ class EstadoMarcha {
     DireccionMovimientoVertical getDireccionVertical();
 
     void actualizar(Orden orden);
-    Orden sincronizar(EstadoMarcha estadoObjetivo);
+
+    bool igual(EstadoMarcha otroEstado);
 };
 
 #endif
