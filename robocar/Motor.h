@@ -8,9 +8,11 @@
 #include "Arduino.h"
 #include <AFMotor.h>
 
+#include "EstadoMarcha.h"
+
 enum class PosicionChasisHorizontal {Indiferente, Izquierda, Derecha};
 enum class PosicionChasisVertical {Indiferente, Delante, Detras};
-enum class SentidoRotacion {Directa, Reversa};
+enum class SentidoRotacion {Directo, Reverso};
 
 class Motor {
   private:
@@ -28,6 +30,12 @@ class Motor {
   
     void setSentidoRotacion(SentidoRotacion sentidoRotacion);
     SentidoRotacion getSentidoRotacion();
+    
+    // obtiene el sentido de rotación a partir de una dirección vertical de movimiento
+    static SentidoRotacion obtenerSentidoRotacion(DireccionMovimientoVertical direccionVertical);
+
+    // obtiene el sentido real de rotación
+    static int obtenerSentidoRealRotacion(SentidoRotacion sentidoRotacion);
 
     void setVelocidad(int velocidad);
     int getVelocidad();

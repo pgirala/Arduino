@@ -80,40 +80,6 @@ int ping(int TriggerPin, int EchoPin) {
 //-------------------------------------------------------------------------------------------------------------------------------------
 
 // Motores
-
-void ajustarVelocidad(int velocidadSolicitada, int ordenRC)
-{
-  static int velocidad = 0;
-  velocidad = (hayObstaculo() ? 0 : determinarVelocidad(velocidad, velocidadSolicitada, ordenRC));
-Serial.println(velocidad);
-  setSpeed(velocidad);
-}
-
-//-------------------------------------------------------------------------------------------------------------------------------------
-
-int determinarVelocidad(int velocidadActual, int velocidadSolicitada, int ordenRC)
-{
-  if (velocidadSolicitada >= 0 && velocidadActual != velocidadSolicitada)
-    return velocidadSolicitada;
-
-  if (ordenRC == IR_ADELANTE)
-    return velocidadActual;
-  
-  if (ordenRC == ACELERAR)
-    return (velocidadActual + VARIACION_VELOCIDAD >= MAX_SPEED ? MAX_SPEED : velocidadActual + VARIACION_VELOCIDAD);
-  
-  if (ordenRC == FRENAR)
-    return (velocidadActual - VARIACION_VELOCIDAD <= 0 ? 0 : velocidadActual - VARIACION_VELOCIDAD);
-
-  if (ordenRC == PARAR_ARRANCAR)
-    if (velocidadActual != 0)
-      return VARIACION_VELOCIDAD;
-    else
-      return 0;
-  
-  return velocidadActual;
-}*/
-
 //-------------------------------------------------------------------------------------------------------------------------------------
 /*
 void checkForward() {

@@ -9,12 +9,13 @@ Motor::Motor(int numero, PosicionChasisHorizontal posicionHorizontal, PosicionCh
               _posicionVertical (posicionVertical),
               _ajuste (ajuste) {
   _motorReal = new AF_DCMotor(numero, MOTOR34_1KHZ);
-  setSentidoRotacion(SentidoRotacion::Directa);
+  setSentidoRotacion(SentidoRotacion::Directo);
   setVelocidad(0); // parado
 }
 
 void Motor::setSentidoRotacion(SentidoRotacion sentidoRotacion) {
   _sentidoRotacion = sentidoRotacion;
+  _motorReal->run(Motor::obtenerSentidoRealRotacion(sentidoRotacion));
 }
 
 SentidoRotacion Motor::getSentidoRotacion() {
@@ -37,5 +38,19 @@ boolean Motor::isColocado(PosicionChasisHorizontal posicionHorizontal, PosicionC
 
 void Motor::parar() {
   _motorReal->run(RELEASE);
+}
+
+// obtiene el sentido de rotación a partir de una dirección vertical de movimiento
+static SentidoRotacion Motor::obtenerSentidoRotacion(DireccionMovimientoVertical direccionVertical) {
+  if (direccionVertical == DireccionMovimientoVertical::Atras)
+    return SentidoRotacion::Reverso;
+  return SentidoRotacion::Directo; // opción por defecto
+}
+
+// obtiene el sentido real de rotación
+static int Motor::obtenerSentidoRealRotacion(SentidoRotacion sentidoRotacion) {
+  if (sentidoRotacion == SentidoRotacion::Reverso)
+    return BACKWARD;
+  return FORWARD; // opción por defecto
 }
 
