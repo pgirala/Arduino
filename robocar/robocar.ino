@@ -29,6 +29,10 @@ void setup()
   controlRemoto.inicializar();
 
   Serial.begin(9600);  
+
+  while (! Serial);
+    Serial.println("D (aDelante) T (aTrás) + (acelerar) - (frenar) I (Izquierda) R (deRecha) C (Arrancar) P (Pausa /continuar) F (indeFinida) ");
+
 }
 
 void loop()
@@ -37,8 +41,53 @@ void loop()
 }
 
 Orden recibirOrden() {
+  // órdenes procedentes del puerto serie
+  Orden ordenPuertoSerie = obtenerOrdenPuertoSerie(); // para pruebas
+
+  if (ordenPuertoSerie != Orden::Indefinida)
+    return ordenPuertoSerie;
+    
   // órdenes procedentes del control de infrarrojos
   return controlRemoto.obtenerOrden();
+}
+
+Orden obtenerOrdenPuertoSerie() {
+  static bool enPausa = false;
+  
+  if (Serial.available()) // se ha suministrado una nueva velocidad
+  {
+    char valorDevuelto = Serial.read();
+
+    switch (valorDevuelto)
+    {
+    case 'D':
+      return Orden::IrAdelante;
+    case 'T':
+      return Orden::IrAtras;
+    case '+':
+      return Orden::Acelerar;
+    case '-':
+      return Orden::Frenar;
+    case 'R':
+      return Orden::GirarDerecha;
+    case 'I':
+      return Orden::GirarIzquierda;
+    case 'C':
+      return Orden::Arrancar;
+    case 'P':
+      if (enPausa) {
+        enPausa = false;
+        return Orden::Arrancar;
+      } else {
+        enPausa = true;
+        return Orden::Parar;
+      };
+     case 'F':
+      return Orden::Indefinida;
+    };
+    
+    return Orden::Indefinida;
+  }
 }
 
 // Ultrasonidos
