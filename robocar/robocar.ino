@@ -26,6 +26,8 @@ void setup()
   pinMode(TRIG_PIN, OUTPUT); // Ultrasonidos
   pinMode(ECHO_PIN, INPUT);
   
+  controlRemoto.inicializar();
+
   Serial.begin(9600);  
 }
 

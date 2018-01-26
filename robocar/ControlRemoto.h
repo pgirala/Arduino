@@ -16,10 +16,10 @@
 #define KEY_MINUS 0xFFE01F
 #define KEY_PAUSE 0xFFC23D
 #define KEY_REPEAT 0xFFFFFFFF
-#define KEY_FORWARD 0xFFFFFFF0 // TODO definir
-#define KEY_BACKWARD 0xFFFFFFF1
-#define KEY_CHANNEL_PLUS 0xFFFFFFF2
-#define KEY_CHANNEL_MINUS 0xFFFFFFF3
+#define KEY_FORWARD 0x2FD
+#define KEY_BACKWARD 0x22DD
+#define KEY_CHANNEL_PLUS 0xFFFFE21D
+#define KEY_CHANNEL_MINUS 0xFFFFA25D
 
 
 // teclas del control remoto
@@ -30,6 +30,7 @@ class ControlRemoto {
     boolean _enPausa = false;
   public:
     ControlRemoto(int pin);
+    void inicializar();
     Orden obtenerOrden();
 };
 

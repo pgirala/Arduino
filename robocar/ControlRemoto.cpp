@@ -6,6 +6,9 @@
 
 ControlRemoto::ControlRemoto(int pin) {
   _receptorIR = new IRrecv(pin);
+}
+
+void ControlRemoto::inicializar() {
   _receptorIR->enableIRIn(); // Start the IR receiver
 }
 
@@ -14,8 +17,12 @@ Orden ControlRemoto::obtenerOrden() {
   decode_results resultados;
   
   if (_receptorIR->decode(&resultados))
-  {  
-    switch (resultados.value)
+  { 
+    int valorDevuelto = resultados.value;
+
+    // Serial.println(valorDevuelto, HEX); // para pruebas
+    
+    switch (valorDevuelto)
     {
       case KEY_PLUS:
         if (!_enPausa)
