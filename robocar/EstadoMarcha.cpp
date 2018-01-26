@@ -55,7 +55,7 @@ void EstadoMarcha::actualizar(Orden orden) {
       _velocidad = (_velocidad + INCREMENTO_VELOCIDAD > VELOCIDAD_MAXIMA ? VELOCIDAD_MAXIMA :_velocidad + INCREMENTO_VELOCIDAD);
       break;
     case Orden::Frenar:
-      _velocidad = (_velocidad - INCREMENTO_VELOCIDAD > VELOCIDAD_MINIMA ? VELOCIDAD_MINIMA :_velocidad - INCREMENTO_VELOCIDAD);
+      _velocidad = (_velocidad - INCREMENTO_VELOCIDAD > 0 ? 0 :_velocidad - INCREMENTO_VELOCIDAD);
       break;
    };
 }
@@ -66,3 +66,8 @@ bool EstadoMarcha::igual(EstadoMarcha otroEstado) {
         and getDireccionHorizontal() == otroEstado.getDireccionHorizontal();
 }
 
+void EstadoMarcha::copiar(EstadoMarcha otroEstado) {
+  _velocidad = otroEstado.getVelocidad();
+  _direccionVertical = otroEstado.getDireccionVertical();
+  _direccionHorizontal == otroEstado.getDireccionHorizontal();
+}

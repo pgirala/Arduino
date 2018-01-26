@@ -9,13 +9,15 @@ Motor::Motor(int numero, PosicionChasisHorizontal posicionHorizontal, PosicionCh
               _posicionVertical (posicionVertical),
               _ajuste (ajuste) {
   _motorReal = new AF_DCMotor(numero, MOTOR34_1KHZ);
-  setSentidoRotacion(SentidoRotacion::Directo);
-  setVelocidad(0); // parado
+  _velocidad = 0; // parado
+  _sentidoRotacion = SentidoRotacion::Indefinido;
 }
 
 void Motor::setSentidoRotacion(SentidoRotacion sentidoRotacion) {
-  _sentidoRotacion = sentidoRotacion;
   _motorReal->run(Motor::obtenerSentidoRealRotacion(sentidoRotacion));
+  if (sentidoRotacion == SentidoRotacion::Indefinido)
+    _velocidad = 0;
+  _sentidoRotacion = sentidoRotacion;
 }
 
 SentidoRotacion Motor::getSentidoRotacion() {
@@ -23,34 +25,60 @@ SentidoRotacion Motor::getSentidoRotacion() {
 }
 
 void Motor::setVelocidad(int velocidad) {
-  _velocidad = velocidad;
   _motorReal->setSpeed(velocidad);
+  _velocidad = velocidad;
+  if (_velocidad == 0)
+    _sentidoRotacion = SentidoRotacion::Indefinido;
 }
 
 int Motor::getVelocidad() {
   return _velocidad;
 }
 
-boolean Motor::isColocado(PosicionChasisHorizontal posicionHorizontal, PosicionChasisVertical posicionVertical) {
-  return (posicionHorizontal == PosicionChasisHorizontal::Indiferente || posicionHorizontal == _posicionHorizontal)
-        and (posicionVertical == PosicionChasisVertical::Indiferente || posicionVertical == _posicionVertical); 
-}
-
 void Motor::parar() {
   _motorReal->run(RELEASE);
+  _velocidad = 0;
+  _sentidoRotacion = SentidoRotacion::Indefinido;
 }
 
-// obtiene el sentido de rotación a partir de una dirección vertical de movimiento
-static SentidoRotacion Motor::obtenerSentidoRotacion(DireccionMovimientoVertical direccionVertical) {
+// obtiene el sentido de rotación a partir de las direcciones de movimiento y de la posición del motor en el chasis
+static SentidoRotacion Motor::obtenerSentidoRotacion(DireccionMovimientoHorizontal direccionHorizontal, DireccionMovimientoVertical direccionVertical) {
+  return Motor::obtenerSentidoRotacion(direccionHorizontal, direccionVertical, _posicionHorizontal, _posicionVertical);
+}
+
+// obtiene el sentido de rotación a partir de las direcciones de movimiento y de la posición del motor en el chasis
+static SentidoRotacion Motor::obtenerSentidoRotacion(DireccionMovimientoHorizontal direccionHorizontal, DireccionMovimientoVertical direccionVertical, 
+                                                      PosicionChasisHorizontal posicionHorizontal, PosicionChasisVertical posicionVertical) {
+  SentidoRotacion resultado = SentidoRotacion::Indefinido;
+
+  if (direccionVertical == DireccionMovimientoVertical::Adelante)
+    resultado = SentidoRotacion::Directo;
+    
   if (direccionVertical == DireccionMovimientoVertical::Atras)
-    return SentidoRotacion::Reverso;
-  return SentidoRotacion::Directo; // opción por defecto
+    resultado = SentidoRotacion::Reverso;
+  
+  if (direccionHorizontal == DireccionMovimientoHorizontal::Recta)
+    return resultado;
+    
+  if (direccionHorizontal == DireccionMovimientoHorizontal::Izquierda)
+    if (posicionHorizontal == PosicionChasisHorizontal::Izquierda)
+      resultado = SentidoRotacion::Indefinido;
+          
+  if (direccionHorizontal == DireccionMovimientoHorizontal::Derecha)
+    if (posicionHorizontal == PosicionChasisHorizontal::Derecha)
+      resultado = SentidoRotacion::Indefinido;
+
+  return resultado;
 }
 
 // obtiene el sentido real de rotación
 static int Motor::obtenerSentidoRealRotacion(SentidoRotacion sentidoRotacion) {
   if (sentidoRotacion == SentidoRotacion::Reverso)
     return BACKWARD;
-  return FORWARD; // opción por defecto
+    
+  if (sentidoRotacion == SentidoRotacion::Directo)
+    return FORWARD;
+
+  return RELEASE; // opción por defecto
 }
 

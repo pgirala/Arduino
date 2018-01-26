@@ -24,9 +24,9 @@ class Coche {
     EstadoMarcha _estadoActual;
     EstadoMarcha _estadoOrdenado;
     // acciones dirigidas a los motores
-    void establecerSentidoRotacion(SentidoRotacion sentidoRotacion, PosicionChasisHorizontal posicionHorizontal, PosicionChasisVertical posicionVertical);
-    void establecerVelocidadMotores(int velocidad, PosicionChasisHorizontal posicionHorizontal, PosicionChasisVertical posicionVertical);
-    void pararMotores(PosicionChasisHorizontal posicionHorizontal, PosicionChasisVertical posicionVertical);
+    void establecerDireccion();
+    void establecerVelocidadMotores();
+    void pararMotoresPorReversion();
     // acciones del coche
     void actualizarEstado();
   public:

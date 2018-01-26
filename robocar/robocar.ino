@@ -26,18 +26,7 @@ void setup()
   pinMode(TRIG_PIN, OUTPUT); // Ultrasonidos
   pinMode(ECHO_PIN, INPUT);
   
-  Serial.begin(9600);
-  
-  // recibir orden (por IR, teclado o cualquier otro medio; método de este módulo; habrá un conjunto de órdenes; para el sensor de IR se necesitará un método que transforme las teclas pulsadas en órdenes)
-  // obedecer orden (método de Coche)
-  //    1. obtener el estado solicitado aplicando la orden al actual estado solicitado.
-  //    2. sincronizar el estado solicitado respecto al estado actual. Provocará tomar acciones:
-  //        2.1. Parar motor, girar izquierda, girar derecha, ir hacia adelante, ir hacia atrás (cada una de ellas usará los métodos de Motor para que se lleven a cabo). Cuando se cumplimente una acción se actualizará el estado actual.
-  //        2.2. Las acciones que provoquen movimiento (es decir, todas salvo parar) comprobarán que no haya un obstáculo consultando el sensor de obstáculos que controle su existencia en el sentido de la marcha. Como todavía no hay sensor trasero siempre impedirá el movimiento hacia atrás.
-  //
-  // hay que hacer una prueba, para ello:
-  //    1. Probará que se dan las órdenes adecuadas a los motores según las situaciones posibles que se pueden dar.
-  //    2. Cuando se ejecute en modo prueba se desactivarán totalmente los motores (accionadores) y los sensores tomarán los valores establecidos por la prueba, es decir, el código deberá tener directivas que se aplicarán en función del modo de ejecución.
+  Serial.begin(9600);  
 }
 
 void loop()

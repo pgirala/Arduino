@@ -12,7 +12,7 @@
 
 enum class PosicionChasisHorizontal {Indiferente, Izquierda, Derecha};
 enum class PosicionChasisVertical {Indiferente, Delante, Detras};
-enum class SentidoRotacion {Directo, Reverso};
+enum class SentidoRotacion {Indefinido, Directo, Reverso};
 
 class Motor {
   private:
@@ -25,22 +25,22 @@ class Motor {
     PosicionChasisVertical _posicionVertical; // delante o detrás
     // motor real
     AF_DCMotor * _motorReal;
+
+    // obtiene el sentido de rotación a partir de una dirección vertical de movimiento
+    static SentidoRotacion obtenerSentidoRotacion(DireccionMovimientoHorizontal direccionHorizontal, DireccionMovimientoVertical direccionVertical, 
+                                                  PosicionChasisHorizontal posicionHorizontal, PosicionChasisVertical posicionVertical);
+    // obtiene el sentido real de rotación
+    static int obtenerSentidoRealRotacion(SentidoRotacion sentidoRotacion);
   public:
     Motor(int numero, PosicionChasisHorizontal posicionHorizontal, PosicionChasisVertical posicionVertical, int ajuste = 0);
   
     void setSentidoRotacion(SentidoRotacion sentidoRotacion);
     SentidoRotacion getSentidoRotacion();
     
-    // obtiene el sentido de rotación a partir de una dirección vertical de movimiento
-    static SentidoRotacion obtenerSentidoRotacion(DireccionMovimientoVertical direccionVertical);
-
-    // obtiene el sentido real de rotación
-    static int obtenerSentidoRealRotacion(SentidoRotacion sentidoRotacion);
+    SentidoRotacion obtenerSentidoRotacion(DireccionMovimientoHorizontal direccionHorizontal, DireccionMovimientoVertical direccionVertical);
 
     void setVelocidad(int velocidad);
     int getVelocidad();
-
-    boolean isColocado(PosicionChasisHorizontal posicionHorizontal, PosicionChasisVertical posicionVertical);
 
     void parar();
 };
