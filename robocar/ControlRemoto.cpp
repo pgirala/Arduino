@@ -20,10 +20,18 @@ Orden ControlRemoto::obtenerOrden() {
   { 
     int valorDevuelto = resultados.value;
 
-    // Serial.println(valorDevuelto, HEX); // para pruebas
+    // Serial.println(valorDevuelto, HEX); // TEST
     
     switch (valorDevuelto)
     {
+      case KEY_FORWARD:
+        if (!_enPausa)
+          orden = Orden::IrAdelante;
+        break;
+      case KEY_BACKWARD:
+        if (!_enPausa)
+          orden = Orden::IrAtras;
+        break;
       case KEY_PLUS:
         if (!_enPausa)
           orden = Orden::Acelerar;
