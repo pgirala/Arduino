@@ -6,6 +6,8 @@
 
 void Coche::reaccionar(Orden orden) {
   _estadoOrdenado.actualizar(orden);
+  //if (!_estadoActual.igual(_estadoOrdenado))
+  //  _estadoOrdenado.print(); // TEST
   actualizarEstado();
 }
 

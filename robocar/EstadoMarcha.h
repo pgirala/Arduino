@@ -5,6 +5,8 @@
 #ifndef EstadoMarcha_h
 #define EstadoMarcha_h
 
+#include "Arduino.h"
+
 // movimiento
 
 #define INCREMENTO_VELOCIDAD 10
@@ -12,7 +14,7 @@
 
 // Ordenes que afectan al estado de la marcha
 
-enum class Orden {Indefinida, Parar, Arrancar, IrAdelante, IrAtras, GirarIzquierda, GirarDerecha, Acelerar, Frenar};
+enum class Orden {Indefinida, Parar, Arrancar, IrAdelante, IrAtras, Recto, GirarIzquierda, GirarDerecha, Acelerar, Frenar};
 
 enum class DireccionMovimientoHorizontal {Recta, Izquierda, Derecha};
 enum class DireccionMovimientoVertical {Adelante, Atras};
@@ -37,6 +39,8 @@ class EstadoMarcha {
     bool igual(EstadoMarcha otroEstado);
 
     void copiar(EstadoMarcha otroEstado);
+
+    void print(); // TEST
 };
 
 #endif

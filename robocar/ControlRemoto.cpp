@@ -48,6 +48,10 @@ Orden ControlRemoto::obtenerOrden() {
         if (!_enPausa)
           orden = Orden::GirarIzquierda;
         break;
+      case KEY_CHANNEL:
+        if (!_enPausa)
+          orden = Orden::Recto;
+        break;
       case KEY_PAUSE:
         if (_enPausa)
           orden = Orden::Arrancar;

@@ -20,6 +20,7 @@
 #define KEY_BACKWARD 0x22DD
 #define KEY_CHANNEL_PLUS 0xFFFFE21D
 #define KEY_CHANNEL_MINUS 0xFFFFA25D
+#define KEY_CHANNEL 0x629D
 
 
 // teclas del control remoto
