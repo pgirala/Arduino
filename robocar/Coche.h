@@ -13,6 +13,7 @@
 // motores
 
 #define NUMERO_MOTORES 4
+#define TIEMPO_PROTECCION_REVERSION 100 // milisegundos
 
 class Coche {
   private:
@@ -31,6 +32,7 @@ class Coche {
     void actualizarEstado();
   public:
     void reaccionar(Orden orden);
+    void print(); // TEST
 };
 
 #endif

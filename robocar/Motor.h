@@ -10,8 +10,8 @@
 
 #include "EstadoMarcha.h"
 
-enum class PosicionChasisHorizontal {Indiferente, Izquierda, Derecha};
-enum class PosicionChasisVertical {Indiferente, Delante, Detras};
+enum class PosicionChasisHorizontal {Izquierda, Derecha};
+enum class PosicionChasisVertical {Delante, Detras};
 enum class SentidoRotacion {Indefinido, Directo, Reverso};
 
 class Motor {
@@ -43,6 +43,8 @@ class Motor {
     int getVelocidad();
 
     void parar();
+
+    void print(); // TEST
 };
 
 #endif

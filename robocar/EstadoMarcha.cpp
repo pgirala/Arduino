@@ -58,7 +58,7 @@ void EstadoMarcha::actualizar(Orden orden) {
       _velocidad = (_velocidad + INCREMENTO_VELOCIDAD > VELOCIDAD_MAXIMA ? VELOCIDAD_MAXIMA :_velocidad + INCREMENTO_VELOCIDAD);
       break;
     case Orden::Frenar:
-      _velocidad = (_velocidad - INCREMENTO_VELOCIDAD > 0 ? 0 :_velocidad - INCREMENTO_VELOCIDAD);
+      _velocidad = (_velocidad - INCREMENTO_VELOCIDAD > 0 ? _velocidad - INCREMENTO_VELOCIDAD : 0);
       break;
    };
 }
@@ -72,14 +72,11 @@ bool EstadoMarcha::igual(EstadoMarcha otroEstado) {
 void EstadoMarcha::copiar(EstadoMarcha otroEstado) {
   _velocidad = otroEstado.getVelocidad();
   _direccionVertical = otroEstado.getDireccionVertical();
-  _direccionHorizontal == otroEstado.getDireccionHorizontal();
+  _direccionHorizontal = otroEstado.getDireccionHorizontal();
 }
 
 void EstadoMarcha::print() { // TEST
-  Serial.println("+++");
-  Serial.print("Velocidad: "); Serial.println(_velocidad);
-  Serial.print("Direccion horizontal: "); Serial.println(static_cast<int>(_direccionHorizontal));
-  Serial.print("Direccion vertical: "); Serial.println(static_cast<int>(_direccionVertical));
-  Serial.println("---");
-  Serial.println("D (aDelante) T (aTrás) + (acelerar) - (frenar) I (Izquierda) R (deRecha) E (rEcto) P (Pausa /continuar) F (indeFinida) ");
+  Serial.print("\t\tVelocidad: "); Serial.println(_velocidad);
+  Serial.print("\t\tDireccion horizontal: "); Serial.println(static_cast<int>(_direccionHorizontal));
+  Serial.print("\t\tDireccion vertical: "); Serial.println(static_cast<int>(_direccionVertical));
 }
