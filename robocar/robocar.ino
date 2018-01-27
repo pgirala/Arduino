@@ -31,8 +31,8 @@ void setup()
   Serial.begin(9600);  
 
   while (! Serial);
-    Serial.println("D (aDelante) T (aTrás) + (acelerar) - (frenar) I (Izquierda) R (deRecha) P (Pausa /continuar) F (indeFinida) ");
-
+  
+  Serial.println("D (aDelante) T (aTrás) + (acelerar) - (frenar) I (Izquierda) R (deRecha) P (Pausa /continuar) F (indeFinida) ");
 }
 
 void loop()
@@ -42,13 +42,15 @@ void loop()
 
 Orden recibirOrden() {
   // órdenes procedentes del puerto serie
-  Orden ordenPuertoSerie = obtenerOrdenPuertoSerie(); // para pruebas
+  Orden resultado = obtenerOrdenPuertoSerie(); // para pruebas
 
-  if (ordenPuertoSerie != Orden::Indefinida)
-    return ordenPuertoSerie;
-    
-  // órdenes procedentes del control de infrarrojos
-  return controlRemoto.obtenerOrden();
+  if (resultado == Orden::Indefinida)
+    resultado = controlRemoto.obtenerOrden();
+
+  if (resultado != Orden::Indefinida)    // para pruebas
+    Serial.println(static_cast<int>(resultado));
+  
+  return resultado;
 }
 
 Orden obtenerOrdenPuertoSerie() {
@@ -56,7 +58,7 @@ Orden obtenerOrdenPuertoSerie() {
   
   if (Serial.available()) // se ha suministrado una nueva velocidad
   {
-    char valorDevuelto = Serial.read();
+    char valorDevuelto = toupper(Serial.read());
 
     switch (valorDevuelto)
     {
@@ -82,10 +84,10 @@ Orden obtenerOrdenPuertoSerie() {
       };
      case 'F':
       return Orden::Indefinida;
-    };
-    
-    return Orden::Indefinida;
+    };    
   }
+  return Orden::Indefinida;
+  
 }
 
 // Ultrasonidos

@@ -53,9 +53,6 @@ Orden ControlRemoto::obtenerOrden() {
     _receptorIR->resume(); // Recibe el siguiente valor
   }
   
-  //if (orden != Orden::Indefinida)    // para pruebas
-  //  Serial.println(static_cast<int>(orden));
-  
   return orden;
 }
 
