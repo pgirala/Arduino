@@ -31,7 +31,7 @@ void setup()
   Serial.begin(9600);  
 
   while (! Serial);
-    Serial.println("D (aDelante) T (aTrás) + (acelerar) - (frenar) I (Izquierda) R (deRecha) C (Arrancar) P (Pausa /continuar) F (indeFinida) ");
+    Serial.println("D (aDelante) T (aTrás) + (acelerar) - (frenar) I (Izquierda) R (deRecha) P (Pausa /continuar) F (indeFinida) ");
 
 }
 
@@ -72,8 +72,6 @@ Orden obtenerOrdenPuertoSerie() {
       return Orden::GirarDerecha;
     case 'I':
       return Orden::GirarIzquierda;
-    case 'C':
-      return Orden::Arrancar;
     case 'P':
       if (enPausa) {
         enPausa = false;
