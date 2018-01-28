@@ -26,7 +26,7 @@ SentidoRotacion Motor::getSentidoRotacion() {
 
 void Motor::setVelocidad(int velocidad) {
 //  _motorReal->setSpeed(velocidad);
-  _velocidad = velocidad;
+  _velocidad = velocidad + (velocidad / INCREMENTO_VELOCIDAD) * _ajuste;
   if (_velocidad == 0)
     _sentidoRotacion = SentidoRotacion::Indefinido;
 }
