@@ -4,6 +4,11 @@
  
 #include "Coche.h"
 
+void Coche::inicializar() {
+  for (int i = 0; i < NUMERO_SENSORES_US; i++)
+    _sensoresUS[i].inicializar();
+}
+
 void Coche::reaccionar(Orden orden) {
   _estadoOrdenado.actualizar(orden);
   //if (!_estadoActual.igual(_estadoOrdenado))
