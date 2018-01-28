@@ -43,7 +43,7 @@ class Coche {
     void pararMotoresPorReversion();
     // acciones del coche
     void actualizarEstado();
-    bool hayObstaculo();
+    bool hayObstaculo(DireccionMovimientoVertical direccionVertical);
   public:
     void inicializar();
     void reaccionar(Orden orden);

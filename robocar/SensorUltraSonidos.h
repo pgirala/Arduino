@@ -17,10 +17,11 @@ class SensorUltraSonidos {
     int _triggerPin;
     int _echoPin;
     bool ping();
+    bool hayObstaculo();
   public:
     SensorUltraSonidos(PosicionChasisVertical posicionVertical, int echoPin, int triggerPin);
     void inicializar();
-    bool hayObstaculo();
+    bool hayObstaculo(DireccionMovimientoVertical direccionVertical);
 };
 
 #endif

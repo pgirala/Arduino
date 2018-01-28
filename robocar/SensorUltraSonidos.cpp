@@ -17,6 +17,19 @@ void SensorUltraSonidos::inicializar() {
 
 // Ultrasonidos
 
+boolean SensorUltraSonidos::hayObstaculo(DireccionMovimientoVertical direccionVertical) 
+{
+  if (_posicionVertical == PosicionChasisVertical::Delante
+      && direccionVertical == DireccionMovimientoVertical::Adelante)
+    return hayObstaculo();
+      
+  if (_posicionVertical == PosicionChasisVertical::Detras
+      && direccionVertical == DireccionMovimientoVertical::Atras)
+    return hayObstaculo();
+
+  return false;
+}
+
 boolean SensorUltraSonidos::hayObstaculo() 
 {
   long cm = ping();
