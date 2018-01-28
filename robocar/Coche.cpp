@@ -10,6 +10,10 @@ void Coche::inicializar() {
 }
 
 void Coche::reaccionar(Orden orden) {
+  if (hayObstaculo()) { // TODO mejorar la respuesta ante obstaculos, evitándolos
+    establecerVelocidadMotores(0);
+    return;
+  }
   _estadoOrdenado.actualizar(orden);
   //if (!_estadoActual.igual(_estadoOrdenado))
   //  _estadoOrdenado.print(); // TEST
@@ -39,9 +43,13 @@ void Coche::establecerDireccion() {
 }
 
 void Coche::establecerVelocidadMotores() {
+  establecerVelocidadMotores(_estadoOrdenado.getVelocidad());
+}
+
+void Coche::establecerVelocidadMotores(int velocidad) {
   for (int i = 0; i < NUMERO_MOTORES; i++)
     if (_motores[i].getSentidoRotacion() != SentidoRotacion::Indefinido)
-      _motores[i].setVelocidad(_estadoOrdenado.getVelocidad());
+      _motores[i].setVelocidad(velocidad);
 }
 
 void Coche::pararMotoresPorReversion() {
@@ -56,6 +64,14 @@ void Coche::pararMotoresPorReversion() {
     }
   if (parada)
     delay(TIEMPO_PROTECCION_REVERSION); // deja que los motores se paren antes de revertir la marcha
+}
+
+boolean Coche::hayObstaculo() 
+{
+  for (int i = 0; i < NUMERO_SENSORES_US; i++)
+    if (_sensoresUS[i].hayObstaculo())
+      return true;
+  return false;
 }
 
 void Coche::print() { // TEST

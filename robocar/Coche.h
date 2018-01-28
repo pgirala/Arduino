@@ -39,9 +39,11 @@ class Coche {
     // acciones dirigidas a los motores
     void establecerDireccion();
     void establecerVelocidadMotores();
+    void establecerVelocidadMotores(int velocidad);
     void pararMotoresPorReversion();
     // acciones del coche
     void actualizarEstado();
+    bool hayObstaculo();
   public:
     void inicializar();
     void reaccionar(Orden orden);
