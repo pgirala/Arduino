@@ -16,7 +16,7 @@ class SensorUltraSonidos {
     PosicionChasisVertical _posicionVertical; // delante o detrás
     int _triggerPin;
     int _echoPin;
-    bool ping();
+    long ping();
     bool hayObstaculo();
   public:
     SensorUltraSonidos(PosicionChasisVertical posicionVertical, int echoPin, int triggerPin);

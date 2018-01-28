@@ -36,7 +36,7 @@ boolean SensorUltraSonidos::hayObstaculo()
   return cm >= 0 and cm <= DISTANCIA_SEGURIDAD;
 }
 
-boolean SensorUltraSonidos::ping() {
+long SensorUltraSonidos::ping() {
    long duration, distanceCm;
    
    digitalWrite(_triggerPin, LOW);  //para generar un pulso limpio ponemos a LOW 4us
@@ -48,6 +48,10 @@ boolean SensorUltraSonidos::ping() {
    duration = pulseIn(_echoPin, HIGH);  //medimos el tiempo entre pulsos, en microsegundos
    
    distanceCm = duration * 10 / 292/ 2;   //convertimos a distancia, en cm
+    // Serial.print("\t\tTrigger "); Serial.println(_triggerPin); TEST
+    // Serial.print("\t\tEcho "); Serial.println(_echoPin);
+    // Serial.print("\t\tDuración "); Serial.println(duration);
+    // Serial.print("\t\tDistancia "); Serial.println(distanceCm);
    return distanceCm;
 }
 

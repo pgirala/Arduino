@@ -8,13 +8,13 @@ Motor::Motor(int numero, PosicionChasisHorizontal posicionHorizontal, PosicionCh
               _posicionHorizontal (posicionHorizontal), 
               _posicionVertical (posicionVertical),
               _ajuste (ajuste) {
-//  _motorReal = new AF_DCMotor(numero, MOTOR34_1KHZ);
+  _motorReal = new AF_DCMotor(numero, MOTOR34_1KHZ);
   _velocidad = 0; // parado
   _sentidoRotacion = SentidoRotacion::Indefinido;
 }
 
 void Motor::setSentidoRotacion(SentidoRotacion sentidoRotacion) {
-//  _motorReal->run(Motor::obtenerSentidoRealRotacion(sentidoRotacion));
+  _motorReal->run(Motor::obtenerSentidoRealRotacion(sentidoRotacion));
   if (sentidoRotacion == SentidoRotacion::Indefinido)
     _velocidad = 0;
   _sentidoRotacion = sentidoRotacion;
@@ -25,10 +25,17 @@ SentidoRotacion Motor::getSentidoRotacion() {
 }
 
 void Motor::setVelocidad(int velocidad) {
-//  _motorReal->setSpeed(velocidad);
-  _velocidad = velocidad + (velocidad / INCREMENTO_VELOCIDAD) * _ajuste;
+  _velocidad = velocidad;
+  int velocidadEfectiva = velocidad;
+  
   if (_velocidad == 0)
     _sentidoRotacion = SentidoRotacion::Indefinido;
+  else
+    velocidadEfectiva = velocidadEfectiva + _ajuste;
+
+  velocidadEfectiva = (velocidadEfectiva > VELOCIDAD_MAXIMA_MOTOR ? VELOCIDAD_MAXIMA_MOTOR : velocidadEfectiva);
+
+  _motorReal->setSpeed(velocidadEfectiva);
 }
 
 int Motor::getVelocidad() {
@@ -36,7 +43,7 @@ int Motor::getVelocidad() {
 }
 
 void Motor::parar() {
-//  _motorReal->run(RELEASE);
+  _motorReal->run(RELEASE);
   _velocidad = 0;
   _sentidoRotacion = SentidoRotacion::Indefinido;
 }

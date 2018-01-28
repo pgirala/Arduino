@@ -12,13 +12,15 @@ void Coche::inicializar() {
 void Coche::reaccionar(Orden orden) {
   _estadoOrdenado.actualizar(orden);
 
+  if (!_estadoActual.igual(_estadoOrdenado))
+    _estadoOrdenado.print(); // TEST
+
   if (hayObstaculo(_estadoOrdenado.getDireccionVertical())) { // TODO mejorar la respuesta ante obstaculos, evitándolos
+    Serial.println("Obstáculo detectado en la dirección de la marcha");
     establecerVelocidadMotores(0);
     return;
   }
   
-  //if (!_estadoActual.igual(_estadoOrdenado))
-  //  _estadoOrdenado.print(); // TEST
   actualizarEstado();
 }
 
@@ -73,9 +75,20 @@ void Coche::pararMotoresPorReversion() {
 
 boolean Coche::hayObstaculo(DireccionMovimientoVertical direccionVertical) 
 {
-  for (int i = 0; i < NUMERO_SENSORES_US; i++)
-    if (_sensoresUS[i].hayObstaculo(direccionVertical))
+  // Serial.print("Comprobación de obstáculo en la dirección "); TEST
+  // Serial.println(static_cast<int>(direccionVertical));
+  
+  for (int i = 0; i < NUMERO_SENSORES_US; i++) {
+    // Serial.print("\tSensor US "); TEST
+    // Serial.println(i + 1);
+    
+    if (_sensoresUS[i].hayObstaculo(direccionVertical)) {
+      // Serial.println("\tHay obstaculo"); TEST
       return true;
+    }
+  }
+
+  // Serial.println("\tNO hay obstaculo"); TEST
   return false;
 }
 

@@ -10,6 +10,8 @@
 
 #include "EstadoMarcha.h"
 
+#define VELOCIDAD_MAXIMA_MOTOR 250
+
 enum class PosicionChasisHorizontal {Izquierda, Derecha};
 enum class PosicionChasisVertical {Delante, Detras};
 enum class SentidoRotacion {Indefinido, Directo, Reverso};
