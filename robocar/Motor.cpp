@@ -56,26 +56,50 @@ static SentidoRotacion Motor::obtenerSentidoRotacion(DireccionMovimientoHorizont
 // obtiene el sentido de rotación a partir de las direcciones de movimiento y de la posición del motor en el chasis
 static SentidoRotacion Motor::obtenerSentidoRotacion(DireccionMovimientoHorizontal direccionHorizontal, DireccionMovimientoVertical direccionVertical, 
                                                       PosicionChasisHorizontal posicionHorizontal, PosicionChasisVertical posicionVertical) {
-  SentidoRotacion resultado = SentidoRotacion::Indefinido;
 
-  if (direccionVertical == DireccionMovimientoVertical::Adelante)
-    resultado = SentidoRotacion::Directo;
-    
-  if (direccionVertical == DireccionMovimientoVertical::Atras)
-    resultado = SentidoRotacion::Reverso;
-  
-  if (direccionHorizontal == DireccionMovimientoHorizontal::Recta)
-    return resultado;
-    
-  if (direccionHorizontal == DireccionMovimientoHorizontal::Izquierda)
-    if (posicionHorizontal == PosicionChasisHorizontal::Izquierda)
-      resultado = SentidoRotacion::Indefinido;
-          
-  if (direccionHorizontal == DireccionMovimientoHorizontal::Derecha)
-    if (posicionHorizontal == PosicionChasisHorizontal::Derecha)
-      resultado = SentidoRotacion::Indefinido;
+  if (direccionVertical == DireccionMovimientoVertical::Adelante) {
+    if (direccionHorizontal == DireccionMovimientoHorizontal::Recta)
+      return SentidoRotacion::Directo;
 
-  return resultado;
+    if (direccionHorizontal == DireccionMovimientoHorizontal::Izquierda) {
+      if (posicionHorizontal == PosicionChasisHorizontal::Izquierda)
+        return SentidoRotacion::Reverso;
+        
+      if (posicionHorizontal == PosicionChasisHorizontal::Derecha)
+        return SentidoRotacion::Directo;
+    }
+
+    if (direccionHorizontal == DireccionMovimientoHorizontal::Derecha) {
+      if (posicionHorizontal == PosicionChasisHorizontal::Izquierda)
+        return SentidoRotacion::Directo;
+        
+      if (posicionHorizontal == PosicionChasisHorizontal::Derecha)
+        return SentidoRotacion::Reverso;
+    }
+  }
+    
+  if (direccionVertical == DireccionMovimientoVertical::Atras) {
+    if (direccionHorizontal == DireccionMovimientoHorizontal::Recta)
+      return SentidoRotacion::Reverso;
+
+    if (direccionHorizontal == DireccionMovimientoHorizontal::Izquierda) {
+      if (posicionHorizontal == PosicionChasisHorizontal::Izquierda)
+        return SentidoRotacion::Directo;
+        
+      if (posicionHorizontal == PosicionChasisHorizontal::Derecha)
+        return SentidoRotacion::Reverso;
+    }
+
+    if (direccionHorizontal == DireccionMovimientoHorizontal::Derecha) {
+      if (posicionHorizontal == PosicionChasisHorizontal::Izquierda)
+        return SentidoRotacion::Reverso;
+        
+      if (posicionHorizontal == PosicionChasisHorizontal::Derecha)
+        return SentidoRotacion::Directo;
+    }
+  }
+
+  return SentidoRotacion::Indefinido;;
 }
 
 // obtiene el sentido real de rotación
@@ -90,6 +114,6 @@ static int Motor::obtenerSentidoRealRotacion(SentidoRotacion sentidoRotacion) {
 }
 
 void Motor::print() { // TEST
-  Serial.print("\t\tSentido rotación: "); Serial.println(static_cast<int>(_sentidoRotacion));
-  Serial.print("\t\tVelocidad: "); Serial.println(_velocidad);
+  Serial.print("\t\tSentido rotación: "); Serial.print(static_cast<int>(_sentidoRotacion));
+  Serial.print("  Velocidad: "); Serial.println(_velocidad);
 }
