@@ -46,7 +46,7 @@ class Motor {
 
     void parar();
 
-    void print(); // TEST
+    void print();
 };
 
 #endif

@@ -99,7 +99,7 @@ static SentidoRotacion Motor::obtenerSentidoRotacion(DireccionMovimientoHorizont
     }
   }
 
-  return SentidoRotacion::Indefinido;;
+  return SentidoRotacion::Indefinido;
 }
 
 // obtiene el sentido real de rotación
@@ -113,7 +113,7 @@ static int Motor::obtenerSentidoRealRotacion(SentidoRotacion sentidoRotacion) {
   return RELEASE; // opción por defecto
 }
 
-void Motor::print() { // TEST
+void Motor::print() {
   Serial.print("\t\tSentido rotación: "); Serial.print(static_cast<int>(_sentidoRotacion));
   Serial.print("  Velocidad: "); Serial.println(_velocidad);
 }

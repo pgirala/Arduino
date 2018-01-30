@@ -34,10 +34,11 @@ void EstadoMarcha::actualizar(Orden orden) {
       // no aplica ningún cambio
       break;
     case Orden::Parar:
+      _velocidadPreviaParada = _velocidad;
       _velocidad = 0;
       break;
     case Orden::Arrancar:
-      _velocidad = INCREMENTO_VELOCIDAD;
+      _velocidad = _velocidadPreviaParada;
       break;
     case Orden::IrAdelante:
       _direccionVertical = DireccionMovimientoVertical::Adelante;
@@ -75,8 +76,8 @@ void EstadoMarcha::copiar(EstadoMarcha otroEstado) {
   _direccionHorizontal = otroEstado.getDireccionHorizontal();
 }
 
-void EstadoMarcha::print() { // TEST
-  Serial.print("\t\tVelocidad: "); Serial.println(_velocidad);
-  Serial.print("\t\tDireccion horizontal: "); Serial.println(static_cast<int>(_direccionHorizontal));
-  Serial.print("\t\tDireccion vertical: "); Serial.println(static_cast<int>(_direccionVertical));
+void EstadoMarcha::print() {
+  Serial.print("\t\tVelocidad: "); Serial.print(_velocidad);
+  Serial.print("  Direccion horizontal: "); Serial.print(static_cast<int>(_direccionHorizontal));
+  Serial.print("  Direccion vertical: "); Serial.println(static_cast<int>(_direccionVertical));
 }

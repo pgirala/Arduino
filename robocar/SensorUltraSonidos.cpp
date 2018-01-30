@@ -48,10 +48,6 @@ long SensorUltraSonidos::ping() {
    duration = pulseIn(_echoPin, HIGH);  //medimos el tiempo entre pulsos, en microsegundos
    
    distanceCm = duration * 10 / 292/ 2;   //convertimos a distancia, en cm
-    // Serial.print("\t\tTrigger "); Serial.println(_triggerPin); TEST
-    // Serial.print("\t\tEcho "); Serial.println(_echoPin);
-    // Serial.print("\t\tDuración "); Serial.println(duration);
-    // Serial.print("\t\tDistancia "); Serial.println(distanceCm);
    return distanceCm;
 }
 

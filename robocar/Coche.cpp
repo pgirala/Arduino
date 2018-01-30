@@ -12,12 +12,8 @@ void Coche::inicializar() {
 void Coche::reaccionar(Orden orden) {
   _estadoOrdenado.actualizar(orden);
 
-  if (!_estadoActual.igual(_estadoOrdenado))
-    _estadoOrdenado.print(); // TEST
-
   if (hayObstaculo(_estadoOrdenado.getDireccionVertical())) { // TODO mejorar la respuesta ante obstaculos, evitándolos
-    Serial.println("Obstáculo detectado en la dirección de la marcha");
-    establecerVelocidadMotores(0);
+    pararMotores();
     return;
   }
   
@@ -27,18 +23,22 @@ void Coche::reaccionar(Orden orden) {
 void Coche::actualizarEstado() {
   if (_estadoActual.igual(_estadoOrdenado))
     return;
-    
-  Serial.println("SITUACION INICIAL"); // TEST
+
+#ifdef TEST    
+  Serial.println("SITUACION INICIAL");
   this->print();
+#endif
   
   pararMotoresPorReversion(); // evita problemas con los motores que tenga que revertir el sentido
   establecerDireccion();
   establecerVelocidadMotores(); 
   _estadoActual.copiar(_estadoOrdenado);
-  
+
+#ifdef TEST
   Serial.println("SITUACION FINAL"); // TEST
   this->print();
   Serial.println("D (aDelante) T (aTrás) + (acelerar) - (frenar) I (Izquierda) R (deRecha) E (rEcto) P (Pausa /continuar) F (indeFinida) ");
+#endif
 }
 
 void Coche::establecerDireccion() {
@@ -54,6 +54,11 @@ void Coche::establecerVelocidadMotores(int velocidad) {
   for (int i = 0; i < NUMERO_MOTORES; i++)
     if (_motores[i].getSentidoRotacion() != SentidoRotacion::Indefinido)
       _motores[i].setVelocidad(velocidad);
+}
+
+void Coche::pararMotores() {
+  _estadoActual.setVelocidad(0);
+  establecerVelocidadMotores(0);
 }
 
 void Coche::pararMotoresPorReversion() {
@@ -92,13 +97,13 @@ boolean Coche::hayObstaculo(DireccionMovimientoVertical direccionVertical)
   return false;
 }
 
-void Coche::print() { // TEST
-  Serial.println("\tEstado actual");
+void Coche::print() {
+  Serial.print("\tEstado actual: ");
   _estadoActual.print();
-  Serial.println("\tEstado ordenado");
+  Serial.print("\tEstado orden.: ");
   _estadoOrdenado.print();
   for (int i = 0; i < NUMERO_MOTORES; i++) {
-    Serial.print("\tMotor "); Serial.println(i + 1);
+    Serial.print("\tMotor "); Serial.print(i + 1); Serial.print(": ");
     _motores[i].print();    
   }
 }

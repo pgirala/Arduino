@@ -19,8 +19,6 @@ Orden ControlRemoto::obtenerOrden() {
   if (_receptorIR->decode(&resultados))
   { 
     int valorDevuelto = resultados.value;
-
-    // Serial.println(valorDevuelto, HEX); // TEST
     
     switch (valorDevuelto)
     {

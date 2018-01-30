@@ -9,7 +9,7 @@
 #include "Motor.h"
 
 // parámetros pra el control de distancia por ultrasonidos
-const int DISTANCIA_SEGURIDAD = 30; // centímetros
+const int DISTANCIA_SEGURIDAD = 15; // centímetros
 
 class SensorUltraSonidos {
   private:

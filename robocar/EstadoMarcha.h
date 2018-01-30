@@ -9,7 +9,7 @@
 
 // movimiento
 
-#define INCREMENTO_VELOCIDAD 10
+#define INCREMENTO_VELOCIDAD 25
 #define VELOCIDAD_MAXIMA 200
 
 // Ordenes que afectan al estado de la marcha
@@ -24,6 +24,7 @@ class EstadoMarcha {
     int _velocidad = 0;
     DireccionMovimientoHorizontal _direccionHorizontal = DireccionMovimientoHorizontal::Recta;
     DireccionMovimientoVertical _direccionVertical = DireccionMovimientoVertical::Adelante;
+    int _velocidadPreviaParada = 0; // velocidad previa a la petición de una parada y a la que se reanuda la marcha
   public:
     void setVelocidad(int velocidad);
     int getVelocidad();
@@ -40,7 +41,7 @@ class EstadoMarcha {
 
     void copiar(EstadoMarcha otroEstado);
 
-    void print(); // TEST
+    void print();
 };
 
 #endif
