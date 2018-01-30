@@ -38,9 +38,6 @@ Orden recibirOrden() {
   if (resultado == Orden::Indefinida)
     resultado = controlRemoto.obtenerOrden();
 
-//  if (resultado != Orden::Indefinida)    // TEST
-//    Serial.println(static_cast<int>(resultado));
-  
   return resultado;
 }
 

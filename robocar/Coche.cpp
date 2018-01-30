@@ -70,8 +70,6 @@ void Coche::pararMotoresPorReversion() {
           && _motores[i].obtenerSentidoRotacion(_estadoOrdenado.getDireccionHorizontal(), _estadoOrdenado.getDireccionVertical()) != _motores[i].getSentidoRotacion()) {
       _motores[i].parar();
       parada = true;
-      Serial.print("\t\tParada de prevención antireversión del motor "); // TEST
-      Serial.println(i + 1);
     }
     
   if (parada)
@@ -79,21 +77,12 @@ void Coche::pararMotoresPorReversion() {
 }
 
 boolean Coche::hayObstaculo(DireccionMovimientoVertical direccionVertical) 
-{
-  // Serial.print("Comprobación de obstáculo en la dirección "); TEST
-  // Serial.println(static_cast<int>(direccionVertical));
-  
+{  
   for (int i = 0; i < NUMERO_SENSORES_US; i++) {
-    // Serial.print("\tSensor US "); TEST
-    // Serial.println(i + 1);
-    
-    if (_sensoresUS[i].hayObstaculo(direccionVertical)) {
-      // Serial.println("\tHay obstaculo"); TEST
+    if (_sensoresUS[i].hayObstaculo(direccionVertical))
       return true;
-    }
   }
 
-  // Serial.println("\tNO hay obstaculo"); TEST
   return false;
 }
 
