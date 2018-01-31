@@ -78,10 +78,9 @@ void Coche::pararMotoresPorReversion() {
 
 boolean Coche::hayObstaculo(DireccionMovimientoVertical direccionVertical) 
 {  
-  for (int i = 0; i < NUMERO_SENSORES_US; i++) {
+  for (int i = 0; i < NUMERO_SENSORES_US; i++)
     if (_sensoresUS[i].hayObstaculo(direccionVertical))
       return true;
-  }
 
   return false;
 }
