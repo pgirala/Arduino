@@ -11,7 +11,7 @@
 #include "SensorUltraSonidos.h"
 #include "Motor.h"
 
-//#define TEST // activa el log
+#define TEST // activa el log
 
 // motores
 
