@@ -32,6 +32,8 @@ class Motor {
     static SentidoRotacion obtenerSentidoRotacion(DireccionMovimientoHorizontal direccionHorizontal, DireccionMovimientoVertical direccionVertical, 
                                                   PosicionChasisHorizontal posicionHorizontal, PosicionChasisVertical posicionVertical);
     // obtiene el sentido real de rotación
+    static SentidoRotacion obtenerSentidoRotacionDefecto(DireccionMovimientoVertical direccionVertical);
+    static SentidoRotacion obtenerSentidoRotacionContrario(SentidoRotacion sentidoRotacion);
     static int obtenerSentidoRealRotacion(SentidoRotacion sentidoRotacion);
   public:
     Motor(int numero, PosicionChasisHorizontal posicionHorizontal, PosicionChasisVertical posicionVertical, int ajuste = 0);

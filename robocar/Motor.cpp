@@ -53,50 +53,37 @@ static SentidoRotacion Motor::obtenerSentidoRotacion(DireccionMovimientoHorizont
   return Motor::obtenerSentidoRotacion(direccionHorizontal, direccionVertical, _posicionHorizontal, _posicionVertical);
 }
 
+static SentidoRotacion Motor::obtenerSentidoRotacionDefecto(DireccionMovimientoVertical direccionVertical) {
+  return (direccionVertical == DireccionMovimientoVertical::Adelante ? SentidoRotacion::Directo : SentidoRotacion::Reverso);
+}
+
+static SentidoRotacion Motor::obtenerSentidoRotacionContrario(SentidoRotacion sentidoRotacion) {
+  return (sentidoRotacion == SentidoRotacion::Directo ? SentidoRotacion::Reverso : SentidoRotacion::Directo);
+}
+
 // obtiene el sentido de rotación a partir de las direcciones de movimiento y de la posición del motor en el chasis
 static SentidoRotacion Motor::obtenerSentidoRotacion(DireccionMovimientoHorizontal direccionHorizontal, DireccionMovimientoVertical direccionVertical, 
                                                       PosicionChasisHorizontal posicionHorizontal, PosicionChasisVertical posicionVertical) {
+  SentidoRotacion sentidoDefecto = obtenerSentidoRotacionDefecto(direccionVertical);
+  SentidoRotacion sentidoContrario = obtenerSentidoRotacionContrario(sentidoDefecto);
+  
+  if (direccionHorizontal == DireccionMovimientoHorizontal::Recta)
+    return sentidoDefecto;
 
-  if (direccionVertical == DireccionMovimientoVertical::Adelante) {
-    if (direccionHorizontal == DireccionMovimientoHorizontal::Recta)
-      return SentidoRotacion::Directo;
-
-    if (direccionHorizontal == DireccionMovimientoHorizontal::Izquierda) {
-      if (posicionHorizontal == PosicionChasisHorizontal::Izquierda)
-        return SentidoRotacion::Reverso;
-        
-      if (posicionHorizontal == PosicionChasisHorizontal::Derecha)
-        return SentidoRotacion::Directo;
-    }
-
-    if (direccionHorizontal == DireccionMovimientoHorizontal::Derecha) {
-      if (posicionHorizontal == PosicionChasisHorizontal::Izquierda)
-        return SentidoRotacion::Directo;
-        
-      if (posicionHorizontal == PosicionChasisHorizontal::Derecha)
-        return SentidoRotacion::Reverso;
-    }
+  if (direccionHorizontal == DireccionMovimientoHorizontal::Izquierda) {
+    if (posicionHorizontal == PosicionChasisHorizontal::Izquierda)
+      return sentidoContrario;
+      
+    if (posicionHorizontal == PosicionChasisHorizontal::Derecha)
+      return sentidoDefecto;
   }
-    
-  if (direccionVertical == DireccionMovimientoVertical::Atras) {
-    if (direccionHorizontal == DireccionMovimientoHorizontal::Recta)
-      return SentidoRotacion::Reverso;
 
-    if (direccionHorizontal == DireccionMovimientoHorizontal::Izquierda) {
-      if (posicionHorizontal == PosicionChasisHorizontal::Izquierda)
-        return SentidoRotacion::Directo;
-        
-      if (posicionHorizontal == PosicionChasisHorizontal::Derecha)
-        return SentidoRotacion::Reverso;
-    }
-
-    if (direccionHorizontal == DireccionMovimientoHorizontal::Derecha) {
-      if (posicionHorizontal == PosicionChasisHorizontal::Izquierda)
-        return SentidoRotacion::Reverso;
-        
-      if (posicionHorizontal == PosicionChasisHorizontal::Derecha)
-        return SentidoRotacion::Directo;
-    }
+  if (direccionHorizontal == DireccionMovimientoHorizontal::Derecha) {
+    if (posicionHorizontal == PosicionChasisHorizontal::Izquierda)
+      return sentidoDefecto;
+      
+    if (posicionHorizontal == PosicionChasisHorizontal::Derecha)
+      return sentidoContrario;
   }
 
   return SentidoRotacion::Indefinido;
