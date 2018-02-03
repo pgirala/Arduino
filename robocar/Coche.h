@@ -5,26 +5,11 @@
 #ifndef Coche_h
 #define Coche_h
  
-#include "Arduino.h"
+#include "comun.h"
 
-#include "EstadoMarcha.h"
 #include "SensorUltraSonidos.h"
 #include "Motor.h"
-
-#define TEST // activa el log
-
-// motores
-
-#define NUMERO_MOTORES 4
-#define TIEMPO_PROTECCION_REVERSION 100 // milisegundos
-
-// ultrasonidos
-
-#define NUMERO_SENSORES_US 2
-#define ECHO_PIN_DELANTERO 33
-#define TRIGGER_PIN_DELANTERO 35
-#define ECHO_PIN_TRASERO 37
-#define TRIGGER_PIN_TRASERO 39
+#include "EstadoMarcha.h"
 
 class Coche {
   private:

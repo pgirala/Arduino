@@ -5,10 +5,9 @@
 #ifndef ControlRemoto_h
 #define ControlRemoto_h
 
-#include <IRremote.h>
+#include "comun.h"
 
-#include "Arduino.h"
-#include "Coche.h"
+#include <IRremote.h>
 
 // Teclas del control remoto por IR
 
@@ -21,9 +20,6 @@
 #define KEY_CHANNEL_PLUS 0xFFFFE21D
 #define KEY_CHANNEL_MINUS 0xFFFFA25D
 #define KEY_CHANNEL 0x629D
-
-
-// teclas del control remoto
 
 class ControlRemoto {
   private:

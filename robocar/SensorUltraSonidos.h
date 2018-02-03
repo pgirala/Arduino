@@ -5,11 +5,7 @@
 #ifndef SensorUltraSonidos_h
 #define SensorUltraSonidos_h
 
-#include "Arduino.h"
-#include "Motor.h"
-
-// parámetros pra el control de distancia por ultrasonidos
-const int DISTANCIA_SEGURIDAD = 20; // centímetros
+#include "comun.h"
 
 class SensorUltraSonidos {
   private:

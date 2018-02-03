@@ -5,19 +5,7 @@
 #ifndef EstadoMarcha_h
 #define EstadoMarcha_h
 
-#include "Arduino.h"
-
-// movimiento
-
-#define INCREMENTO_VELOCIDAD 25
-#define VELOCIDAD_MAXIMA 200
-
-// Ordenes que afectan al estado de la marcha
-
-enum class Orden {Indefinida, Parar, Arrancar, IrAdelante, IrAtras, Recto, GirarIzquierda, GirarDerecha, Acelerar, Frenar};
-
-enum class DireccionMovimientoHorizontal {Recta, Izquierda, Derecha};
-enum class DireccionMovimientoVertical {Adelante, Atras};
+#include "comun.h"
 
 class EstadoMarcha {
   private:

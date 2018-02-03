@@ -5,16 +5,9 @@
 #ifndef Motor_h
 #define Motor_h
  
-#include "Arduino.h"
+#include "comun.h"
+
 #include <AFMotor.h>
-
-#include "EstadoMarcha.h"
-
-#define VELOCIDAD_MAXIMA_MOTOR 250
-
-enum class PosicionChasisHorizontal {Izquierda, Derecha};
-enum class PosicionChasisVertical {Delante, Detras};
-enum class SentidoRotacion {Indefinido, Directo, Reverso};
 
 class Motor {
   private:

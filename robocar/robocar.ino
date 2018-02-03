@@ -1,12 +1,9 @@
+#include "comun.h"
+
 #include "Coche.h"
 #include "ControlRemoto.h"
 
-// coche
 Coche coche;
-
-// control remoto
-#define CR_PIN 31
-
 ControlRemoto controlRemoto(CR_PIN);
 
 //-------------------------------------------------------------------------------------------------------------------------------------
