@@ -1,7 +1,7 @@
 #ifndef properties_h
 #define properties_h
  
-#define TEST // activa el log
+#define TEST // activa el modo de pruebas
 
 // control remoto
 

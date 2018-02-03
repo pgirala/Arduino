@@ -4,6 +4,10 @@
  
 #include "Coche.h"
 
+EstadoMarcha Coche::getEstadoActual() {
+  return _estadoActual;
+}
+
 void Coche::inicializar() {
   for (int i = 0; i < NUMERO_SENSORES_US; i++)
     _sensoresUS[i].inicializar();

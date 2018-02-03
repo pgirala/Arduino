@@ -7,6 +7,31 @@ Coche coche;
 ControlRemoto controlRemoto(CR_PIN);
 
 //-------------------------------------------------------------------------------------------------------------------------------------
+#ifdef TEST
+
+#include "TestCoche.h"
+
+TestCoche testCoche;
+
+void setup() {
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, LOW);    // desactiva el led de prueba que, en caso contrario, quedaría encendido
+  
+  Serial.begin(9600);  
+
+  while (! Serial);
+  
+  Serial.println("-----COMIENZO DE LAS PRUEBAS-----");
+  testCoche.ejecutar(&coche);
+  Serial.println("-------FINAL DE LAS PRUEBAS------");
+}
+
+void loop() {
+}
+
+#else
+
+//-------------------------------------------------------------------------------------------------------------------------------------
 
 void setup()
 {
@@ -27,6 +52,8 @@ void loop()
 {
   coche.reaccionar(recibirOrden());
 }
+
+#endif
 
 Orden recibirOrden() {
   // órdenes procedentes del puerto serie

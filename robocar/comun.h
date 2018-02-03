@@ -23,5 +23,4 @@ enum class PosicionChasisVertical {Delante, Detras};
 
 enum class SentidoRotacion {Indefinido, Directo, Reverso};
 
-
 #endif

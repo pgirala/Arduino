@@ -27,7 +27,6 @@ class Coche {
     void establecerDireccion();
     void establecerVelocidadMotores();
     void establecerVelocidadMotores(int velocidad);
-    void pararMotores();
     void pararMotoresPorReversion();
     // acciones del coche
     void actualizarEstado();
@@ -35,6 +34,8 @@ class Coche {
   public:
     void inicializar();
     void reaccionar(Orden orden);
+    void pararMotores();
+    EstadoMarcha getEstadoActual();
     void print();
 };
 
