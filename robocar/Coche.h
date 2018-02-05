@@ -13,10 +13,10 @@
 
 class Coche {
   private:
-    Motor _motores[NUMERO_MOTORES] = {Motor(1, PosicionChasisHorizontal::Izquierda, PosicionChasisVertical::Detras, 60), 
-                                      Motor(2, PosicionChasisHorizontal::Derecha, PosicionChasisVertical::Detras, 70), 
-                                      Motor(3, PosicionChasisHorizontal::Derecha, PosicionChasisVertical::Delante, 75), 
-                                      Motor(4, PosicionChasisHorizontal::Izquierda, PosicionChasisVertical::Delante, 70)};
+    Motor _motores[NUMERO_MOTORES] = {Motor(1, PosicionChasisHorizontal::Izquierda, PosicionChasisVertical::Detras, AJUSTE_MOTOR_TRASERO_IZQUIERDO), 
+                                      Motor(2, PosicionChasisHorizontal::Derecha, PosicionChasisVertical::Detras, AJUSTE_MOTOR_TRASERO_DERECHO), 
+                                      Motor(3, PosicionChasisHorizontal::Derecha, PosicionChasisVertical::Delante, AJUSTE_MOTOR_DELANTERO_DERECHO), 
+                                      Motor(4, PosicionChasisHorizontal::Izquierda, PosicionChasisVertical::Delante, AJUSTE_MOTOR_DELANTERO_IZQUIERDO)};
     // estados de la marcha
     EstadoMarcha _estadoActual;
     EstadoMarcha _estadoOrdenado;
