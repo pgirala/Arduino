@@ -37,6 +37,9 @@ class Coche {
     void pararMotores();
     EstadoMarcha getEstadoActual();
     void print();
+#ifdef TEST
+    SensorUltraSonidos* getSensoresUS();
+#endif
 };
 
 #endif

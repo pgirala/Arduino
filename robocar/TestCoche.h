@@ -9,6 +9,7 @@ class TestCoche {
     void testParar(Coche *coche);
     void testArrancar(Coche *coche);
     void testAcelerar(Coche *coche);
+    void desactivarSensores(Coche *coche);
   public:
     void ejecutar(Coche *coche);
 };

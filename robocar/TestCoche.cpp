@@ -8,6 +8,7 @@ void TestCoche::ejecutar(Coche *coche) {
 
 void TestCoche::testParar(Coche *coche) {
   Serial.print("\ttestParar\t");
+  desactivarSensores(coche);
   coche ->reaccionar(Orden::Parar);
   
   if (coche->getEstadoActual().getVelocidad() != 0)
@@ -18,6 +19,7 @@ void TestCoche::testParar(Coche *coche) {
 
 void TestCoche::testArrancar(Coche *coche) {
   Serial.print("\ttestArrancar\t");
+  desactivarSensores(coche);
   int velocidadAnterior = coche->getEstadoActual().getVelocidad();
   coche ->reaccionar(Orden::Parar);
   coche ->reaccionar(Orden::Arrancar);
@@ -30,9 +32,9 @@ void TestCoche::testArrancar(Coche *coche) {
 
 void TestCoche::testAcelerar(Coche *coche) {
   Serial.print("\ttestAcelerar\t");
-
-  coche ->pararMotores(); // partimos de un estado controlado
-  coche ->reaccionar(Orden::Arrancar);
+  desactivarSensores(coche);
+  coche->pararMotores(); // partimos de un estado controlado
+  coche->reaccionar(Orden::Arrancar);
   int velocidadAnterior = coche->getEstadoActual().getVelocidad();
   coche ->reaccionar(Orden::Acelerar);
 
@@ -41,3 +43,9 @@ void TestCoche::testAcelerar(Coche *coche) {
   else
     Serial.println("OK");
 }
+
+void TestCoche::desactivarSensores(Coche *coche) {
+  for (int i = 0; i < NUMERO_SENSORES_US; i++)
+    coche->getSensoresUS()[i].setHayObstaculo(false);
+}
+

@@ -28,21 +28,17 @@ void Coche::actualizarEstado() {
   if (_estadoActual.igual(_estadoOrdenado))
     return;
 
-#ifdef TEST    
-  Serial.println("SITUACION INICIAL");
-  this->print();
-#endif
+//  Serial.println("SITUACION INICIAL");
+//  this->print();
   
   pararMotoresPorReversion(); // evita problemas con los motores que tenga que revertir el sentido
   establecerDireccion();
   establecerVelocidadMotores(); 
   _estadoActual.copiar(_estadoOrdenado);
 
-#ifdef TEST
-  Serial.println("SITUACION FINAL"); // TEST
-  this->print();
-  Serial.println("D (aDelante) T (aTrás) + (acelerar) - (frenar) I (Izquierda) R (deRecha) E (rEcto) P (Pausa /continuar) F (indeFinida) ");
-#endif
+//  Serial.println("SITUACION FINAL"); // TEST
+//  this->print();
+//  Serial.println("D (aDelante) T (aTrás) + (acelerar) - (frenar) I (Izquierda) R (deRecha) E (rEcto) P (Pausa /continuar) F (indeFinida) ");
 }
 
 void Coche::establecerDireccion() {
@@ -85,7 +81,7 @@ boolean Coche::hayObstaculo(DireccionMovimientoVertical direccionVertical)
   for (int i = 0; i < NUMERO_SENSORES_US; i++)
     if (_sensoresUS[i].hayObstaculo(direccionVertical))
       return true;
-
+    
   return false;
 }
 
@@ -99,4 +95,10 @@ void Coche::print() {
     _motores[i].print();    
   }
 }
+
+#ifdef TEST
+SensorUltraSonidos* Coche::getSensoresUS() {
+  return _sensoresUS;
+}
+#endif
 

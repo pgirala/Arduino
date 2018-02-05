@@ -32,6 +32,9 @@ boolean SensorUltraSonidos::hayObstaculo(DireccionMovimientoVertical direccionVe
 
 boolean SensorUltraSonidos::hayObstaculo() 
 {
+#ifdef TEST
+  return _hayObstaculo;
+#endif
   long cm = 0;
   for (int i = 0; i < 10; i++) { // mide hasta diez veces consecutivas para evitar falsos positivos
     cm = ping();
@@ -55,4 +58,10 @@ long SensorUltraSonidos::ping() {
    distanceCm = duration * 10 / 292/ 2;   //convertimos a distancia, en cm
    return distanceCm;
 }
+
+#ifdef TEST
+bool SensorUltraSonidos::setHayObstaculo(bool hayObs) {
+  _hayObstaculo = hayObs;
+}
+#endif
 
