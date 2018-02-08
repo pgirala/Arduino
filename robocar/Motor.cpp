@@ -100,7 +100,14 @@ static int Motor::obtenerSentidoRealRotacion(SentidoRotacion sentidoRotacion) {
   return RELEASE; // opción por defecto
 }
 
+#ifdef TEST
 void Motor::print() {
   Serial.print("\t\tSentido rotación: "); Serial.print(static_cast<int>(_sentidoRotacion));
   Serial.print("  Velocidad: "); Serial.println(_velocidad);
 }
+
+void Motor::reset() {
+  _velocidad = 0; // parado
+  _sentidoRotacion = SentidoRotacion::Indefinido;  
+}
+#endif

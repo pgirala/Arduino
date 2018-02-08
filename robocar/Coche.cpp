@@ -28,17 +28,21 @@ void Coche::actualizarEstado() {
   if (_estadoActual.igual(_estadoOrdenado))
     return;
 
+#ifdef TEST
 //  Serial.println("SITUACION INICIAL");
-//  this->print();
-  
+//  this.print();
+#endif
+
   pararMotoresPorReversion(); // evita problemas con los motores que tenga que revertir el sentido
   establecerDireccion();
   establecerVelocidadMotores(); 
   _estadoActual.copiar(_estadoOrdenado);
 
+#ifdef TEST
 //  Serial.println("SITUACION FINAL"); // TEST
-//  this->print();
+//  this.print();
 //  Serial.println("D (aDelante) T (aTrás) + (acelerar) - (frenar) I (Izquierda) R (deRecha) E (rEcto) P (Pausa /continuar) F (indeFinida) ");
+#endif
 }
 
 void Coche::establecerDireccion() {
@@ -85,6 +89,7 @@ boolean Coche::hayObstaculo(DireccionMovimientoVertical direccionVertical)
   return false;
 }
 
+#ifdef TEST
 void Coche::print() {
   Serial.print("\tEstado actual: ");
   _estadoActual.print();
@@ -96,9 +101,24 @@ void Coche::print() {
   }
 }
 
-#ifdef TEST
-SensorUltraSonidos* Coche::getSensoresUS() {
-  return _sensoresUS;
+void Coche::reset() {
+  // coche parado dirigido hacia adelante
+  _estadoActual.reset();
+  _estadoOrdenado.reset();  
+  // sensores de ultrasonidos
+  for (int i = 0; i < NUMERO_SENSORES_US; i++)
+    _sensoresUS[i].setHayObstaculo(false);
+  // motores
+  for (int i = 0; i < NUMERO_MOTORES; i++)
+    _motores[i].reset();
+}
+
+int Coche::comprobarSincronizacionMotores() {
+  for (int i = 0; i < NUMERO_MOTORES; i++)
+    if (_motores[i].getSentidoRotacion() != _motores[i].obtenerSentidoRotacion(_estadoActual.getDireccionHorizontal(), _estadoActual.getDireccionVertical())
+        || _motores[i].getVelocidad() != _estadoActual.getVelocidad())
+      return i + 1;
+  return 0;
 }
 #endif
 

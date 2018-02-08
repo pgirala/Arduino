@@ -22,7 +22,7 @@ void setup() {
   while (! Serial);
   
   Serial.println("-----COMIENZO DE LAS PRUEBAS-----");
-  testCoche.ejecutar(&coche);
+  testCoche.ejecutar(coche, controlRemoto);
   Serial.println("-------FINAL DE LAS PRUEBAS------");
 }
 

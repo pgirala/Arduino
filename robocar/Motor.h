@@ -41,7 +41,10 @@ class Motor {
 
     void parar();
 
+#ifdef TEST
     void print();
+    void reset();
+#endif
 };
 
 #endif

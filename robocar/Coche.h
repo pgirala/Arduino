@@ -18,8 +18,8 @@ class Coche {
                                       Motor(3, PosicionChasisHorizontal::Derecha, PosicionChasisVertical::Delante, AJUSTE_MOTOR_DELANTERO_DERECHO), 
                                       Motor(4, PosicionChasisHorizontal::Izquierda, PosicionChasisVertical::Delante, AJUSTE_MOTOR_DELANTERO_IZQUIERDO)};
     // estados de la marcha
-    EstadoMarcha _estadoActual;
-    EstadoMarcha _estadoOrdenado;
+    EstadoMarcha _estadoActual{0, DireccionMovimientoHorizontal::Recta, DireccionMovimientoVertical::Adelante};
+    EstadoMarcha _estadoOrdenado{0, DireccionMovimientoHorizontal::Recta, DireccionMovimientoVertical::Adelante};
     // sensor de ultrasonidos
     SensorUltraSonidos _sensoresUS[NUMERO_SENSORES_US] = {SensorUltraSonidos(PosicionChasisVertical::Delante, ECHO_PIN_DELANTERO, TRIGGER_PIN_DELANTERO),
                                                            SensorUltraSonidos(PosicionChasisVertical::Detras, ECHO_PIN_TRASERO, TRIGGER_PIN_TRASERO)};
@@ -38,7 +38,8 @@ class Coche {
     EstadoMarcha getEstadoActual();
     void print();
 #ifdef TEST
-    SensorUltraSonidos* getSensoresUS();
+    void reset();
+    int comprobarSincronizacionMotores();
 #endif
 };
 
