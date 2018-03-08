@@ -1,13 +1,19 @@
 #include "TestCoche.h"
 
+#ifdef TEST
+
 void TestCoche::ejecutar(Coche &coche, ControlRemoto &controlRemoto) {
   testParar(coche, controlRemoto);
   testArrancar(coche, controlRemoto);
   testAcelerar(coche, controlRemoto);
+  testFrenar(coche, controlRemoto);
+  testIrAdelante(coche, controlRemoto);
+  testIrAtras(coche, controlRemoto);
 }
 
 void TestCoche::testParar(Coche &coche, ControlRemoto &controlRemoto) {
   Serial.print("\ttestParar\t");
+
   inicializar(coche, controlRemoto);
   
   EstadoMarcha estadoInicial = coche.getEstadoActual();
@@ -29,6 +35,7 @@ void TestCoche::testParar(Coche &coche, ControlRemoto &controlRemoto) {
 
 void TestCoche::testArrancar(Coche &coche, ControlRemoto &controlRemoto) {
   Serial.print("\ttestArrancar\t");
+
   iniciarMovimientoHaciaAdelante(coche, controlRemoto);
   EstadoMarcha estadoInicial = coche.getEstadoActual();
   
@@ -43,18 +50,102 @@ void TestCoche::testArrancar(Coche &coche, ControlRemoto &controlRemoto) {
 
 void TestCoche::testAcelerar(Coche &coche, ControlRemoto &controlRemoto) {
   Serial.print("\ttestAcelerar\t");
-  inicializar(coche, controlRemoto);
-  
-  coche.reaccionar(Orden::Acelerar);
+
+  iniciarMovimientoHaciaAdelante(coche, controlRemoto);
   
   int velocidadAnterior = coche.getEstadoActual().getVelocidad();
 
   coche.reaccionar(Orden::Acelerar);
 
-  if (coche.getEstadoActual().getVelocidad() > velocidadAnterior)
-    Serial.println("OK");
-  else if (comprobarSincronizacionMotores(coche))
+  if (coche.getEstadoActual().getVelocidad() <= velocidadAnterior)
     Serial.println("El coche no acelera");
+  else if (comprobarSincronizacionMotores(coche))
+    Serial.println("OK");
+}
+
+void TestCoche::testFrenar(Coche &coche, ControlRemoto &controlRemoto) {
+  Serial.print("\ttestFrenar\t");
+
+  iniciarMovimientoHaciaAdelante(coche, controlRemoto);
+  coche.reaccionar(Orden::Acelerar);
+  
+  int velocidadAnterior = coche.getEstadoActual().getVelocidad();
+
+  coche.reaccionar(Orden::Frenar);
+
+  if (coche.getEstadoActual().getVelocidad() >= velocidadAnterior)
+    Serial.println("El coche no acelera");
+  else if (comprobarSincronizacionMotores(coche))
+    Serial.println("OK");
+}
+
+void TestCoche::testIrAdelante(Coche &coche, ControlRemoto &controlRemoto) {
+  Serial.print("\ttestIrAdelante\t");
+
+  iniciarMovimientoHaciaAdelante(coche, controlRemoto);
+  coche.reaccionar(Orden::GirarDerecha);
+
+  if (coche.getEstadoActual().getDireccionVertical() != DireccionMovimientoVertical::Adelante)
+    Serial.println("El coche ha cambiado de sentido de marcha");
+  else if (coche.getEstadoActual().getDireccionHorizontal() != DireccionMovimientoHorizontal::Derecha)
+    Serial.println("El coche no gira a la derecha");
+  else 
+    comprobarSincronizacionMotores(coche);
+
+  coche.reaccionar(Orden::GirarIzquierda);
+
+  if (coche.getEstadoActual().getDireccionVertical() != DireccionMovimientoVertical::Adelante)
+    Serial.println("El coche ha cambiado de sentido de marcha");
+  else if (coche.getEstadoActual().getDireccionHorizontal() != DireccionMovimientoHorizontal::Izquierda)
+    Serial.println("El coche no gira a la izquierda");
+  else 
+    comprobarSincronizacionMotores(coche);
+    
+  coche.reaccionar(Orden::Recto);
+
+  if (coche.getEstadoActual().getDireccionVertical() != DireccionMovimientoVertical::Adelante)
+    Serial.println("El coche ha cambiado de sentido de marcha");
+  else if (coche.getEstadoActual().getDireccionHorizontal() != DireccionMovimientoHorizontal::Recta)
+    Serial.println("El coche no se endereza");
+  else if (comprobarSincronizacionMotores(coche))
+    Serial.println("OK");
+}
+
+void TestCoche::testIrAtras(Coche &coche, ControlRemoto &controlRemoto) {
+  Serial.print("\ttestIrAtras\t");
+
+  iniciarMovimientoHaciaAdelante(coche, controlRemoto);
+
+  int velocidadAnterior = coche.getEstadoActual().getVelocidad();
+  
+  coche.reaccionar(Orden::IrAtras);
+
+  if (coche.getEstadoActual().getDireccionVertical() != DireccionMovimientoVertical::Atras)
+    Serial.println("El coche no ha cambiado de sentido de marcha");
+  else if (coche.getEstadoActual().getVelocidad() != velocidadAnterior)
+    Serial.println("El coche no mantiene la velocidad");
+  else if (coche.getEstadoActual().getDireccionHorizontal() != DireccionMovimientoHorizontal::Recta)
+    Serial.println("El coche no se mantiene recto");
+  else 
+    comprobarSincronizacionMotores(coche);
+
+  coche.reaccionar(Orden::GirarIzquierda);
+
+  if (coche.getEstadoActual().getDireccionVertical() != DireccionMovimientoVertical::Atras)
+    Serial.println("El coche ha cambiado de sentido de marcha");
+  else if (coche.getEstadoActual().getDireccionHorizontal() != DireccionMovimientoHorizontal::Izquierda)
+    Serial.println("El coche no gira a la izquierda");
+  else 
+    comprobarSincronizacionMotores(coche);
+    
+  coche.reaccionar(Orden::Recto);
+
+  if (coche.getEstadoActual().getDireccionVertical() != DireccionMovimientoVertical::Atras)
+    Serial.println("El coche ha cambiado de sentido de marcha");
+  else if (coche.getEstadoActual().getDireccionHorizontal() != DireccionMovimientoHorizontal::Recta)
+    Serial.println("El coche no se endereza");
+  else if (comprobarSincronizacionMotores(coche))
+    Serial.println("OK");
 }
 
 void TestCoche::inicializar(Coche &coche, ControlRemoto &controlRemoto) {
@@ -82,4 +173,4 @@ boolean TestCoche::comprobarSincronizacionMotores(Coche &coche) {
   return true;
 }
 
-
+#endif

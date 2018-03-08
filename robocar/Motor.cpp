@@ -50,6 +50,9 @@ void Motor::parar() {
 
 // obtiene el sentido de rotación a partir de las direcciones de movimiento y de la posición del motor en el chasis
 static SentidoRotacion Motor::obtenerSentidoRotacion(DireccionMovimientoHorizontal direccionHorizontal, DireccionMovimientoVertical direccionVertical) {
+  if (_velocidad == 0)
+    return SentidoRotacion::Indefinido;
+    
   return Motor::obtenerSentidoRotacion(direccionHorizontal, direccionVertical, _posicionHorizontal, _posicionVertical);
 }
 
@@ -100,14 +103,20 @@ static int Motor::obtenerSentidoRealRotacion(SentidoRotacion sentidoRotacion) {
   return RELEASE; // opción por defecto
 }
 
-#ifdef TEST
+#ifdef LOG
+
 void Motor::print() {
   Serial.print("\t\tSentido rotación: "); Serial.print(static_cast<int>(_sentidoRotacion));
   Serial.print("  Velocidad: "); Serial.println(_velocidad);
 }
 
+#endif
+
+#ifdef TEST
+
 void Motor::reset() {
   _velocidad = 0; // parado
   _sentidoRotacion = SentidoRotacion::Indefinido;  
 }
+
 #endif

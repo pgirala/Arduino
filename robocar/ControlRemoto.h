@@ -31,11 +31,11 @@ class ControlRemoto {
   public:
     ControlRemoto(int pin);
     void inicializar();
-    Orden obtenerOrden(long int key);
+    Orden obtenerOrden(int key);
     Orden obtenerOrden();
 #ifdef TEST
     void reset();
-    bool setKey(int key);
+    bool setKey(long int key);
 #endif
 };
 

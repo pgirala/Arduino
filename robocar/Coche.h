@@ -36,7 +36,9 @@ class Coche {
     void reaccionar(Orden orden);
     void pararMotores();
     EstadoMarcha getEstadoActual();
+#ifdef LOG
     void print();
+#endif
 #ifdef TEST
     void reset();
     int comprobarSincronizacionMotores();

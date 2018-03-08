@@ -10,6 +10,9 @@ class TestCoche {
     void testParar(Coche &coche, ControlRemoto &controlRemoto);
     void testArrancar(Coche &coche, ControlRemoto &controlRemoto);
     void testAcelerar(Coche &coche, ControlRemoto &controlRemoto);
+    void testFrenar(Coche &coche, ControlRemoto &controlRemoto);
+    void testIrAdelante(Coche &coche, ControlRemoto &controlRemoto);
+    void testIrAtras(Coche &coche, ControlRemoto &controlRemoto);
 
     void inicializar(Coche &coche, ControlRemoto &controlRemoto);
     void iniciarMovimientoHaciaAdelante(Coche &coche, ControlRemoto &controlRemoto);

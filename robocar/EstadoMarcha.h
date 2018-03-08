@@ -31,8 +31,11 @@ class EstadoMarcha {
 
     void copiar(EstadoMarcha otroEstado);
 
-#ifdef TEST
+#ifdef LOG
     void print();
+#endif
+
+#ifdef TEST
     void reset();
 #endif
 };

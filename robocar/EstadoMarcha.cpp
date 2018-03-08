@@ -83,16 +83,22 @@ void EstadoMarcha::copiar(EstadoMarcha otroEstado) {
   _direccionHorizontal = otroEstado.getDireccionHorizontal();
 }
 
-#ifdef TEST
+#ifdef LOG
+
 void EstadoMarcha::print() {
   Serial.print("\t\tVelocidad: "); Serial.print(_velocidad);
   Serial.print("  Direccion horizontal: "); Serial.print(static_cast<int>(_direccionHorizontal));
   Serial.print("  Direccion vertical: "); Serial.println(static_cast<int>(_direccionVertical));
 }
 
+#endif
+
+#ifdef TEST
+
 void EstadoMarcha::reset() {
   _velocidad = 0;
   _direccionHorizontal = DireccionMovimientoHorizontal::Recta;
   _direccionVertical = DireccionMovimientoVertical::Adelante;
 }
+
 #endif

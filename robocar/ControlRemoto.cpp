@@ -12,7 +12,7 @@ void ControlRemoto::inicializar() {
   _receptorIR->enableIRIn(); // Start the IR receiver
 }
 
-Orden ControlRemoto::obtenerOrden(long int key) {
+Orden ControlRemoto::obtenerOrden(int key) {
   Orden orden = Orden::Indefinida;
   
   switch (key)
@@ -81,7 +81,7 @@ void ControlRemoto::reset() {
   _key = KEY_REPEAT;
 }
 
-bool ControlRemoto::setKey(int key) {
+bool ControlRemoto::setKey(long int key) {
     _key = key;
   }
 #endif

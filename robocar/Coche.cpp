@@ -28,20 +28,24 @@ void Coche::actualizarEstado() {
   if (_estadoActual.igual(_estadoOrdenado))
     return;
 
-#ifdef TEST
-//  Serial.println("SITUACION INICIAL");
-//  this.print();
+#ifdef LOG
+
+  Serial.println("SITUACION INICIAL");
+  this->print();
+
 #endif
 
   pararMotoresPorReversion(); // evita problemas con los motores que tenga que revertir el sentido
-  establecerDireccion();
   establecerVelocidadMotores(); 
+  establecerDireccion();
   _estadoActual.copiar(_estadoOrdenado);
 
-#ifdef TEST
-//  Serial.println("SITUACION FINAL"); // TEST
-//  this.print();
-//  Serial.println("D (aDelante) T (aTrás) + (acelerar) - (frenar) I (Izquierda) R (deRecha) E (rEcto) P (Pausa /continuar) F (indeFinida) ");
+#ifdef LOG
+
+  Serial.println("SITUACION FINAL"); // TEST
+  this->print();
+  Serial.println("D (aDelante) T (aTrás) + (acelerar) - (frenar) I (Izquierda) R (deRecha) E (rEcto) P (Pausa /continuar) F (indeFinida) ");
+
 #endif
 }
 
@@ -56,8 +60,7 @@ void Coche::establecerVelocidadMotores() {
 
 void Coche::establecerVelocidadMotores(int velocidad) {
   for (int i = 0; i < NUMERO_MOTORES; i++)
-    if (_motores[i].getSentidoRotacion() != SentidoRotacion::Indefinido)
-      _motores[i].setVelocidad(velocidad);
+    _motores[i].setVelocidad(velocidad);
 }
 
 void Coche::pararMotores() {
@@ -75,9 +78,13 @@ void Coche::pararMotoresPorReversion() {
       _motores[i].parar();
       parada = true;
     }
-    
+
+#ifndef TEST
+
   if (parada)
-    delay(TIEMPO_PROTECCION_REVERSION); // deja que los motores se paren antes de revertir la marcha
+    delay(TIEMPO_PROTECCION_REVERSION); // deja que los motores se paren antes de revertir la marcha; solo es necesario si se está en modo no test
+
+#endif
 }
 
 boolean Coche::hayObstaculo(DireccionMovimientoVertical direccionVertical) 
@@ -89,7 +96,8 @@ boolean Coche::hayObstaculo(DireccionMovimientoVertical direccionVertical)
   return false;
 }
 
-#ifdef TEST
+#ifdef LOG
+
 void Coche::print() {
   Serial.print("\tEstado actual: ");
   _estadoActual.print();
@@ -100,6 +108,10 @@ void Coche::print() {
     _motores[i].print();    
   }
 }
+
+#endif
+
+#ifdef TEST
 
 void Coche::reset() {
   // coche parado dirigido hacia adelante
@@ -120,5 +132,6 @@ int Coche::comprobarSincronizacionMotores() {
       return i + 1;
   return 0;
 }
+
 #endif
 
