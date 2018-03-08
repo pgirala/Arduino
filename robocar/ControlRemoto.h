@@ -26,12 +26,12 @@ class ControlRemoto {
     IRrecv * _receptorIR;
     boolean _enPausa = false;
     #ifdef TEST
-      int _key = KEY_REPEAT;
+      long int _key = KEY_REPEAT;
     #endif
   public:
     ControlRemoto(int pin);
     void inicializar();
-    Orden obtenerOrden(int key);
+    Orden obtenerOrden(long int key);
     Orden obtenerOrden();
 #ifdef TEST
     void reset();
