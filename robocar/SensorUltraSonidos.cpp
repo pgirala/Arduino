@@ -26,7 +26,6 @@ boolean SensorUltraSonidos::hayObstaculo(DireccionMovimientoVertical direccionVe
   if (_posicionVertical == PosicionChasisVertical::Detras
       && direccionVertical == DireccionMovimientoVertical::Atras)
     return hayObstaculo();
-
   return false;
 }
 
@@ -36,9 +35,9 @@ boolean SensorUltraSonidos::hayObstaculo()
   return _hayObstaculo;
 #endif
   long cm = 0;
-  for (int i = 0; i < 10; i++) { // mide hasta diez veces consecutivas para evitar falsos positivos
+  for (int i = 0; i < 5; i++) { // mide hasta cinco veces consecutivas para evitar falsos positivos
     cm = ping();
-    if (cm >= 0 and cm <= DISTANCIA_SEGURIDAD)
+    if (cm > 0 and cm <= DISTANCIA_SEGURIDAD)
       return true;
   }
   return false;
