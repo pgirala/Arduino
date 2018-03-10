@@ -1,1 +1,0 @@
-Se deben copiar en \documentos\Arduino\libraries.
