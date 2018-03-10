@@ -1,7 +1,7 @@
 #ifndef properties_h
 #define properties_h
  
-#define LOG // TEST activa el modo de pruebas software; para trazas de ejecución poner LOG
+//#define LOG // TEST activa el modo de pruebas software; para trazas de ejecución poner LOG
 
 // control remoto
 
@@ -23,14 +23,14 @@
 #define VELOCIDAD_MAXIMA_MOTOR 200
 
 // equilibrado de la velocidad de los motores
-#define AJUSTE_MOTOR_TRASERO_IZQUIERDO 60
-#define AJUSTE_MOTOR_TRASERO_DERECHO 75
-#define AJUSTE_MOTOR_DELANTERO_DERECHO 60
-#define AJUSTE_MOTOR_DELANTERO_IZQUIERDO 75
+#define AJUSTE_MOTOR_TRASERO_IZQUIERDO 70
+#define AJUSTE_MOTOR_TRASERO_DERECHO 85
+#define AJUSTE_MOTOR_DELANTERO_DERECHO 70
+#define AJUSTE_MOTOR_DELANTERO_IZQUIERDO 85
 
 // movimiento
 
-#define INCREMENTO_VELOCIDAD 25
+#define INCREMENTO_VELOCIDAD 10
 #define VELOCIDAD_MAXIMA 200
 
 
