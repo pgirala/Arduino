@@ -16,12 +16,19 @@ void Coche::inicializar() {
 void Coche::reaccionar(Orden orden) {
   _estadoOrdenado.actualizar(orden);
 
-  if (hayObstaculo(_estadoOrdenado.getDireccionVertical())) { // TODO mejorar la respuesta ante obstaculos, evitándolos
-    pararMotores();
-    return;
-  }
+  if (hayObstaculo(_estadoOrdenado.getDireccionVertical()))
+    evitarObstaculo();
   
   actualizarEstado();
+}
+
+void Coche::evitarObstaculo() {
+  establecerDireccion(DireccionMovimientoHorizontal::Izquierda, _estadoOrdenado.getDireccionVertical());
+  
+  while (hayObstaculo(_estadoOrdenado.getDireccionVertical())); // gira hasta que no detecta un obstáculo
+  
+  establecerDireccion(_estadoOrdenado.getDireccionHorizontal(), _estadoOrdenado.getDireccionVertical()); // vuelve a comportarse como antes
+  return;
 }
 
 void Coche::actualizarEstado() {
@@ -50,8 +57,12 @@ void Coche::actualizarEstado() {
 }
 
 void Coche::establecerDireccion() {
+  establecerDireccion(_estadoOrdenado.getDireccionHorizontal(), _estadoOrdenado.getDireccionVertical());
+}
+
+void Coche::establecerDireccion(DireccionMovimientoHorizontal direccionHorizontal, DireccionMovimientoVertical direccionVertical) {
   for (int i = 0; i < NUMERO_MOTORES; i++)
-    _motores[i].setSentidoRotacion(_motores[i].obtenerSentidoRotacion(_estadoOrdenado.getDireccionHorizontal(), _estadoOrdenado.getDireccionVertical()));
+    _motores[i].setSentidoRotacion(_motores[i].obtenerSentidoRotacion(direccionHorizontal, direccionVertical));
 }
 
 void Coche::establecerVelocidadMotores() {
