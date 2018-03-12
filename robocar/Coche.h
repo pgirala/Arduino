@@ -38,6 +38,8 @@ class Coche {
     void reaccionar(Orden orden);
     void pararMotores();
     EstadoMarcha getEstadoActual();
+    void evitarObstaculo();
+    void establecerDireccion(DireccionMovimientoHorizontal direccionHorizontal, DireccionMovimientoVertical direccionVertical);
 #ifdef LOG
     void print();
 #endif
