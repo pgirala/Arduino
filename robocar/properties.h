@@ -18,7 +18,7 @@
 #define TRIGGER_PIN_DELANTERO_D 47
 #define ECHO_PIN_TRASERO 37
 #define TRIGGER_PIN_TRASERO 39
-#define DISTANCIA_SEGURIDAD 15 // centímetros
+#define DISTANCIA_SEGURIDAD 20 // centímetros
 
 // motores
 
