@@ -21,9 +21,7 @@ class Coche {
     EstadoMarcha _estadoActual{0, DireccionMovimientoHorizontal::Recta, DireccionMovimientoVertical::Adelante};
     EstadoMarcha _estadoOrdenado{0, DireccionMovimientoHorizontal::Recta, DireccionMovimientoVertical::Adelante};
     // sensor de ultrasonidos
-    SensorUltraSonidos _sensoresUS[NUMERO_SENSORES_US] = {SensorUltraSonidos(PosicionChasisVertical::Delante, ECHO_PIN_DELANTERO_I, TRIGGER_PIN_DELANTERO_I),
-                                                           SensorUltraSonidos(PosicionChasisVertical::Delante, ECHO_PIN_DELANTERO_C, TRIGGER_PIN_DELANTERO_C),
-                                                           SensorUltraSonidos(PosicionChasisVertical::Delante, ECHO_PIN_DELANTERO_D, TRIGGER_PIN_DELANTERO_D),
+    SensorUltraSonidos _sensoresUS[NUMERO_SENSORES_US] = {SensorUltraSonidos(PosicionChasisVertical::Delante, ECHO_PIN_DELANTERO, TRIGGER_PIN_DELANTERO),
                                                            SensorUltraSonidos(PosicionChasisVertical::Detras, ECHO_PIN_TRASERO, TRIGGER_PIN_TRASERO)};
     // acciones dirigidas a los motores
     void establecerDireccion();
