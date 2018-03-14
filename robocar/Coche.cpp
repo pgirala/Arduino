@@ -49,7 +49,7 @@ DireccionMovimientoHorizontal Coche::buscarDireccionEscape(DireccionMovimientoVe
       indiceSensorEscape = i;
     }
   }
-  
+
   return _sensoresUS[indiceSensorEscape].getDireccionMovimientoHorizontal();
 }
 

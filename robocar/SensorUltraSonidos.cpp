@@ -37,7 +37,7 @@ boolean SensorUltraSonidos::hayObstaculo()
 #endif
   long cm = 0;
   for (int i = 0; i < 3; i++) { // varias veces consecutivas para evitar falsos positivos
-    cm = ping();
+    cm = ping(DISTANCIA_SEGURIDAD + 1);
     if (cm > 0 and cm <= DISTANCIA_SEGURIDAD)
       return true;
   }
@@ -45,6 +45,10 @@ boolean SensorUltraSonidos::hayObstaculo()
 }
 
 long SensorUltraSonidos::ping() {
+  return ping(-1);
+}
+
+long SensorUltraSonidos::ping(long distanciaMaxima) {
    long duration, distanceCm;
    
    digitalWrite(_triggerPin, LOW);  //para generar un pulso limpio ponemos a LOW 4us
@@ -52,11 +56,18 @@ long SensorUltraSonidos::ping() {
    digitalWrite(_triggerPin, HIGH);  //generamos Trigger (disparo) de 10us
    delayMicroseconds(10);
    digitalWrite(_triggerPin, LOW);
-   
-   duration = pulseIn(_echoPin, HIGH, (DISTANCIA_SEGURIDAD + 1) * 292);  //medimos el tiempo entre pulsos, en microsegundos evitando distancias superiores a la de seguridad
-   
+
+   if (distanciaMaxima < 0)
+    duration = pulseIn(_echoPin, HIGH);  //medimos el tiempo entre pulsos, en microsegundos
+   else 
+    duration = pulseIn(_echoPin, HIGH, distanciaMaxima * 292);  //medimos el tiempo entre pulsos, en microsegundos evitando distancias superiores a la de seguridad
+
    distanceCm = duration * 10 / 292/ 2;   //convertimos a distancia, en cm
-   return (distanceCm == 0 ? DISTANCIA_SEGURIDAD + 1 : distanceCm);
+
+   if (distanciaMaxima < 0)
+    return distanceCm;
+   else
+    return (distanceCm == 0 ? DISTANCIA_SEGURIDAD + 1 : distanceCm);
 }
 
 DireccionMovimientoHorizontal SensorUltraSonidos::getDireccionMovimientoHorizontal() {
