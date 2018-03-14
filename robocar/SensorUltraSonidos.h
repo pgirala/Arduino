@@ -9,17 +9,20 @@
 
 class SensorUltraSonidos {
   private:
+    PosicionChasisHorizontal _posicionHorizontal; // izquierda o derecha
     PosicionChasisVertical _posicionVertical; // delante o detrás
     int _triggerPin;
     int _echoPin;
     #ifdef TEST
       bool _hayObstaculo;
     #endif
-    long ping();
     bool hayObstaculo();
   public:
-    SensorUltraSonidos(PosicionChasisVertical posicionVertical, int echoPin, int triggerPin);
+    SensorUltraSonidos(PosicionChasisHorizontal posicionHorizontal, PosicionChasisVertical posicionVertical, int echoPin, int triggerPin);
     void inicializar();
+    DireccionMovimientoHorizontal getDireccionMovimientoHorizontal();
+    DireccionMovimientoVertical getDireccionMovimientoVertical();
+    long ping();
     bool hayObstaculo(DireccionMovimientoVertical direccionVertical);
     #ifdef TEST
       bool setHayObstaculo(bool hayObs);

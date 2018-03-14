@@ -16,7 +16,7 @@ enum class DireccionMovimientoVertical {Adelante, Atras};
 
 // Posiciones dentro del chasis
 
-enum class PosicionChasisHorizontal {Izquierda, Derecha};
+enum class PosicionChasisHorizontal {Izquierda, Centro, Derecha};
 enum class PosicionChasisVertical {Delante, Detras};
 
 // Sentido de rotación de los motores

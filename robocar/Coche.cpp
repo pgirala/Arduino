@@ -16,7 +16,7 @@ void Coche::inicializar() {
 void Coche::reaccionar(Orden orden) {
   _estadoOrdenado.actualizar(orden);
 
-  if (hayObstaculo(_estadoOrdenado.getDireccionVertical())) { // TODO mejorar la respuesta ante obstaculos, evitándolos
+  if (hayObstaculo(_estadoOrdenado.getDireccionVertical())) {
     evitarObstaculo();
     return;
   }
@@ -25,12 +25,32 @@ void Coche::reaccionar(Orden orden) {
 }
 
 void Coche::evitarObstaculo() {
-  establecerDireccion(DireccionMovimientoHorizontal::Izquierda, _estadoOrdenado.getDireccionVertical());
+  establecerDireccion(buscarDireccionEscape(_estadoOrdenado.getDireccionVertical()), _estadoOrdenado.getDireccionVertical());
   
   while (hayObstaculo(_estadoOrdenado.getDireccionVertical())); // gira hasta que no detecta un obstáculo
   
   establecerDireccion(_estadoOrdenado.getDireccionHorizontal(), _estadoOrdenado.getDireccionVertical()); // vuelve a comportarse como antes
   return;
+}
+
+DireccionMovimientoHorizontal Coche::buscarDireccionEscape(DireccionMovimientoVertical direccionMovimientoVertical) {
+  int indiceSensorEscape = 0;
+  long distancia = 0;
+  long distanciaSensor = 0;
+
+  for (int i = 0; i < NUMERO_SENSORES_US; i++) {
+    if (_sensoresUS[i].getDireccionMovimientoVertical() != direccionMovimientoVertical)
+      continue;
+    
+    distanciaSensor = _sensoresUS[i].ping();
+
+    if (distanciaSensor > distancia) {
+      distancia = distanciaSensor;
+      indiceSensorEscape = i;
+    }
+  }
+  
+  return _sensoresUS[indiceSensorEscape].getDireccionMovimientoHorizontal();
 }
 
 void Coche::actualizarEstado() {

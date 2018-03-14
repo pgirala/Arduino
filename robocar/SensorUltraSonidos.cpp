@@ -4,7 +4,8 @@
  
 #include "SensorUltraSonidos.h"
  
-SensorUltraSonidos::SensorUltraSonidos(PosicionChasisVertical posicionVertical, int echoPin, int triggerPin) : 
+SensorUltraSonidos::SensorUltraSonidos(PosicionChasisHorizontal posicionHorizontal, PosicionChasisVertical posicionVertical, int echoPin, int triggerPin) : 
+              _posicionHorizontal (posicionHorizontal),
               _posicionVertical (posicionVertical),
               _echoPin (echoPin),
               _triggerPin (triggerPin) { 
@@ -55,7 +56,31 @@ long SensorUltraSonidos::ping() {
    duration = pulseIn(_echoPin, HIGH, (DISTANCIA_SEGURIDAD + 1) * 292);  //medimos el tiempo entre pulsos, en microsegundos evitando distancias superiores a la de seguridad
    
    distanceCm = duration * 10 / 292/ 2;   //convertimos a distancia, en cm
-   return distanceCm;
+   return (distanceCm == 0 ? DISTANCIA_SEGURIDAD + 1 : distanceCm);
+}
+
+DireccionMovimientoHorizontal SensorUltraSonidos::getDireccionMovimientoHorizontal() {
+  switch (_posicionHorizontal) {
+    case PosicionChasisHorizontal::Izquierda:
+      return DireccionMovimientoHorizontal::Izquierda;
+    case PosicionChasisHorizontal::Centro:
+      return DireccionMovimientoHorizontal::Recta;
+    case PosicionChasisHorizontal::Derecha:
+      return DireccionMovimientoHorizontal::Derecha;
+    default:
+      return DireccionMovimientoHorizontal::Izquierda;
+  }
+}
+
+DireccionMovimientoVertical SensorUltraSonidos::getDireccionMovimientoVertical() {
+  switch (_posicionVertical) {
+    case PosicionChasisVertical::Delante:
+      return DireccionMovimientoVertical::Adelante;
+    case PosicionChasisVertical::Detras:
+      return DireccionMovimientoVertical::Atras;
+    default:
+      return DireccionMovimientoVertical::Adelante;
+  }
 }
 
 #ifdef TEST
