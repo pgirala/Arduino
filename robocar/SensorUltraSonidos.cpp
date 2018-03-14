@@ -35,7 +35,7 @@ boolean SensorUltraSonidos::hayObstaculo()
   return _hayObstaculo;
 #endif
   long cm = 0;
-  for (int i = 0; i < 5; i++) { // mide hasta cinco veces consecutivas para evitar falsos positivos
+  for (int i = 0; i < 3; i++) { // varias veces consecutivas para evitar falsos positivos
     cm = ping();
     if (cm > 0 and cm <= DISTANCIA_SEGURIDAD)
       return true;
@@ -52,7 +52,7 @@ long SensorUltraSonidos::ping() {
    delayMicroseconds(10);
    digitalWrite(_triggerPin, LOW);
    
-   duration = pulseIn(_echoPin, HIGH);  //medimos el tiempo entre pulsos, en microsegundos
+   duration = pulseIn(_echoPin, HIGH, (DISTANCIA_SEGURIDAD + 1) * 292);  //medimos el tiempo entre pulsos, en microsegundos evitando distancias superiores a la de seguridad
    
    distanceCm = duration * 10 / 292/ 2;   //convertimos a distancia, en cm
    return distanceCm;
