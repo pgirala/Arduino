@@ -9,6 +9,7 @@ void TestCoche::ejecutar(Coche &coche, ControlRemoto &controlRemoto) {
   testFrenar(coche, controlRemoto);
   testIrAdelante(coche, controlRemoto);
   testIrAtras(coche, controlRemoto);
+  testEvitarObstaculo(coche, controlRemoto);
 }
 
 void TestCoche::testParar(Coche &coche, ControlRemoto &controlRemoto) {
@@ -148,6 +149,80 @@ void TestCoche::testIrAtras(Coche &coche, ControlRemoto &controlRemoto) {
     Serial.println("OK");
 }
 
+void TestCoche::testEvitarObstaculo(Coche &coche, ControlRemoto &controlRemoto){
+  Serial.print("\ttestEvitarObstaculo\t");
+
+  iniciarMovimientoHaciaAdelante(coche, controlRemoto);
+
+  // aparece un obstáculo a la izquierda; el coche debería permanecer recto o girar a la derecha
+
+  if (!establecerObstaculo(coche, PosicionChasisHorizontal::Izquierda, PosicionChasisVertical::Delante, DISTANCIA_SEGURIDAD - 1) ||
+      !establecerObstaculo(coche, PosicionChasisHorizontal::Centro, PosicionChasisVertical::Delante, DISTANCIA_SEGURIDAD + 1) ||
+      !establecerObstaculo(coche, PosicionChasisHorizontal::Derecha, PosicionChasisVertical::Delante, DISTANCIA_SEGURIDAD + 1))
+      return;
+  
+  DireccionMovimientoHorizontal direccionEscape;
+
+  if (coche.encontrarDireccionEscape(DireccionMovimientoVertical::Adelante, direccionEscape)) {
+    if (direccionEscape != DireccionMovimientoHorizontal::Recta and direccionEscape != DireccionMovimientoHorizontal::Derecha)
+      Serial.println("Con el obstáculo a la izquierda no se va al frente o a la derecha");
+  } else
+    Serial.println("No ha encontrado dirección de escape");
+  
+  // aparece un obstáculo a la izquierda y delante; el coche debería girar a la derecha
+
+  if (!establecerObstaculo(coche, PosicionChasisHorizontal::Izquierda, PosicionChasisVertical::Delante, DISTANCIA_SEGURIDAD - 1) ||
+      !establecerObstaculo(coche, PosicionChasisHorizontal::Centro, PosicionChasisVertical::Delante, DISTANCIA_SEGURIDAD - 1) ||
+      !establecerObstaculo(coche, PosicionChasisHorizontal::Derecha, PosicionChasisVertical::Delante, DISTANCIA_SEGURIDAD + 1))
+      return;
+  
+  if (coche.encontrarDireccionEscape(DireccionMovimientoVertical::Adelante, direccionEscape)) {
+    if (direccionEscape != DireccionMovimientoHorizontal::Derecha)
+      Serial.println("Con el obstáculo a la izquierda y centro no se va a la derecha");
+  } else
+    Serial.println("No ha encontrado dirección de escape");
+
+  // aparece un obstáculo delante; el coche debería girar a la izquierda o derecha
+
+  if (!establecerObstaculo(coche, PosicionChasisHorizontal::Izquierda, PosicionChasisVertical::Delante, DISTANCIA_SEGURIDAD + 1) ||
+      !establecerObstaculo(coche, PosicionChasisHorizontal::Centro, PosicionChasisVertical::Delante, DISTANCIA_SEGURIDAD + 1) ||
+      !establecerObstaculo(coche, PosicionChasisHorizontal::Derecha, PosicionChasisVertical::Delante, DISTANCIA_SEGURIDAD + 1))
+      return;
+  
+  if (coche.encontrarDireccionEscape(DireccionMovimientoVertical::Adelante, direccionEscape)) {
+    if (direccionEscape != DireccionMovimientoHorizontal::Izquierda and direccionEscape != DireccionMovimientoHorizontal::Derecha)
+      Serial.println("Con el obstáculo en el centro no se va a la izquierda o a la derecha");
+  } else
+    Serial.println("No ha encontrado dirección de escape");
+
+  // aparece un obstáculo a la derecha y delante; el coche debería girar a la izquierda
+
+  if (!establecerObstaculo(coche, PosicionChasisHorizontal::Izquierda, PosicionChasisVertical::Delante, DISTANCIA_SEGURIDAD + 1) ||
+      !establecerObstaculo(coche, PosicionChasisHorizontal::Centro, PosicionChasisVertical::Delante, DISTANCIA_SEGURIDAD - 1) ||
+      !establecerObstaculo(coche, PosicionChasisHorizontal::Derecha, PosicionChasisVertical::Delante, DISTANCIA_SEGURIDAD - 1))
+      return;
+  
+  if (coche.encontrarDireccionEscape(DireccionMovimientoVertical::Adelante, direccionEscape)) {
+    if (direccionEscape != DireccionMovimientoHorizontal::Izquierda)
+      Serial.println("Con el obstáculo a la derecha y centro no se va a la izquierda");
+  } else
+    Serial.println("No ha encontrado dirección de escape");
+
+  // aparece un obstáculo a la derecha, izquierda y delante; el coche debería parar TODO el coche debería buscar hacia atrás
+
+  if (!establecerObstaculo(coche, PosicionChasisHorizontal::Izquierda, PosicionChasisVertical::Delante, DISTANCIA_SEGURIDAD - 1) ||
+      !establecerObstaculo(coche, PosicionChasisHorizontal::Centro, PosicionChasisVertical::Delante, DISTANCIA_SEGURIDAD - 1) ||
+      !establecerObstaculo(coche, PosicionChasisHorizontal::Derecha, PosicionChasisVertical::Delante, DISTANCIA_SEGURIDAD - 1))
+      return;
+  
+  if (coche.encontrarDireccionEscape(DireccionMovimientoVertical::Adelante, direccionEscape))
+    Serial.println("Con el obstáculo a la derecha, izquierda y centro no se para");
+
+  if (comprobarSincronizacionMotores(coche))
+    Serial.println("OK");
+
+}
+
 void TestCoche::inicializar(Coche &coche, ControlRemoto &controlRemoto) {
   coche.reset();
   controlRemoto.reset();
@@ -172,5 +247,17 @@ boolean TestCoche::comprobarSincronizacionMotores(Coche &coche) {
 
   return true;
 }
+
+bool TestCoche::establecerObstaculo(Coche &coche, PosicionChasisHorizontal posicionChasisHorizontal, PosicionChasisVertical posicionChasisVertical, long distancia) {
+ SensorUltraSonidos * sensorUS = coche.getSensorUltraSonidos(posicionChasisHorizontal, posicionChasisVertical);
+
+  if (sensorUS == NULL) {
+    Serial.println("No se encuentra el sensor delantero izquierdo");
+    return false;
+  }
+
+  sensorUS->setDistanciaObstaculo(distancia);
+  return true;
+ }
 
 #endif

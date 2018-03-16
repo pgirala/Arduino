@@ -39,7 +39,7 @@ class Coche {
     void pararMotores();
     EstadoMarcha getEstadoActual();
     void evitarObstaculo();
-    DireccionMovimientoHorizontal buscarDireccionEscape(DireccionMovimientoVertical direccionMovimientoVertical);
+    bool encontrarDireccionEscape(DireccionMovimientoVertical direccionMovimientoVertical, DireccionMovimientoHorizontal& direccionEscape);
     void establecerDireccion(DireccionMovimientoHorizontal direccionHorizontal, DireccionMovimientoVertical direccionVertical);
 #ifdef LOG
     void print();
@@ -47,6 +47,7 @@ class Coche {
 #ifdef TEST
     void reset();
     int comprobarSincronizacionMotores();
+    SensorUltraSonidos * getSensorUltraSonidos(PosicionChasisHorizontal posicionChasisHorizontal, PosicionChasisVertical posicionChasisVertical);
 #endif
 };
 

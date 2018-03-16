@@ -13,10 +13,12 @@ class TestCoche {
     void testFrenar(Coche &coche, ControlRemoto &controlRemoto);
     void testIrAdelante(Coche &coche, ControlRemoto &controlRemoto);
     void testIrAtras(Coche &coche, ControlRemoto &controlRemoto);
+    void testEvitarObstaculo(Coche &coche, ControlRemoto &controlRemoto);
 
     void inicializar(Coche &coche, ControlRemoto &controlRemoto);
     void iniciarMovimientoHaciaAdelante(Coche &coche, ControlRemoto &controlRemoto);
     bool comprobarSincronizacionMotores(Coche &coche);
+    bool establecerObstaculo(Coche &coche, PosicionChasisHorizontal posicionChasisHorizontal, PosicionChasisVertical posicionChasisVertical, long distancia);
   public:
     void ejecutar(Coche &coche, ControlRemoto &controlRemoto);
 };

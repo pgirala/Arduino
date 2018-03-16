@@ -25,7 +25,14 @@ void Coche::reaccionar(Orden orden) {
 }
 
 void Coche::evitarObstaculo() {
-  establecerDireccion(buscarDireccionEscape(_estadoOrdenado.getDireccionVertical()), _estadoOrdenado.getDireccionVertical());
+  DireccionMovimientoHorizontal direccionEscape;
+
+  if (!encontrarDireccionEscape(_estadoOrdenado.getDireccionVertical(), direccionEscape)) {
+    establecerVelocidadMotores(0); // para los motores para evitar el choque
+    return;
+  }
+  
+  establecerDireccion(direccionEscape, _estadoOrdenado.getDireccionVertical());
   
   while (hayObstaculo(_estadoOrdenado.getDireccionVertical())); // gira hasta que no detecta un obstáculo
   
@@ -33,8 +40,8 @@ void Coche::evitarObstaculo() {
   return;
 }
 
-DireccionMovimientoHorizontal Coche::buscarDireccionEscape(DireccionMovimientoVertical direccionMovimientoVertical) {
-  int indiceSensorEscape = 0;
+boolean Coche::encontrarDireccionEscape(DireccionMovimientoVertical direccionMovimientoVertical, DireccionMovimientoHorizontal& direccionEscape) {
+  int indiceSensorEscape = -1;
   long distancia = 0;
   long distanciaSensor = 0;
 
@@ -42,15 +49,19 @@ DireccionMovimientoHorizontal Coche::buscarDireccionEscape(DireccionMovimientoVe
     if (_sensoresUS[i].getDireccionMovimientoVertical() != direccionMovimientoVertical)
       continue;
     
-    distanciaSensor = _sensoresUS[i].ping();
+    distanciaSensor = _sensoresUS[i].obtenerDistanciaObstaculo(3 * DISTANCIA_SEGURIDAD); // amplía la dirección chequeada para encontrar la mejor ruta de escape
 
-    if (distanciaSensor > distancia) {
+    if (distanciaSensor >= distancia && distanciaSensor > DISTANCIA_SEGURIDAD) {
       distancia = distanciaSensor;
       indiceSensorEscape = i;
     }
   }
 
-  return _sensoresUS[indiceSensorEscape].getDireccionMovimientoHorizontal();
+  if (indiceSensorEscape >= 0) { // ha encontrado una dirección
+    direccionEscape = _sensoresUS[indiceSensorEscape].getDireccionMovimientoHorizontal(); // devuelve la mejor dirección de escape
+    return true;
+  } else
+    return false;
 }
 
 void Coche::actualizarEstado() {
@@ -152,7 +163,7 @@ void Coche::reset() {
   _estadoOrdenado.reset();  
   // sensores de ultrasonidos
   for (int i = 0; i < NUMERO_SENSORES_US; i++)
-    _sensoresUS[i].setHayObstaculo(false);
+    _sensoresUS[i].setDistanciaObstaculo(DISTANCIA_SEGURIDAD + 1);
   // motores
   for (int i = 0; i < NUMERO_MOTORES; i++)
     _motores[i].reset();
@@ -164,6 +175,16 @@ int Coche::comprobarSincronizacionMotores() {
         || _motores[i].getVelocidad() != _estadoActual.getVelocidad())
       return i + 1;
   return 0;
+}
+
+
+SensorUltraSonidos * Coche::getSensorUltraSonidos(PosicionChasisHorizontal posicionChasisHorizontal, PosicionChasisVertical posicionChasisVertical) {
+  for (int i = 0; i < NUMERO_SENSORES_US; i++)
+    if (_sensoresUS[i].getPosicionChasisHorizontal() == posicionChasisHorizontal &&
+        _sensoresUS[i].getPosicionChasisVertical() == posicionChasisVertical)
+      return &_sensoresUS[i];
+
+  return NULL;
 }
 
 #endif

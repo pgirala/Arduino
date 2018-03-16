@@ -20,35 +20,19 @@ void SensorUltraSonidos::inicializar() {
 
 boolean SensorUltraSonidos::hayObstaculo(DireccionMovimientoVertical direccionVertical) 
 {
-  if (_posicionVertical == PosicionChasisVertical::Delante
-      && direccionVertical == DireccionMovimientoVertical::Adelante)
+  if (getDireccionMovimientoVertical() == direccionVertical)
     return hayObstaculo();
-      
-  if (_posicionVertical == PosicionChasisVertical::Detras
-      && direccionVertical == DireccionMovimientoVertical::Atras)
-    return hayObstaculo();
+
   return false;
 }
 
 boolean SensorUltraSonidos::hayObstaculo() 
 {
-#ifdef TEST
-  return _hayObstaculo;
-#endif
-  long cm = 0;
-  for (int i = 0; i < 3; i++) { // varias veces consecutivas para evitar falsos positivos
-    cm = ping(DISTANCIA_SEGURIDAD + 1);
-    if (cm > 0 and cm <= DISTANCIA_SEGURIDAD)
-      return true;
-  }
-  return false;
+  long cm = obtenerDistanciaObstaculo(DISTANCIA_SEGURIDAD + 5);
+  return (cm > 0 and cm <= DISTANCIA_SEGURIDAD); // se ha encontrado un obstáculo en el área de control
 }
 
-long SensorUltraSonidos::ping() {
-  return ping(-1);
-}
-
-long SensorUltraSonidos::ping(long distanciaMaxima) {
+long SensorUltraSonidos::obtenerDistanciaObstaculo(long distanciaMaxima) {
    long duration, distanceCm;
    
    digitalWrite(_triggerPin, LOW);  //para generar un pulso limpio ponemos a LOW 4us
@@ -57,17 +41,15 @@ long SensorUltraSonidos::ping(long distanciaMaxima) {
    delayMicroseconds(10);
    digitalWrite(_triggerPin, LOW);
 
-   if (distanciaMaxima < 0)
-    duration = pulseIn(_echoPin, HIGH);  //medimos el tiempo entre pulsos, en microsegundos
-   else 
-    duration = pulseIn(_echoPin, HIGH, distanciaMaxima * 292);  //medimos el tiempo entre pulsos, en microsegundos evitando distancias superiores a la de seguridad
+   duration = pulseIn(_echoPin, HIGH, distanciaMaxima * 292);  //medimos el tiempo entre pulsos, en microsegundos evitando distancias superiores a la de seguridad
 
+#ifdef TEST
+   distanceCm = _distanciaObstaculo;
+#else
    distanceCm = duration * 10 / 292/ 2;   //convertimos a distancia, en cm
+#endif
 
-   if (distanciaMaxima < 0)
-    return distanceCm;
-   else
-    return (distanceCm == 0 ? DISTANCIA_SEGURIDAD + 1 : distanceCm);
+   return (distanceCm == 0 ? DISTANCIA_SEGURIDAD + 1 : distanceCm); // si no se ha logrado ninguna lectura se devuelve una distancia que cae fuera del ámbito de detección de obstáculos
 }
 
 DireccionMovimientoHorizontal SensorUltraSonidos::getDireccionMovimientoHorizontal() {
@@ -95,8 +77,18 @@ DireccionMovimientoVertical SensorUltraSonidos::getDireccionMovimientoVertical()
 }
 
 #ifdef TEST
-bool SensorUltraSonidos::setHayObstaculo(bool hayObs) {
-  _hayObstaculo = hayObs;
+
+void SensorUltraSonidos::setDistanciaObstaculo(long distanciaObstaculo) {
+  _distanciaObstaculo = distanciaObstaculo;
 }
+
+PosicionChasisHorizontal SensorUltraSonidos::getPosicionChasisHorizontal() {
+  return _posicionHorizontal;
+}
+
+PosicionChasisVertical SensorUltraSonidos::getPosicionChasisVertical() {
+  return _posicionVertical;
+}
+      
 #endif
 
