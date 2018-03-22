@@ -15,10 +15,17 @@ void Coche::inicializar() {
 
 void Coche::reaccionar(Orden orden) {
   _estadoOrdenado.actualizar(orden);
-
+#ifdef LOG
+    Serial.print("\t\tComprobación de obstáculo en la dirección: "); Serial.println(static_cast<int>(_estadoOrdenado.getDireccionVertical()));
+#endif 
   if (hayObstaculo(_estadoOrdenado.getDireccionVertical())) {
+#ifdef LOG
+    Serial.println("\t\tObstáculo detectado");
+#endif    
     evitarObstaculo();
-    return;
+#ifdef LOG
+    Serial.println("\t\tObstáculo evitado");
+#endif     return;
   }
   
   actualizarEstado();
@@ -28,12 +35,19 @@ void Coche::evitarObstaculo() {
   DireccionMovimientoHorizontal direccionEscape;
 
   if (!encontrarDireccionEscape(_estadoOrdenado.getDireccionVertical(), direccionEscape)) {
+#ifdef LOG
+    Serial.println("\t\tNo hay escape");
+#endif    
     establecerVelocidadMotores(0); // para los motores para evitar el choque
     return;
   }
   
   establecerDireccion(direccionEscape, _estadoOrdenado.getDireccionVertical());
   
+#ifdef LOG
+  Serial.print("\t\tDirección de escape: "); Serial.println(static_cast<int>(direccionEscape)); 
+#endif  
+
   while (hayObstaculo(_estadoOrdenado.getDireccionVertical())); // gira hasta que no detecta un obstáculo
   
   establecerDireccion(_estadoOrdenado.getDireccionHorizontal(), _estadoOrdenado.getDireccionVertical()); // vuelve a comportarse como antes
