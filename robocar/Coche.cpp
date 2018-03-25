@@ -42,6 +42,8 @@ void Coche::evitarObstaculo() {
     Serial.println("\t\tNo hay escape");
 #endif    
     pararMotores(); // para los motores para evitar el choque
+    // TODO si no hay obstáculo en la dirección opuesta, encontrar dirección de escape en la otra dirección 
+    // y cuando deje de haber obstáculos en la dirección original volver a localizar la dirección de escape (un giro a ser posible)
     _estadoOrdenado.copiar(_estadoActual);
     return;
   }
@@ -77,7 +79,7 @@ boolean Coche::encontrarDireccionEscape(DireccionMovimientoHorizontal& direccion
   if (indiceSensorEscape >= 0) { // ha encontrado una dirección
     direccionEscape = _sensoresUS[indiceSensorEscape].getDireccionMovimientoHorizontal(); // devuelve la mejor dirección de escape
     return true;
-  } else
+  } else // TODO solo en caso de no encontrar un giro disponible, si no hay obstáculo yendo recto, ir recto
     return false;
 }
 
@@ -182,11 +184,15 @@ void Coche::reset() {
   _estadoActual.reset();
   _estadoOrdenado.reset();  
   // sensores de ultrasonidos
-  for (int i = 0; i < NUMERO_SENSORES_US; i++)
-    _sensoresUS[i].setDistanciaObstaculo(DISTANCIA_SEGURIDAD + 1);
+  resetObstaculos();
   // motores
   for (int i = 0; i < NUMERO_MOTORES; i++)
     _motores[i].reset();
+}
+
+void Coche::resetObstaculos() {
+  for (int i = 0; i < NUMERO_SENSORES_US; i++)
+    _sensoresUS[i].setDistanciaObstaculo(DISTANCIA_SEGURIDAD + 1);  
 }
 
 int Coche::comprobarSincronizacionMotores() {

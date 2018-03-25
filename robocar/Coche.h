@@ -48,6 +48,7 @@ class Coche {
 #endif
 #ifdef TEST
     void reset();
+    void resetObstaculos();
     int comprobarSincronizacionMotores();
     SensorUltraSonidos * getSensorUltraSonidos(PosicionChasisHorizontal posicionChasisHorizontal, PosicionChasisVertical posicionChasisVertical);
 #endif

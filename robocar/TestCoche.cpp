@@ -149,7 +149,76 @@ void TestCoche::testIrAtras(Coche &coche, ControlRemoto &controlRemoto) {
     Serial.println("OK");
 }
 
-void TestCoche::testEvitarObstaculo(Coche &coche, ControlRemoto &controlRemoto){
+bool TestCoche::evitarObstaculo(Coche &coche, ControlRemoto &controlRemoto, 
+                                PosicionChasisVertical posicionVerticalConObstaculo, 
+                                PosicionChasisHorizontal posicionesHorizontalesConObstaculo[],
+                                DireccionMovimientoHorizontal direccionesEscapeValidas[]) {
+  DireccionMovimientoHorizontal direccionEscape;
+
+#ifdef LOG
+  Serial.println(""); Serial.println("Inicialización");
+#endif
+
+  iniciarMovimientoHaciaAdelante(coche, controlRemoto);
+  EstadoMarcha estadoOriginal = coche.getEstadoActual();
+  
+#ifdef LOG
+  Serial.println("Fin de la inicialización");
+#endif
+
+#ifdef LOG
+  Serial.println("");
+  Serial.print("Obstáculos: ");
+  for (int i = 0; i < sizeof(posicionesHorizontalesConObstaculo) / sizeof(*posicionesHorizontalesConObstaculo); i++) {
+    Serial.print(" ");
+    Serial.print(posicionesChasisHorizontal[static_cast<int>(posicionesHorizontalesConObstaculo[i])]);
+  }
+#endif
+
+  // establece los obstáculos
+
+  coche.resetObstaculos();
+  
+  for (int i = 0; i < sizeof(posicionesHorizontalesConObstaculo) / sizeof(*posicionesHorizontalesConObstaculo); i++)
+    establecerObstaculo(coche, posicionesHorizontalesConObstaculo[i], PosicionChasisVertical::Delante, DISTANCIA_SEGURIDAD - 1);
+      
+#ifdef LOG
+  Serial.println("Se intenta detectar el obstáculo y decidir la nueva dirección...");
+#endif
+  coche.reaccionar(Orden::Indefinida); // detecta el obstáculo y prepara el cambio de dirección
+#ifdef LOG
+  Serial.println("Se hace efectivo el cambio de dirección...");
+#endif
+  coche.reaccionar(Orden::Indefinida); // lleva a cabo el cambio de dirección  
+  direccionEscape = coche.getEstadoActual().getDireccionHorizontal();
+
+  bool direccionEscapeEncontrada = false;
+
+  for (int i = 0; i < sizeof(direccionesEscapeValidas) / sizeof(*direccionesEscapeValidas); i++)
+    direccionEscapeEncontrada = direccionEscapeEncontrada || direccionEscape == direccionesEscapeValidas[i];
+    
+  if (!direccionEscapeEncontrada) {
+#ifdef LOG
+    Serial.println("No se encuentra la direccion de escape esperada");
+#endif
+    return false;
+  }
+
+#ifdef LOG
+  Serial.println("Desaparece el obstáculo...");
+#endif
+
+  coche.resetObstaculos();
+  coche.reaccionar(Orden::Indefinida); // detecta el obstáculo y prepara el cambio de dirección
+#ifdef LOG
+  Serial.println("Se vuelve a la dirección original dirección...");
+#endif
+  coche.reaccionar(Orden::Indefinida); // detecta el obstáculo y prepara el cambio de dirección
+
+  return coche.getEstadoActual().igual(estadoOriginal);
+}
+
+void TestCoche::testEvitarObstaculo(Coche &coche, ControlRemoto &controlRemoto){ // TODO refactoring, extraer un método con las pruebas
   Serial.print("\ttestEvitarObstaculo\t");
 
   DireccionMovimientoHorizontal direccionEscape;

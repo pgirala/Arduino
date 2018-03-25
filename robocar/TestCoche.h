@@ -19,6 +19,10 @@ class TestCoche {
     void iniciarMovimientoHaciaAdelante(Coche &coche, ControlRemoto &controlRemoto);
     bool comprobarSincronizacionMotores(Coche &coche);
     bool establecerObstaculo(Coche &coche, PosicionChasisHorizontal posicionChasisHorizontal, PosicionChasisVertical posicionChasisVertical, long distancia);
+    bool evitarObstaculo(Coche &coche, ControlRemoto &controlRemoto, 
+                                PosicionChasisVertical posicionVerticalConObstaculo, 
+                                PosicionChasisHorizontal posicionesHorizontalesConObstaculo[],
+                                DireccionMovimientoHorizontal direccionesEscapeValidas[]);
   public:
     void ejecutar(Coche &coche, ControlRemoto &controlRemoto);
 };
