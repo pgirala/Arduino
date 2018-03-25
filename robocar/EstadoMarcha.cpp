@@ -4,6 +4,10 @@
  
 #include "EstadoMarcha.h"
 
+EstadoMarcha::EstadoMarcha() {
+  
+}
+
 EstadoMarcha::EstadoMarcha(int velocidad, DireccionMovimientoHorizontal direccionHorizontal, DireccionMovimientoVertical direccionVertical) :
                             _velocidad (velocidad),
                             _direccionHorizontal (direccionHorizontal),
@@ -87,8 +91,8 @@ void EstadoMarcha::copiar(EstadoMarcha otroEstado) {
 
 void EstadoMarcha::print() {
   Serial.print("\t\tVelocidad: "); Serial.print(_velocidad);
-  Serial.print("  Direccion horizontal: "); Serial.print(static_cast<int>(_direccionHorizontal));
-  Serial.print("  Direccion vertical: "); Serial.println(static_cast<int>(_direccionVertical));
+  Serial.print("  Direccion horizontal: "); Serial.print(direccionesMovimientoHorizontal[static_cast<int>(_direccionHorizontal)]);
+  Serial.print("  Direccion vertical: "); Serial.println(direccionesMovimientoVertical[static_cast<int>(_direccionVertical)]);
 }
 
 #endif

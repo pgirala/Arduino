@@ -20,6 +20,7 @@ class Coche {
     // estados de la marcha
     EstadoMarcha _estadoActual{0, DireccionMovimientoHorizontal::Recta, DireccionMovimientoVertical::Adelante};
     EstadoMarcha _estadoOrdenado{0, DireccionMovimientoHorizontal::Recta, DireccionMovimientoVertical::Adelante};
+    EstadoMarcha *_estadoPrevioObstaculo;
     // sensor de ultrasonidos
     SensorUltraSonidos _sensoresUS[NUMERO_SENSORES_US] = {SensorUltraSonidos(PosicionChasisHorizontal::Izquierda, PosicionChasisVertical::Delante, ECHO_PIN_DELANTERO_I, TRIGGER_PIN_DELANTERO_I),
                                                            SensorUltraSonidos(PosicionChasisHorizontal::Centro, PosicionChasisVertical::Delante, ECHO_PIN_DELANTERO_C, TRIGGER_PIN_DELANTERO_C),
@@ -33,13 +34,14 @@ class Coche {
     // acciones del coche
     void actualizarEstado();
     bool hayObstaculo(DireccionMovimientoVertical direccionVertical);
+    bool estaEvitandoObstaculo();
   public:
     void inicializar();
     void reaccionar(Orden orden);
     void pararMotores();
     EstadoMarcha getEstadoActual();
     void evitarObstaculo();
-    bool encontrarDireccionEscape(DireccionMovimientoVertical direccionMovimientoVertical, DireccionMovimientoHorizontal& direccionEscape);
+    bool encontrarDireccionEscape(DireccionMovimientoHorizontal& direccionEscape, DireccionMovimientoVertical direccionMovimientoVertical);
     void establecerDireccion(DireccionMovimientoHorizontal direccionHorizontal, DireccionMovimientoVertical direccionVertical);
 #ifdef LOG
     void print();

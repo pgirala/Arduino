@@ -15,46 +15,46 @@ void Coche::inicializar() {
 
 void Coche::reaccionar(Orden orden) {
   _estadoOrdenado.actualizar(orden);
-#ifdef LOG
-    Serial.print("\t\tComprobación de obstáculo en la dirección: "); Serial.println(static_cast<int>(_estadoOrdenado.getDireccionVertical()));
-#endif 
-  if (hayObstaculo(_estadoOrdenado.getDireccionVertical())) {
+  actualizarEstado();
+
+  if (hayObstaculo(_estadoActual.getDireccionVertical())) {
 #ifdef LOG
     Serial.println("\t\tObstáculo detectado");
 #endif    
     evitarObstaculo();
-#ifdef LOG
-    Serial.println("\t\tObstáculo evitado");
-#endif     return;
+  } else if (estaEvitandoObstaculo()) {
+    _estadoOrdenado.copiar(*_estadoPrevioObstaculo);
+    delete _estadoPrevioObstaculo;
+    _estadoPrevioObstaculo = NULL;
   }
-  
-  actualizarEstado();
 }
 
 void Coche::evitarObstaculo() {
-  DireccionMovimientoHorizontal direccionEscape;
+  if (!estaEvitandoObstaculo()) {
+    _estadoPrevioObstaculo = new EstadoMarcha();
+    _estadoPrevioObstaculo->copiar(_estadoActual);
+  }
+  
+  DireccionMovimientoHorizontal direccionEscapeHorizontal;
 
-  if (!encontrarDireccionEscape(_estadoOrdenado.getDireccionVertical(), direccionEscape)) {
+  if (!encontrarDireccionEscape(direccionEscapeHorizontal, _estadoActual.getDireccionVertical())) {
 #ifdef LOG
     Serial.println("\t\tNo hay escape");
 #endif    
-    establecerVelocidadMotores(0); // para los motores para evitar el choque
+    pararMotores(); // para los motores para evitar el choque
+    _estadoOrdenado.copiar(_estadoActual);
     return;
   }
   
-  establecerDireccion(direccionEscape, _estadoOrdenado.getDireccionVertical());
-  
 #ifdef LOG
-  Serial.print("\t\tDirección de escape: "); Serial.println(static_cast<int>(direccionEscape)); 
+  Serial.print("\t\tDirección de escape: "); Serial.println(direccionesMovimientoHorizontal[static_cast<int>(direccionEscapeHorizontal)]); 
 #endif  
 
-  while (hayObstaculo(_estadoOrdenado.getDireccionVertical())); // gira hasta que no detecta un obstáculo
-  
-  establecerDireccion(_estadoOrdenado.getDireccionHorizontal(), _estadoOrdenado.getDireccionVertical()); // vuelve a comportarse como antes
-  return;
+  _estadoOrdenado.copiar(_estadoActual);
+  _estadoOrdenado.setDireccionHorizontal(direccionEscapeHorizontal); // en la siguiente iteración se cambiará la dirección
 }
 
-boolean Coche::encontrarDireccionEscape(DireccionMovimientoVertical direccionMovimientoVertical, DireccionMovimientoHorizontal& direccionEscape) {
+boolean Coche::encontrarDireccionEscape(DireccionMovimientoHorizontal& direccionEscape, DireccionMovimientoVertical direccionMovimientoVertical) {
   int indiceSensorEscape = -1;
   long distancia = 0;
   long distanciaSensor = 0;
@@ -62,8 +62,11 @@ boolean Coche::encontrarDireccionEscape(DireccionMovimientoVertical direccionMov
   for (int i = 0; i < NUMERO_SENSORES_US; i++) {
     if (_sensoresUS[i].getDireccionMovimientoVertical() != direccionMovimientoVertical)
       continue;
+
+    if (_sensoresUS[i].getDireccionMovimientoHorizontal() == DireccionMovimientoHorizontal::Recta) // solo hace giros para evitar un comportamiento errático
+      continue;    
     
-    distanciaSensor = _sensoresUS[i].obtenerDistanciaObstaculo(3 * DISTANCIA_SEGURIDAD); // amplía la dirección chequeada para encontrar la mejor ruta de escape
+    distanciaSensor = _sensoresUS[i].obtenerDistanciaObstaculo(DISTANCIA_SEGURIDAD); // amplía la dirección chequeada para encontrar la mejor ruta de escape
 
     if (distanciaSensor >= distancia && distanciaSensor > DISTANCIA_SEGURIDAD) {
       distancia = distanciaSensor;
@@ -145,13 +148,16 @@ void Coche::pararMotoresPorReversion() {
 #endif
 }
 
-boolean Coche::hayObstaculo(DireccionMovimientoVertical direccionVertical) 
-{  
+boolean Coche::hayObstaculo(DireccionMovimientoVertical direccionVertical) {  
   for (int i = 0; i < NUMERO_SENSORES_US; i++)
     if (_sensoresUS[i].hayObstaculo(direccionVertical))
       return true;
     
   return false;
+}
+
+boolean Coche::estaEvitandoObstaculo() {
+  return _estadoPrevioObstaculo != NULL;
 }
 
 #ifdef LOG

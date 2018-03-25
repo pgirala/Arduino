@@ -1,7 +1,8 @@
 #ifndef properties_h
 #define properties_h
  
-//#define LOG // TEST activa el modo de pruebas software; para trazas de ejecución poner LOG
+//#define TEST // TEST activa el modo de pruebas software; para trazas de ejecución poner LOG
+//#define LOG
 
 // control remoto
 

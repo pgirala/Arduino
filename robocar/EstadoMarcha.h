@@ -14,6 +14,7 @@ class EstadoMarcha {
     DireccionMovimientoVertical _direccionVertical = DireccionMovimientoVertical::Adelante;
     int _velocidadPreviaParada = 0; // velocidad previa a la petición de una parada y a la que se reanuda la marcha
   public:
+    EstadoMarcha();
     EstadoMarcha(int velocidad, DireccionMovimientoHorizontal direccionHorizontal, DireccionMovimientoVertical direccionVertical);
   
     void setVelocidad(int velocidad);

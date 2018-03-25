@@ -106,7 +106,7 @@ static int Motor::obtenerSentidoRealRotacion(SentidoRotacion sentidoRotacion) {
 #ifdef LOG
 
 void Motor::print() {
-  Serial.print("\t\tSentido rotación: "); Serial.print(static_cast<int>(_sentidoRotacion));
+  Serial.print("\t\tSentido rotación: "); Serial.print(sentidosRotacion[static_cast<int>(_sentidoRotacion)]);
   Serial.print("  Velocidad: "); Serial.println(_velocidad);
 }
 
