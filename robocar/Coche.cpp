@@ -60,13 +60,16 @@ boolean Coche::encontrarDireccionEscape(DireccionMovimientoHorizontal& direccion
   int indiceSensorEscape = -1;
   long distancia = 0;
   long distanciaSensor = 0;
+  bool rectaLibre = false;
 
   for (int i = 0; i < NUMERO_SENSORES_US; i++) {
     if (_sensoresUS[i].getDireccionMovimientoVertical() != direccionMovimientoVertical)
       continue;
 
-    if (_sensoresUS[i].getDireccionMovimientoHorizontal() == DireccionMovimientoHorizontal::Recta) // solo hace giros para evitar un comportamiento errático
+    if (_sensoresUS[i].getDireccionMovimientoHorizontal() == DireccionMovimientoHorizontal::Recta) {
+      rectaLibre = true;
       continue;    
+    }
     
     distanciaSensor = _sensoresUS[i].obtenerDistanciaObstaculo(DISTANCIA_SEGURIDAD); // amplía la dirección chequeada para encontrar la mejor ruta de escape
 
@@ -77,10 +80,16 @@ boolean Coche::encontrarDireccionEscape(DireccionMovimientoHorizontal& direccion
   }
 
   if (indiceSensorEscape >= 0) { // ha encontrado una dirección
-    direccionEscape = _sensoresUS[indiceSensorEscape].getDireccionMovimientoHorizontal(); // devuelve la mejor dirección de escape
+    direccionEscape = _sensoresUS[indiceSensorEscape].getDireccionMovimientoHorizontal(); // los giros tienen preferencia para evitar comportamiento errático
     return true;
-  } else // TODO solo en caso de no encontrar un giro disponible, si no hay obstáculo yendo recto, ir recto
-    return false;
+  } 
+  
+  if (rectaLibre) {
+    direccionEscape = DireccionMovimientoHorizontal::Recta;
+    return true;
+  }
+  
+  return false; // no hay escapatoria en la dirección de marcha
 }
 
 void Coche::actualizarEstado() {

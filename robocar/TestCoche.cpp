@@ -219,7 +219,7 @@ bool TestCoche::evitarObstaculo(Coche &coche, ControlRemoto &controlRemoto,
   return coche.getEstadoActual().igual(estadoOriginal);
 }
 
-void TestCoche::testEvitarObstaculo(Coche &coche, ControlRemoto &controlRemoto){ // TODO refactoring, extraer un método con las pruebas
+void TestCoche::testEvitarObstaculo(Coche &coche, ControlRemoto &controlRemoto){
   Serial.print("\ttestEvitarObstaculo\t");
   
   PosicionChasisHorizontal* posicionesHorizontalesConObstaculo = new PosicionChasisHorizontal[1] {PosicionChasisHorizontal::Izquierda};
