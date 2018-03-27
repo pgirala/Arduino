@@ -152,8 +152,9 @@ void TestCoche::testIrAtras(Coche &coche, ControlRemoto &controlRemoto) {
 bool TestCoche::evitarObstaculo(Coche &coche, ControlRemoto &controlRemoto, 
                                 PosicionChasisVertical posicionVerticalConObstaculo, 
                                 PosicionChasisHorizontal posicionesHorizontalesConObstaculo[],
-                                DireccionMovimientoHorizontal direccionesEscapeValidas[]) {
-  DireccionMovimientoHorizontal direccionEscape;
+                                DireccionMovimientoHorizontal direccionesEscapeValidas[],
+                                DireccionMovimientoVertical direccionEscapeValida) {
+  DireccionMovimientoHorizontal direccionEscapeHorizontal;
 
 #ifdef LOG
   Serial.println(""); Serial.println("Inicialización");
@@ -191,16 +192,24 @@ bool TestCoche::evitarObstaculo(Coche &coche, ControlRemoto &controlRemoto,
   Serial.println("Se hace efectivo el cambio de dirección...");
 #endif
   coche.reaccionar(Orden::Indefinida); // lleva a cabo el cambio de dirección  
-  direccionEscape = coche.getEstadoActual().getDireccionHorizontal();
+
+  if (direccionEscapeValida != coche.getEstadoActual().getDireccionVertical()) {
+#ifdef LOG
+    Serial.println("No se encuentra la direccion de escape vertical esperada");
+#endif
+    return false;
+  }
+
+  direccionEscapeHorizontal = coche.getEstadoActual().getDireccionHorizontal();
 
   bool direccionEscapeEncontrada = false;
 
   for (int i = 0; i < sizeof(direccionesEscapeValidas); i++)
-    direccionEscapeEncontrada = direccionEscapeEncontrada || (direccionEscape == direccionesEscapeValidas[i]);
+    direccionEscapeEncontrada = direccionEscapeEncontrada || (direccionEscapeHorizontal == direccionesEscapeValidas[i]);
     
   if (!direccionEscapeEncontrada) {
 #ifdef LOG
-    Serial.println("No se encuentra la direccion de escape esperada");
+    Serial.println("No se encuentra la direccion de escape horizontal esperada");
 #endif
     return false;
   }
@@ -224,29 +233,36 @@ void TestCoche::testEvitarObstaculo(Coche &coche, ControlRemoto &controlRemoto){
   
   PosicionChasisHorizontal* posicionesHorizontalesConObstaculo = new PosicionChasisHorizontal[1] {PosicionChasisHorizontal::Izquierda};
   DireccionMovimientoHorizontal* direccionesEscapeValidas = new DireccionMovimientoHorizontal[2] {DireccionMovimientoHorizontal::Recta, DireccionMovimientoHorizontal::Derecha};
-  if (!evitarObstaculo(coche, controlRemoto, PosicionChasisVertical::Delante, posicionesHorizontalesConObstaculo,direccionesEscapeValidas)) {
+  if (!evitarObstaculo(coche, controlRemoto, PosicionChasisVertical::Delante, posicionesHorizontalesConObstaculo,direccionesEscapeValidas, DireccionMovimientoVertical::Adelante)) {
     Serial.println("\t\tCon el obstáculo a la izquierda no se dirige al centro o a la derecha");
     return;
   }
 
   posicionesHorizontalesConObstaculo = new PosicionChasisHorizontal[2] {PosicionChasisHorizontal::Izquierda, PosicionChasisHorizontal::Centro};
   direccionesEscapeValidas = new DireccionMovimientoHorizontal[1] {DireccionMovimientoHorizontal::Derecha};
-  if (!evitarObstaculo(coche, controlRemoto, PosicionChasisVertical::Delante, posicionesHorizontalesConObstaculo,direccionesEscapeValidas)) {
+  if (!evitarObstaculo(coche, controlRemoto, PosicionChasisVertical::Delante, posicionesHorizontalesConObstaculo,direccionesEscapeValidas, DireccionMovimientoVertical::Adelante)) {
     Serial.println("\t\tCon el obstáculo a la izquierda y en el centro no se dirige a la derecha");
     return;
   }
   
   posicionesHorizontalesConObstaculo = new PosicionChasisHorizontal[1] {PosicionChasisHorizontal::Derecha};
   direccionesEscapeValidas = new DireccionMovimientoHorizontal[2] {DireccionMovimientoHorizontal::Izquierda, DireccionMovimientoHorizontal::Recta, };
-  if (!evitarObstaculo(coche, controlRemoto, PosicionChasisVertical::Delante, posicionesHorizontalesConObstaculo,direccionesEscapeValidas)) {
+  if (!evitarObstaculo(coche, controlRemoto, PosicionChasisVertical::Delante, posicionesHorizontalesConObstaculo,direccionesEscapeValidas, DireccionMovimientoVertical::Adelante)) {
     Serial.println("\t\tCon el obstáculo a la derecha no se dirige al centro o la izquierda");
     return;
   }
 
   posicionesHorizontalesConObstaculo = new PosicionChasisHorizontal[2] {PosicionChasisHorizontal::Derecha, PosicionChasisHorizontal::Centro};
   direccionesEscapeValidas = new DireccionMovimientoHorizontal[1] {DireccionMovimientoHorizontal::Izquierda};
-  if (!evitarObstaculo(coche, controlRemoto, PosicionChasisVertical::Delante, posicionesHorizontalesConObstaculo,direccionesEscapeValidas)) {
+  if (!evitarObstaculo(coche, controlRemoto, PosicionChasisVertical::Delante, posicionesHorizontalesConObstaculo,direccionesEscapeValidas, DireccionMovimientoVertical::Adelante)) {
     Serial.println("\t\tCon el obstáculo a la derecha y en el centro no se dirige a la izquierda");
+    return;
+  }
+
+  posicionesHorizontalesConObstaculo = new PosicionChasisHorizontal[3] {PosicionChasisHorizontal::Izquierda, PosicionChasisHorizontal::Derecha, PosicionChasisHorizontal::Centro};
+  direccionesEscapeValidas = new DireccionMovimientoHorizontal[1] {DireccionMovimientoHorizontal::Recta};
+  if (!evitarObstaculo(coche, controlRemoto, PosicionChasisVertical::Delante, posicionesHorizontalesConObstaculo,direccionesEscapeValidas, DireccionMovimientoVertical::Atras)) {
+    Serial.println("\t\tCon todo obstaculizado por delante no se dirige atrás");
     return;
   }
 

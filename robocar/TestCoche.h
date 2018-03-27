@@ -22,7 +22,8 @@ class TestCoche {
     bool evitarObstaculo(Coche &coche, ControlRemoto &controlRemoto, 
                                 PosicionChasisVertical posicionVerticalConObstaculo, 
                                 PosicionChasisHorizontal posicionesHorizontalesConObstaculo[],
-                                DireccionMovimientoHorizontal direccionesEscapeValidas[]);
+                                DireccionMovimientoHorizontal direccionesEscapeValidas[],
+                                DireccionMovimientoVertical direccionEscapeValida);
   public:
     void ejecutar(Coche &coche, ControlRemoto &controlRemoto);
 };

@@ -37,22 +37,34 @@ void Coche::evitarObstaculo() {
   
   DireccionMovimientoHorizontal direccionEscapeHorizontal;
 
-  if (!encontrarDireccionEscape(direccionEscapeHorizontal, _estadoActual.getDireccionVertical())) {
-#ifdef LOG
-    Serial.println("\t\tNo hay escape");
-#endif    
-    pararMotores(); // para los motores para evitar el choque
-    // TODO si no hay obstáculo en la dirección opuesta, encontrar dirección de escape en la otra dirección 
-    // y cuando deje de haber obstáculos en la dirección original volver a localizar la dirección de escape (un giro a ser posible)
+  if (encontrarDireccionEscape(direccionEscapeHorizontal, _estadoActual.getDireccionVertical()))
     _estadoOrdenado.copiar(_estadoActual);
-    return;
+  else {
+#ifdef LOG
+    Serial.println("\t\tNo hay escape en la dirección de avance");
+#endif    
+    if (encontrarDireccionEscape(direccionEscapeHorizontal, _estadoActual.getDireccionVerticalOpuesta())) {
+#ifdef LOG
+      Serial.print("\t\tDirección de escape vertical: "); Serial.println(direccionesMovimientoVertical[static_cast<int>(_estadoActual.getDireccionVerticalOpuesta())]); 
+#endif  
+      _estadoOrdenado.copiar(_estadoActual);
+      _estadoOrdenado.setDireccionVertical(_estadoActual.getDireccionVerticalOpuesta()); // revierte la marcha
+    } else {
+#ifdef LOG
+      Serial.println("\t\tNo hay escape en la dirección contraria al avance");
+#endif    
+      pararMotores(); // para los motores para evitar el choque
+      // TODO si no hay obstáculo en la dirección opuesta, encontrar dirección de escape en la otra dirección 
+      // y cuando deje de haber obstáculos en la dirección original volver a localizar la dirección de escape (un giro a ser posible)
+      _estadoOrdenado.copiar(_estadoActual);
+      return;
+    }
   }
   
 #ifdef LOG
-  Serial.print("\t\tDirección de escape: "); Serial.println(direccionesMovimientoHorizontal[static_cast<int>(direccionEscapeHorizontal)]); 
+  Serial.print("\t\tDirección de escape horizontal: "); Serial.println(direccionesMovimientoHorizontal[static_cast<int>(direccionEscapeHorizontal)]); 
 #endif  
 
-  _estadoOrdenado.copiar(_estadoActual);
   _estadoOrdenado.setDireccionHorizontal(direccionEscapeHorizontal); // en la siguiente iteración se cambiará la dirección
 }
 
@@ -66,16 +78,18 @@ boolean Coche::encontrarDireccionEscape(DireccionMovimientoHorizontal& direccion
     if (_sensoresUS[i].getDireccionMovimientoVertical() != direccionMovimientoVertical)
       continue;
 
-    if (_sensoresUS[i].getDireccionMovimientoHorizontal() == DireccionMovimientoHorizontal::Recta) {
-      rectaLibre = true;
-      continue;    
-    }
-    
     distanciaSensor = _sensoresUS[i].obtenerDistanciaObstaculo(DISTANCIA_SEGURIDAD); // amplía la dirección chequeada para encontrar la mejor ruta de escape
 
-    if (distanciaSensor >= distancia && distanciaSensor > DISTANCIA_SEGURIDAD) {
-      distancia = distanciaSensor;
-      indiceSensorEscape = i;
+    if (distanciaSensor > DISTANCIA_SEGURIDAD) {
+      if (_sensoresUS[i].getDireccionMovimientoHorizontal() == DireccionMovimientoHorizontal::Recta) {
+        rectaLibre = true;
+        continue;    
+      }
+
+      if (distanciaSensor >= distancia) {
+        distancia = distanciaSensor;
+        indiceSensorEscape = i;
+      }
     }
   }
 

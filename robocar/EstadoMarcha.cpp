@@ -38,6 +38,10 @@ DireccionMovimientoVertical EstadoMarcha::getDireccionVertical() {
   return _direccionVertical;
 }
 
+DireccionMovimientoVertical EstadoMarcha::getDireccionVerticalOpuesta() {
+  return (getDireccionVertical() == DireccionMovimientoVertical::Adelante ? DireccionMovimientoVertical::Atras : DireccionMovimientoVertical::Adelante);
+}
+
 void EstadoMarcha::actualizar(Orden orden) {
   switch (orden)
   {

@@ -26,6 +26,8 @@ class EstadoMarcha {
     void setDireccionVertical(DireccionMovimientoVertical direccionVertical);
     DireccionMovimientoVertical getDireccionVertical();
 
+    DireccionMovimientoVertical getDireccionVerticalOpuesta();    
+
     void actualizar(Orden orden);
 
     bool igual(EstadoMarcha otroEstado);
