@@ -23,9 +23,26 @@ void Coche::reaccionar(Orden orden) {
 #endif    
     evitarObstaculo();
   } else if (estaEvitandoObstaculo()) {
-    _estadoOrdenado.copiar(*_estadoPrevioObstaculo);
-    delete _estadoPrevioObstaculo;
-    _estadoPrevioObstaculo = NULL;
+    if (_estadoActual.getDireccionVertical() == _estadoPrevioObstaculo->getDireccionVertical()) { // el caso más normal: ha desaparecido el obstáculo en la dirección de avance
+      #ifdef LOG
+          Serial.println("\t\tHa desaparecido el obstáculo en la dirección de avance original");
+      #endif    
+      _estadoOrdenado.copiar(*_estadoPrevioObstaculo);
+      delete _estadoPrevioObstaculo;
+      _estadoPrevioObstaculo = NULL;
+    } else { // se va en dirección contraria evitando un bloqueo total
+      DireccionMovimientoHorizontal direccionEscapeHorizontal;
+      
+      if (encontrarDireccionEscape(direccionEscapeHorizontal, _estadoActual.getDireccionVerticalOpuesta())) { // ha desaparecido el obstáculo que evitaba el avance y que obligó a ir en dirección contraria
+      #ifdef LOG
+          Serial.println("\t\tHa desaparecido el obstáculo en la dirección de avance original yendo en la dirección contraria para evitar el bloqueo");
+      #endif    
+        _estadoOrdenado.copiar(*_estadoPrevioObstaculo);
+        delete _estadoPrevioObstaculo;
+        _estadoPrevioObstaculo = NULL;
+        _estadoOrdenado.setDireccionHorizontal(direccionEscapeHorizontal);
+      }
+    }
   }
 }
 
@@ -236,5 +253,14 @@ SensorUltraSonidos * Coche::getSensorUltraSonidos(PosicionChasisHorizontal posic
   return NULL;
 }
 
+int Coche::getNumeroSensoresUltraSonidos(PosicionChasisVertical posicionChasisVertical) {
+  int resultado = 0;
+  
+  for (int i = 0; i < NUMERO_SENSORES_US; i++)
+    if (_sensoresUS[i].getPosicionChasisVertical() == posicionChasisVertical)
+      resultado++;
+
+  return resultado;
+}
 #endif
 

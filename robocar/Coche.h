@@ -51,6 +51,7 @@ class Coche {
     void resetObstaculos();
     int comprobarSincronizacionMotores();
     SensorUltraSonidos * getSensorUltraSonidos(PosicionChasisHorizontal posicionChasisHorizontal, PosicionChasisVertical posicionChasisVertical);
+    int getNumeroSensoresUltraSonidos(PosicionChasisVertical posicionChasisVertical);
 #endif
 };
 

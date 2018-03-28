@@ -21,8 +21,8 @@ class TestCoche {
     bool establecerObstaculo(Coche &coche, PosicionChasisHorizontal posicionChasisHorizontal, PosicionChasisVertical posicionChasisVertical, long distancia);
     bool evitarObstaculo(Coche &coche, ControlRemoto &controlRemoto, 
                                 PosicionChasisVertical posicionVerticalConObstaculo, 
-                                PosicionChasisHorizontal posicionesHorizontalesConObstaculo[],
-                                DireccionMovimientoHorizontal direccionesEscapeValidas[],
+                                PosicionChasisHorizontal posicionesHorizontalesConObstaculo[], int numeroPosicionesHorizontalesConObstaculo,
+                                DireccionMovimientoHorizontal direccionesEscapeValidas[], int numeroDireccionesEscapeValidas,
                                 DireccionMovimientoVertical direccionEscapeValida);
   public:
     void ejecutar(Coche &coche, ControlRemoto &controlRemoto);
