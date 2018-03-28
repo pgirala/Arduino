@@ -33,7 +33,7 @@ void Coche::reaccionar(Orden orden) {
     } else { // se va en dirección contraria evitando un bloqueo total
       DireccionMovimientoHorizontal direccionEscapeHorizontal;
       
-      if (encontrarDireccionEscape(direccionEscapeHorizontal, _estadoActual.getDireccionVerticalOpuesta())) { // ha desaparecido el obstáculo que evitaba el avance y que obligó a ir en dirección contraria
+      if (encontrarDireccionEscape(direccionEscapeHorizontal, _estadoActual.getDireccionVerticalOpuesta(), true)) { // ha desaparecido el obstáculo que evitaba el avance y que obligó a ir en dirección contraria
       #ifdef LOG
           Serial.println("\t\tHa desaparecido el obstáculo en la dirección de avance original yendo en la dirección contraria para evitar el bloqueo");
       #endif    
@@ -85,7 +85,7 @@ void Coche::evitarObstaculo() {
   _estadoOrdenado.setDireccionHorizontal(direccionEscapeHorizontal); // en la siguiente iteración se cambiará la dirección
 }
 
-boolean Coche::encontrarDireccionEscape(DireccionMovimientoHorizontal& direccionEscape, DireccionMovimientoVertical direccionMovimientoVertical) {
+boolean Coche::encontrarDireccionEscape(DireccionMovimientoHorizontal& direccionEscape, DireccionMovimientoVertical direccionMovimientoVertical, bool evitarRecta = false) {
   int indiceSensorEscape = -1;
   long distancia = 0;
   long distanciaSensor = 0;
@@ -115,7 +115,7 @@ boolean Coche::encontrarDireccionEscape(DireccionMovimientoHorizontal& direccion
     return true;
   } 
   
-  if (rectaLibre) {
+  if (rectaLibre && !evitarRecta) {
     direccionEscape = DireccionMovimientoHorizontal::Recta;
     return true;
   }

@@ -224,6 +224,9 @@ bool TestCoche::evitarObstaculo(Coche &coche, ControlRemoto &controlRemoto,
   Serial.println("Se vuelve a la dirección original...");
 #endif
   coche.reaccionar(Orden::Indefinida); // detecta el obstáculo y prepara el cambio de dirección
+#ifdef LOG
+  Serial.print("La dirección original es: "); Serial.println(direccionesMovimientoHorizontal[static_cast<int>(coche.getEstadoActual().getDireccionHorizontal())]);
+#endif
 
   if (numeroPosicionesHorizontalesConObstaculo == coche.getNumeroSensoresUltraSonidos(posicionVerticalConObstaculo)) // había un bloqueo total
     estadoOriginal.setDireccionHorizontal(coche.getEstadoActual().getDireccionHorizontal());

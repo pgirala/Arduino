@@ -41,7 +41,7 @@ class Coche {
     void pararMotores();
     EstadoMarcha getEstadoActual();
     void evitarObstaculo();
-    bool encontrarDireccionEscape(DireccionMovimientoHorizontal& direccionEscape, DireccionMovimientoVertical direccionMovimientoVertical);
+    bool encontrarDireccionEscape(DireccionMovimientoHorizontal& direccionEscape, DireccionMovimientoVertical direccionMovimientoVertical, bool evitarRecta = false);
     void establecerDireccion(DireccionMovimientoHorizontal direccionHorizontal, DireccionMovimientoVertical direccionVertical);
 #ifdef LOG
     void print();
