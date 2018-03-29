@@ -13,9 +13,9 @@ Componentes necesarios:
 - Motor shield para cuatro motores DC https://diotronic.com/producte.aspx?nom=arduino-motor-servo-stepper&referencia=27406 (clon del original Adafruit v1)
 - Chasis YIKESHU 4WD Smart Motor Robot.
 - Sensores ultrasonidos HC-SR04. 4 (3 frontales y 1 trasero).
-- Sensor de infrarrojos ¿? y mando.
+- Sensor de infrarrojos Velleman IO 1838 37.9 khz y mando.
 - Cables (varios tamaños y conectores: macho-macho, macho-hembra).
-- Pequeñas placas de pruebas de 55 pines.
+- Pequeñas placas de pruebas de 55 pines (Velleman Hobby set of mini breadbroads).
 - Caja de baterias keesin 3.7 V 18650 con interruptor y tapa. Se necesitan 2.
 - Baterías de litio recargables EBL 4 unidades 18650 B2300mAh 3.7V de baja autodescarga.
 - Cargador de baterías para cargar 1-4 baterías de litio 18650 EBL 996 

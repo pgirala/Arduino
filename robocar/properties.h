@@ -1,7 +1,7 @@
 #ifndef properties_h
 #define properties_h
  
-#define TEST // TEST activa el modo de pruebas software; para trazas de ejecución poner LOG
+//#define TEST // TEST activa el modo de pruebas software; para trazas de ejecución poner LOG
 //#define LOG
 
 // control remoto
@@ -19,7 +19,8 @@
 #define TRIGGER_PIN_DELANTERO_D 47
 #define ECHO_PIN_TRASERO 37
 #define TRIGGER_PIN_TRASERO 39
-#define DISTANCIA_SEGURIDAD 20 // centímetros
+#define DISTANCIA_SEGURIDAD 25
+// centímetros
 
 // motores
 
