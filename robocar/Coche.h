@@ -26,8 +26,8 @@ class Coche {
                                                            SensorUltraSonidos(PosicionChasisHorizontal::Centro, PosicionChasisVertical::Delante, ECHO_PIN_DELANTERO_C, TRIGGER_PIN_DELANTERO_C),
                                                            SensorUltraSonidos(PosicionChasisHorizontal::Derecha, PosicionChasisVertical::Delante, ECHO_PIN_DELANTERO_D, TRIGGER_PIN_DELANTERO_D),
                                                            SensorUltraSonidos(PosicionChasisHorizontal::Centro, PosicionChasisVertical::Detras, ECHO_PIN_TRASERO_C, TRIGGER_PIN_TRASERO_C),
-                                                           SensorUltraSonidos(PosicionChasisHorizontal::Centro, PosicionChasisVertical::Delante, ECHO_PIN_TRASERO_C, TRIGGER_PIN_TRASERO_C),
-                                                           SensorUltraSonidos(PosicionChasisHorizontal::Derecha, PosicionChasisVertical::Delante, ECHO_PIN_TRASERO_D, TRIGGER_PIN_TRASERO_D)};
+                                                           SensorUltraSonidos(PosicionChasisHorizontal::Izquierda, PosicionChasisVertical::Detras, ECHO_PIN_TRASERO_I, TRIGGER_PIN_TRASERO_I),
+                                                           SensorUltraSonidos(PosicionChasisHorizontal::Derecha, PosicionChasisVertical::Detras, ECHO_PIN_TRASERO_D, TRIGGER_PIN_TRASERO_D)};
     // acciones dirigidas a los motores
     void establecerDireccion();
     void establecerVelocidadMotores();
