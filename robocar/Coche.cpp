@@ -97,7 +97,7 @@ boolean Coche::encontrarDireccionEscape(DireccionMovimientoHorizontal& direccion
     distanciaSensor = _sensoresUS[i].obtenerDistanciaObstaculo(DISTANCIA_SEGURIDAD); // amplía la dirección chequeada para encontrar la mejor ruta de escape
 
     if (distanciaSensor > DISTANCIA_SEGURIDAD) {
-      if (_sensoresUS[i].getDireccionMovimientoHorizontal() == DireccionMovimientoHorizontal::Recta) {
+      if (_sensoresUS[i].getDireccionMovimientoHorizontal(direccionMovimientoVertical) == DireccionMovimientoHorizontal::Recta) {
         rectaLibre = true;
         continue;    
       }
@@ -110,7 +110,7 @@ boolean Coche::encontrarDireccionEscape(DireccionMovimientoHorizontal& direccion
   }
 
   if (indiceSensorEscape >= 0) { // ha encontrado una dirección
-    direccionEscape = _sensoresUS[indiceSensorEscape].getDireccionMovimientoHorizontal(); // los giros tienen preferencia para evitar comportamiento errático
+    direccionEscape = _sensoresUS[indiceSensorEscape].getDireccionMovimientoHorizontal(direccionMovimientoVertical); // los giros tienen preferencia para evitar comportamiento errático
     return true;
   } 
   

@@ -20,7 +20,7 @@ class SensorUltraSonidos {
   public:
     SensorUltraSonidos(PosicionChasisHorizontal posicionHorizontal, PosicionChasisVertical posicionVertical, int echoPin, int triggerPin);
     void inicializar();
-    DireccionMovimientoHorizontal getDireccionMovimientoHorizontal();
+    DireccionMovimientoHorizontal getDireccionMovimientoHorizontal(DireccionMovimientoVertical direccionMovimientoVertical);
     DireccionMovimientoVertical getDireccionMovimientoVertical();
     long obtenerDistanciaObstaculo(long distanciaMaxima);
     bool hayObstaculo(DireccionMovimientoVertical direccionVertical);

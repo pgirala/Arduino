@@ -52,17 +52,19 @@ long SensorUltraSonidos::obtenerDistanciaObstaculo(long distanciaMaxima) {
    return (distanceCm == 0 ? DISTANCIA_SEGURIDAD + 1 : distanceCm); // si no se ha logrado ninguna lectura se devuelve una distancia que cae fuera del ámbito de detección de obstáculos
 }
 
-DireccionMovimientoHorizontal SensorUltraSonidos::getDireccionMovimientoHorizontal() {
+DireccionMovimientoHorizontal SensorUltraSonidos::getDireccionMovimientoHorizontal(DireccionMovimientoVertical direccionMovimientoVertical) {
+  DireccionMovimientoHorizontal resultado = DireccionMovimientoHorizontal::Izquierda;
   switch (_posicionHorizontal) {
     case PosicionChasisHorizontal::Izquierda:
-      return DireccionMovimientoHorizontal::Izquierda;
+      resultado = (direccionMovimientoVertical == DireccionMovimientoVertical::Adelante ? DireccionMovimientoHorizontal::Izquierda : DireccionMovimientoHorizontal::Derecha);
+      break;
     case PosicionChasisHorizontal::Centro:
-      return DireccionMovimientoHorizontal::Recta;
+      resultado = DireccionMovimientoHorizontal::Recta;
+      break;
     case PosicionChasisHorizontal::Derecha:
-      return DireccionMovimientoHorizontal::Derecha;
-    default:
-      return DireccionMovimientoHorizontal::Izquierda;
+      resultado = (direccionMovimientoVertical == DireccionMovimientoVertical::Adelante ? DireccionMovimientoHorizontal::Derecha : DireccionMovimientoHorizontal::Izquierda);
   }
+  return resultado;
 }
 
 DireccionMovimientoVertical SensorUltraSonidos::getDireccionMovimientoVertical() {
