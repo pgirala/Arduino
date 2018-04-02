@@ -1,5 +1,5 @@
 /*
- * SensorUltraSonidos.cpp - abstracción del motor de un coche robótico
+ * SensorUltraSonidos.cpp - abstracción de un sensor de ultrasonidos de un coche robótico
  */
  
 #include "SensorUltraSonidos.h"
@@ -52,17 +52,17 @@ long SensorUltraSonidos::obtenerDistanciaObstaculo(long distanciaMaxima) {
    return (distanceCm == 0 ? DISTANCIA_SEGURIDAD + 1 : distanceCm); // si no se ha logrado ninguna lectura se devuelve una distancia que cae fuera del ámbito de detección de obstáculos
 }
 
-DireccionMovimientoHorizontal SensorUltraSonidos::getDireccionMovimientoHorizontal(DireccionMovimientoVertical direccionMovimientoVertical) {
+DireccionMovimientoHorizontal SensorUltraSonidos::getDireccionMovimientoHorizontal() {
   DireccionMovimientoHorizontal resultado = DireccionMovimientoHorizontal::Izquierda;
   switch (_posicionHorizontal) {
     case PosicionChasisHorizontal::Izquierda:
-      resultado = (direccionMovimientoVertical == DireccionMovimientoVertical::Adelante ? DireccionMovimientoHorizontal::Izquierda : DireccionMovimientoHorizontal::Derecha);
+      resultado = DireccionMovimientoHorizontal::Izquierda;
       break;
     case PosicionChasisHorizontal::Centro:
       resultado = DireccionMovimientoHorizontal::Recta;
       break;
     case PosicionChasisHorizontal::Derecha:
-      resultado = (direccionMovimientoVertical == DireccionMovimientoVertical::Adelante ? DireccionMovimientoHorizontal::Derecha : DireccionMovimientoHorizontal::Izquierda);
+      resultado = DireccionMovimientoHorizontal::Derecha;
   }
   return resultado;
 }

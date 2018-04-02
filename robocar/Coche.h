@@ -10,6 +10,7 @@
 #include "SensorUltraSonidos.h"
 #include "Motor.h"
 #include "EstadoMarcha.h"
+#include "SensorMovimiento.h"
 
 class Coche {
   private:
@@ -28,6 +29,11 @@ class Coche {
                                                            SensorUltraSonidos(PosicionChasisHorizontal::Centro, PosicionChasisVertical::Detras, ECHO_PIN_TRASERO_C, TRIGGER_PIN_TRASERO_C),
                                                            SensorUltraSonidos(PosicionChasisHorizontal::Izquierda, PosicionChasisVertical::Detras, ECHO_PIN_TRASERO_I, TRIGGER_PIN_TRASERO_I),
                                                            SensorUltraSonidos(PosicionChasisHorizontal::Derecha, PosicionChasisVertical::Detras, ECHO_PIN_TRASERO_D, TRIGGER_PIN_TRASERO_D)};
+    // sensor de movimiento
+    SensorMovimiento _sensoresMovimiento[NUMERO_SENSORES_MOVIMIENTO] = {SensorMovimiento(PosicionChasisHorizontal::Izquierda, PosicionChasisVertical::Delante, SM_PIN_DELANTERO_I),
+                                                                        SensorMovimiento(PosicionChasisHorizontal::Derecha, PosicionChasisVertical::Delante, SM_PIN_DELANTERO_D),
+                                                                        SensorMovimiento(PosicionChasisHorizontal::Izquierda, PosicionChasisVertical::Detras, SM_PIN_TRASERO_I),
+                                                                        SensorMovimiento(PosicionChasisHorizontal::Derecha, PosicionChasisVertical::Detras, SM_PIN_TRASERO_D)};
     // acciones dirigidas a los motores
     void establecerDireccion();
     void establecerVelocidadMotores();
