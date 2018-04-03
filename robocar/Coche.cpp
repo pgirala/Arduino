@@ -266,3 +266,12 @@ int Coche::getNumeroSensoresUltraSonidos(PosicionChasisVertical posicionChasisVe
 }
 #endif
 
+SensorMovimiento * Coche::getSensorMovimiento(PosicionChasisHorizontal posicionChasisHorizontal, PosicionChasisVertical posicionChasisVertical) {
+  for (int i = 0; i < NUMERO_SENSORES_MOVIMIENTO; i++)
+    if (_sensoresMovimiento[i].getPosicionChasisHorizontal() == posicionChasisHorizontal &&
+        _sensoresMovimiento[i].getPosicionChasisVertical() == posicionChasisVertical)
+      return &_sensoresMovimiento[i];
+
+  return NULL;
+}
+

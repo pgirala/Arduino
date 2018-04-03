@@ -12,10 +12,16 @@ class SensorMovimiento {
     PosicionChasisHorizontal _posicionHorizontal; // izquierda o derecha
     PosicionChasisVertical _posicionVertical; // delante o detrás
     int _pin;
+    volatile long _contador;
   public:
     SensorMovimiento(PosicionChasisHorizontal posicionHorizontal, PosicionChasisVertical posicionVertical, int pin);
-    long distanciaRecorrida(); // distancia recorrida desde la última medición
     void inicializar();
+    void reset(); // pone a cero el contador interno
+    long getContador();
+    void incrementarContador();
+    long distanciaRecorrida(); // distancia recorrida desde la última medición
+    PosicionChasisHorizontal getPosicionChasisHorizontal();
+    PosicionChasisVertical getPosicionChasisVertical();
 };
 
 #endif

@@ -41,6 +41,12 @@ void setup()
   controlRemoto.inicializar();
   coche.inicializar();
   
+  // manejo de interrupciones asociadas a los sensores de movimiento
+  attachInterrupt( digitalPinToInterrupt(D21), actualizarContadorSMTI, RISING);
+  attachInterrupt( digitalPinToInterrupt(D20), actualizarContadorSMTD, RISING);
+  attachInterrupt( digitalPinToInterrupt(D19), actualizarContadorSMDD, RISING);
+  attachInterrupt( digitalPinToInterrupt(D18), actualizarContadorSMDI, RISING);
+  
   Serial.begin(9600);  
 
   while (! Serial);
@@ -100,6 +106,24 @@ Orden obtenerOrdenPuertoSerie() {
       return Orden::Indefinida;
     };    
   }
-  return Orden::Indefinida;
-  
+  return Orden::Indefinida; 
 }
+
+// manejadores de interrupciones
+
+void actualizarContadorSMTI() {
+  coche.getSensorMovimiento(PosicionChasisHorizontal::Izquierda, PosicionChasisVertical::Detras)->incrementarContador();
+}
+
+void actualizarContadorSMTD() {
+  coche.getSensorMovimiento(PosicionChasisHorizontal::Derecha, PosicionChasisVertical::Detras)->incrementarContador();
+}
+
+void actualizarContadorSMDD() {
+  coche.getSensorMovimiento(PosicionChasisHorizontal::Derecha, PosicionChasisVertical::Delante)->incrementarContador();
+}
+
+void actualizarContadorSMDI() {
+  coche.getSensorMovimiento(PosicionChasisHorizontal::Izquierda, PosicionChasisVertical::Delante)->incrementarContador();
+}
+

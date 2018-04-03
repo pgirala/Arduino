@@ -24,7 +24,7 @@
 #define ECHO_PIN_TRASERO_D 23
 #define TRIGGER_PIN_TRASERO_D 25
 
-#define DISTANCIA_SEGURIDAD 25 // centímetros
+#define DISTANCIA_SEGURIDAD 20 // centímetros
 
 // motores
 
@@ -43,12 +43,12 @@
 #define INCREMENTO_VELOCIDAD 10
 #define VELOCIDAD_MAXIMA 150
 
-// sensores de movimiento
+// sensores de movimiento (los PIN se corresponden con las interrupciones INT2, INT3, INT4, INT5 de MEGA 2560 (21, 20, 19, 18)
 
 #define NUMERO_SENSORES_MOVIMIENTO 4
-#define SM_PIN_DELANTERO_I -1
-#define SM_PIN_DELANTERO_D -1
-#define SM_PIN_TRASERO_I -1
-#define SM_PIN_TRASERO_D -1
+#define SM_PIN_TRASERO_I 21
+#define SM_PIN_TRASERO_D 20
+#define SM_PIN_DELANTERO_D 19
+#define SM_PIN_DELANTERO_I 18
 
 #endif
