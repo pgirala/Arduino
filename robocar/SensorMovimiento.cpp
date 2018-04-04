@@ -37,7 +37,3 @@ void SensorMovimiento::incrementarContador() {
   _contador++;
 }
 
-long SensorMovimiento::distanciaRecorrida() {
-   return 0.0;
-}
-

@@ -221,17 +221,44 @@ bool TestCoche::evitarObstaculo(Coche &coche, ControlRemoto &controlRemoto,
   }
 
 #ifdef LOG
-  Serial.println("Desaparece el obstáculo...");
+  Serial.println("Se añade un obstáculo a la derecha...");
 #endif
 
-  coche.resetObstaculos();
+  establecerObstaculo(coche, PosicionChasisHorizontal::Derecha, PosicionChasisVertical::Detras, DISTANCIA_SEGURIDAD - 1);
   coche.reaccionar(Orden::Indefinida); // detecta el obstáculo y prepara el cambio de dirección
 #ifdef LOG
-  Serial.println("Se vuelve a la dirección original...");
+  Serial.println("Detecta el obstáculo...");
 #endif
   coche.reaccionar(Orden::Indefinida); // detecta el obstáculo y prepara el cambio de dirección
 #ifdef LOG
-  Serial.print("La dirección original es: "); Serial.println(direccionesMovimientoHorizontal[static_cast<int>(coche.getEstadoActual().getDireccionHorizontal())]);
+  Serial.print("La nueva dirección es: "); Serial.println(direccionesMovimientoHorizontal[static_cast<int>(coche.getEstadoActual().getDireccionHorizontal())]);
+#endif
+
+#ifdef LOG
+  Serial.println("Se añade un obstáculo a la izquierda...");
+#endif
+
+  establecerObstaculo(coche, PosicionChasisHorizontal::Izquierda, PosicionChasisVertical::Detras, DISTANCIA_SEGURIDAD - 1);
+  coche.reaccionar(Orden::Indefinida); // detecta el obstáculo y prepara el cambio de dirección
+#ifdef LOG
+  Serial.println("Detecta el obstáculo...");
+#endif
+  coche.reaccionar(Orden::Indefinida); // detecta el obstáculo y prepara el cambio de dirección
+#ifdef LOG
+  Serial.print("La nueva dirección es: "); Serial.println(direccionesMovimientoHorizontal[static_cast<int>(coche.getEstadoActual().getDireccionHorizontal())]);
+#endif
+#ifdef LOG
+  Serial.println("Se añade un obstáculo en el centro...");
+#endif
+
+  establecerObstaculo(coche, PosicionChasisHorizontal::Centro, PosicionChasisVertical::Detras, DISTANCIA_SEGURIDAD - 1);
+  coche.reaccionar(Orden::Indefinida); // detecta el obstáculo y prepara el cambio de dirección
+#ifdef LOG
+  Serial.println("Detecta el obstáculo...");
+#endif
+  coche.reaccionar(Orden::Indefinida); // detecta el obstáculo y prepara el cambio de dirección
+#ifdef LOG
+  Serial.print("La nueva dirección es: "); Serial.println(direccionesMovimientoHorizontal[static_cast<int>(coche.getEstadoActual().getDireccionHorizontal())]);
 #endif
 
   if (numeroPosicionesHorizontalesConObstaculo == coche.getNumeroSensoresUltraSonidos(posicionVerticalConObstaculo)) // había un bloqueo total

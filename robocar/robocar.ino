@@ -42,10 +42,10 @@ void setup()
   coche.inicializar();
   
   // manejo de interrupciones asociadas a los sensores de movimiento
-  attachInterrupt( digitalPinToInterrupt(D21), actualizarContadorSMTI, RISING);
-  attachInterrupt( digitalPinToInterrupt(D20), actualizarContadorSMTD, RISING);
-  attachInterrupt( digitalPinToInterrupt(D19), actualizarContadorSMDD, RISING);
-  attachInterrupt( digitalPinToInterrupt(D18), actualizarContadorSMDI, RISING);
+  attachInterrupt(SM_PIN_TRASERO_I, actualizarContadorSMTI, RISING);
+  attachInterrupt(SM_PIN_TRASERO_D, actualizarContadorSMTD, RISING);
+  attachInterrupt(SM_PIN_DELANTERO_D, actualizarContadorSMDD, RISING);
+  attachInterrupt(SM_PIN_DELANTERO_I, actualizarContadorSMDI, RISING);
   
   Serial.begin(9600);  
 
@@ -112,18 +112,18 @@ Orden obtenerOrdenPuertoSerie() {
 // manejadores de interrupciones
 
 void actualizarContadorSMTI() {
-  coche.getSensorMovimiento(PosicionChasisHorizontal::Izquierda, PosicionChasisVertical::Detras)->incrementarContador();
+  coche.getSistemaNavegacion()->getUnidadMedicion()->getSensorMovimiento(PosicionChasisHorizontal::Izquierda, PosicionChasisVertical::Detras)->incrementarContador();
 }
 
 void actualizarContadorSMTD() {
-  coche.getSensorMovimiento(PosicionChasisHorizontal::Derecha, PosicionChasisVertical::Detras)->incrementarContador();
+  coche.getSistemaNavegacion()->getUnidadMedicion()->getSensorMovimiento(PosicionChasisHorizontal::Derecha, PosicionChasisVertical::Detras)->incrementarContador();
 }
 
 void actualizarContadorSMDD() {
-  coche.getSensorMovimiento(PosicionChasisHorizontal::Derecha, PosicionChasisVertical::Delante)->incrementarContador();
+  coche.getSistemaNavegacion()->getUnidadMedicion()->getSensorMovimiento(PosicionChasisHorizontal::Derecha, PosicionChasisVertical::Delante)->incrementarContador();
 }
 
 void actualizarContadorSMDI() {
-  coche.getSensorMovimiento(PosicionChasisHorizontal::Izquierda, PosicionChasisVertical::Delante)->incrementarContador();
+  coche.getSistemaNavegacion()->getUnidadMedicion()->getSensorMovimiento(PosicionChasisHorizontal::Izquierda, PosicionChasisVertical::Delante)->incrementarContador();
 }
 

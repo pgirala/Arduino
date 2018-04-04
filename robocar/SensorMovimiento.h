@@ -19,7 +19,6 @@ class SensorMovimiento {
     void reset(); // pone a cero el contador interno
     long getContador();
     void incrementarContador();
-    long distanciaRecorrida(); // distancia recorrida desde la última medición
     PosicionChasisHorizontal getPosicionChasisHorizontal();
     PosicionChasisVertical getPosicionChasisVertical();
 };

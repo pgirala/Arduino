@@ -1,3 +1,4 @@
+
 /*
  * EstadoMarca.h - el estado de marcha del coche (real o solicitado)
  */

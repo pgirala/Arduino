@@ -8,12 +8,15 @@ EstadoMarcha Coche::getEstadoActual() {
   return _estadoActual;
 }
 
+SistemaNavegacion * Coche::getSistemaNavegacion() {
+  return &_sistemaNavegacion;
+}
+
 void Coche::inicializar() {
   for (int i = 0; i < NUMERO_SENSORES_US; i++)
     _sensoresUS[i].inicializar();
-    
-  for (int i = 0; i < NUMERO_SENSORES_MOVIMIENTO; i++)
-    _sensoresMovimiento[i].inicializar();
+
+  _sistemaNavegacion.inicializar();
 }
 
 void Coche::reaccionar(Orden orden) {
@@ -266,12 +269,4 @@ int Coche::getNumeroSensoresUltraSonidos(PosicionChasisVertical posicionChasisVe
 }
 #endif
 
-SensorMovimiento * Coche::getSensorMovimiento(PosicionChasisHorizontal posicionChasisHorizontal, PosicionChasisVertical posicionChasisVertical) {
-  for (int i = 0; i < NUMERO_SENSORES_MOVIMIENTO; i++)
-    if (_sensoresMovimiento[i].getPosicionChasisHorizontal() == posicionChasisHorizontal &&
-        _sensoresMovimiento[i].getPosicionChasisVertical() == posicionChasisVertical)
-      return &_sensoresMovimiento[i];
-
-  return NULL;
-}
 
