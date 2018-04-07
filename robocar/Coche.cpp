@@ -25,7 +25,7 @@ void Coche::reaccionar(Orden orden) {
 
   if (hayObstaculo(_estadoActual.getDireccionVertical())) {
 #ifdef LOG
-    Serial.println("\t\tObstáculo detectado");
+    Serial.print("\t\tObstáculo detectado en la dirección: "); Serial.println(direccionesMovimientoVertical[static_cast<int>(_estadoActual.getDireccionVertical())]);
 #endif    
     evitarObstaculo();
   } else if (estaEvitandoObstaculo()) {
@@ -197,8 +197,12 @@ void Coche::pararMotoresPorReversion() {
 
 boolean Coche::hayObstaculo(DireccionMovimientoVertical direccionVertical) {  
   for (int i = 0; i < NUMERO_SENSORES_US; i++)
-    if (_sensoresUS[i].hayObstaculo(direccionVertical))
+    if (_sensoresUS[i].hayObstaculo(direccionVertical)) {
+#ifdef LOG
+      Serial.print("\t\tObstáculo detectado en la dirección: "); Serial.println(direccionesMovimientoHorizontal[static_cast<int>(_sensoresUS[i].getDireccionMovimientoHorizontal())]); 
+#endif  
       return true;
+    }
     
   return false;
 }
