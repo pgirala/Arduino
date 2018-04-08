@@ -39,6 +39,7 @@ class Coche {
     void pararMotoresPorReversion();
     // acciones del coche
     void actualizarEstado();
+    void tratarObstaculos();
     bool hayObstaculo(DireccionMovimientoVertical direccionVertical);
     bool estaEvitandoObstaculo();
   public:
