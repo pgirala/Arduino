@@ -11,6 +11,7 @@
 #include "Motor.h"
 #include "EstadoMarcha.h"
 #include "SistemaNavegacion.h"
+#include "UnidadDeteccionObstaculos.h"
 
 class Coche {
   private:
@@ -22,13 +23,8 @@ class Coche {
     EstadoMarcha _estadoActual{0, DireccionMovimientoHorizontal::Recta, DireccionMovimientoVertical::Adelante};
     EstadoMarcha _estadoOrdenado{0, DireccionMovimientoHorizontal::Recta, DireccionMovimientoVertical::Adelante};
     EstadoMarcha *_estadoPrevioObstaculo;
-    // sensor de ultrasonidos
-    SensorUltraSonidos _sensoresUS[NUMERO_SENSORES_US] = {SensorUltraSonidos(PosicionChasisHorizontal::Izquierda, PosicionChasisVertical::Delante, ECHO_PIN_DELANTERO_I, TRIGGER_PIN_DELANTERO_I),
-                                                           SensorUltraSonidos(PosicionChasisHorizontal::Centro, PosicionChasisVertical::Delante, ECHO_PIN_DELANTERO_C, TRIGGER_PIN_DELANTERO_C),
-                                                           SensorUltraSonidos(PosicionChasisHorizontal::Derecha, PosicionChasisVertical::Delante, ECHO_PIN_DELANTERO_D, TRIGGER_PIN_DELANTERO_D),
-                                                           SensorUltraSonidos(PosicionChasisHorizontal::Centro, PosicionChasisVertical::Detras, ECHO_PIN_TRASERO_C, TRIGGER_PIN_TRASERO_C),
-                                                           SensorUltraSonidos(PosicionChasisHorizontal::Izquierda, PosicionChasisVertical::Detras, ECHO_PIN_TRASERO_I, TRIGGER_PIN_TRASERO_I),
-                                                           SensorUltraSonidos(PosicionChasisHorizontal::Derecha, PosicionChasisVertical::Detras, ECHO_PIN_TRASERO_D, TRIGGER_PIN_TRASERO_D)};
+    // Detección de obstáculos
+    UnidadDeteccionObstaculos _unidadDeteccionObstaculos;
     // sistema de navegacion
     SistemaNavegacion _sistemaNavegacion;
     
@@ -40,7 +36,6 @@ class Coche {
     // acciones del coche
     void actualizarEstado();
     void tratarObstaculos();
-    bool hayObstaculo(DireccionMovimientoVertical direccionVertical);
     bool estaEvitandoObstaculo();
   public:
     void inicializar();
@@ -48,9 +43,9 @@ class Coche {
     void pararMotores();
     EstadoMarcha getEstadoActual();
     void evitarObstaculo();
-    bool encontrarDireccionEscape(DireccionMovimientoHorizontal& direccionEscape, DireccionMovimientoVertical direccionMovimientoVertical, bool evitarRecta = false);
     void establecerDireccion(DireccionMovimientoHorizontal direccionHorizontal, DireccionMovimientoVertical direccionVertical);
     SistemaNavegacion * getSistemaNavegacion();
+    UnidadDeteccionObstaculos * getUnidadDeteccionObstaculos();
 #ifdef LOG
     void print();
 #endif

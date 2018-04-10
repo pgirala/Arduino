@@ -185,10 +185,10 @@ bool TestCoche::evitarObstaculo(Coche &coche, ControlRemoto &controlRemoto,
 
   // establece los obstáculos
 
-  coche.resetObstaculos();
+  coche.getUnidadDeteccionObstaculos()->reset();
   
   for (int i = 0; i < numeroPosicionesHorizontalesConObstaculo; i++)
-    establecerObstaculo(coche, posicionesHorizontalesConObstaculo[i], posicionVerticalConObstaculo, DISTANCIA_SEGURIDAD - 1);
+    establecerObstaculo(coche, posicionesHorizontalesConObstaculo[i], posicionVerticalConObstaculo, DISTANCIA_PERIMETRO_SEGURIDAD - 1);
 
 #ifdef LOG
   Serial.println("Se intenta detectar el obstáculo y decidir la nueva dirección...");
@@ -224,7 +224,7 @@ bool TestCoche::evitarObstaculo(Coche &coche, ControlRemoto &controlRemoto,
   Serial.println("Desaparece el obstáculo...");
 #endif
 
-  coche.resetObstaculos();
+  coche.getUnidadDeteccionObstaculos()->reset();
   coche.reaccionar(Orden::Indefinida); // detecta el obstáculo y prepara el cambio de dirección
   
 #ifdef LOG
@@ -237,7 +237,7 @@ bool TestCoche::evitarObstaculo(Coche &coche, ControlRemoto &controlRemoto,
   Serial.print("La dirección original es: "); Serial.println(direccionesMovimientoHorizontal[static_cast<int>(coche.getEstadoActual().getDireccionHorizontal())]);
 #endif
 
-  if (numeroPosicionesHorizontalesConObstaculo == coche.getNumeroSensoresUltraSonidos(posicionVerticalConObstaculo)) // había un bloqueo total
+  if (numeroPosicionesHorizontalesConObstaculo == coche.getUnidadDeteccionObstaculos()->getNumeroSensoresUltraSonidos(posicionVerticalConObstaculo)) // había un bloqueo total
     estadoOriginal.setDireccionHorizontal(coche.getEstadoActual().getDireccionHorizontal());
     
   return coche.getEstadoActual().igual(estadoOriginal);
@@ -285,7 +285,7 @@ void TestCoche::testEvitarObstaculo(Coche &coche, ControlRemoto &controlRemoto, 
 
   posicionesHorizontalesConObstaculo = new PosicionChasisHorizontal[3] {PosicionChasisHorizontal::Izquierda, PosicionChasisHorizontal::Derecha, PosicionChasisHorizontal::Centro};
   direccionesEscapeValidas = new DireccionMovimientoHorizontal[2] {DireccionMovimientoHorizontal::Izquierda, DireccionMovimientoHorizontal::Derecha};
-  if (!evitarObstaculo(coche, controlRemoto, direccionVertical, (direccionVertical == DireccionMovimientoVertical::Adelante ? PosicionChasisVertical::Delante : PosicionChasisVertical::Detras), posicionesHorizontalesConObstaculo, 3, direccionesEscapeValidas, 2, (direccionVertical == DireccionMovimientoVertical::Adelante ? DireccionMovimientoVertical::Atras : DireccionMovimientoVertical::Adelante))) {
+  if (!evitarObstaculo(coche, controlRemoto, direccionVertical, (direccionVertical == DireccionMovimientoVertical::Adelante ? PosicionChasisVertical::Delante : PosicionChasisVertical::Detras), posicionesHorizontalesConObstaculo, 3, direccionesEscapeValidas, 2, direccionVertical)) {
     Serial.println("\t\tCon todo obstaculizado por delante no se dirige a izquierda o derecha hacia atrás");
     return;
   }
@@ -321,7 +321,7 @@ boolean TestCoche::comprobarSincronizacionMotores(Coche &coche) {
 }
 
 bool TestCoche::establecerObstaculo(Coche &coche, PosicionChasisHorizontal posicionChasisHorizontal, PosicionChasisVertical posicionChasisVertical, long distancia) {
- SensorUltraSonidos * sensorUS = coche.getSensorUltraSonidos(posicionChasisHorizontal, posicionChasisVertical);
+ SensorUltraSonidos * sensorUS = coche.getUnidadDeteccionObstaculos()->getSensorUltraSonidos(posicionChasisHorizontal, posicionChasisVertical);
 
   if (sensorUS == NULL) {
     Serial.println("No se encuentra el sensor");

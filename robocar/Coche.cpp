@@ -12,10 +12,12 @@ SistemaNavegacion * Coche::getSistemaNavegacion() {
   return &_sistemaNavegacion;
 }
 
-void Coche::inicializar() {
-  for (int i = 0; i < NUMERO_SENSORES_US; i++)
-    _sensoresUS[i].inicializar();
+UnidadDeteccionObstaculos * Coche::getUnidadDeteccionObstaculos() {
+  return &_unidadDeteccionObstaculos;
+}
 
+void Coche::inicializar() {
+  _unidadDeteccionObstaculos.inicializar();
   _sistemaNavegacion.inicializar();
 }
 
@@ -25,9 +27,15 @@ void Coche::reaccionar(Orden orden) {
   tratarObstaculos();
 }
 
+boolean Coche::estaEvitandoObstaculo() {
+  return _estadoPrevioObstaculo != NULL;
+}
+
 void Coche::tratarObstaculos() {
+  _unidadDeteccionObstaculos.escanearObstaculos(); // primero realiza un ciclo de detección de obstáculos
+  
   if (estaEvitandoObstaculo()) {
-    if (!hayObstaculo(_estadoPrevioObstaculo->getDireccionVertical())) {
+    if (!_unidadDeteccionObstaculos.hayObstaculo(_estadoPrevioObstaculo->getDireccionVertical())) {
       #ifdef LOG
           Serial.println("\t\tHa desaparecido el obstáculo en la dirección de avance original");
       #endif    
@@ -39,13 +47,8 @@ void Coche::tratarObstaculos() {
     }
   }
   
-  if (hayObstaculo(_estadoActual.getDireccionVertical())) {
-    #ifdef LOG
-        Serial.print("\t\tObstáculo detectado en la dirección: ");
-        Serial.println(direccionesMovimientoVertical[static_cast<int>(_estadoActual.getDireccionVertical())]);
-    #endif    
+  if (_unidadDeteccionObstaculos.hayObstaculo(_estadoActual.getDireccionVertical()))
     evitarObstaculo(); 
-  }
 }
 
 void Coche::evitarObstaculo() {
@@ -57,10 +60,16 @@ void Coche::evitarObstaculo() {
     _estadoPrevioObstaculo->copiar(_estadoActual);
   }
   
-  DireccionMovimientoHorizontal direccionEscapeHorizontal;
+  DireccionMovimientoHorizontal direccionEscapeHorizontal = _estadoActual.getDireccionHorizontal();
 
-  if (!encontrarDireccionEscape(direccionEscapeHorizontal, _estadoActual.getDireccionVertical()))
-    direccionEscapeHorizontal = DireccionMovimientoHorizontal::Derecha; // si no encuentra salida, gira a la derecha hasta que lo haga // TODO parar si gira 360 grados
+  if (!_unidadDeteccionObstaculos.encontrarDireccionEscape(direccionEscapeHorizontal, _estadoActual.getDireccionVertical())) {
+#ifdef LOG
+    Serial.print("\t\tNo hay salida"); 
+#endif  
+    pararMotores(); // para los motores para evitar el choque
+    _estadoOrdenado.copiar(_estadoActual);
+    return;
+  }
   
 #ifdef LOG
   Serial.print("\t\tDirección de escape horizontal: "); Serial.println(direccionesMovimientoHorizontal[static_cast<int>(direccionEscapeHorizontal)]); 
@@ -68,44 +77,6 @@ void Coche::evitarObstaculo() {
 
   _estadoOrdenado.copiar(_estadoActual);
   _estadoOrdenado.setDireccionHorizontal(direccionEscapeHorizontal); // en la siguiente iteración se cambiará la dirección
-}
-
-boolean Coche::encontrarDireccionEscape(DireccionMovimientoHorizontal& direccionEscape, DireccionMovimientoVertical direccionMovimientoVertical, bool evitarRecta = false) {
-  int indiceSensorEscape = -1;
-  long distancia = 0;
-  long distanciaSensor = 0;
-  bool rectaLibre = false;
-
-  for (int i = 0; i < NUMERO_SENSORES_US; i++) {
-    if (_sensoresUS[i].getDireccionMovimientoVertical() != direccionMovimientoVertical)
-      continue;
-
-    distanciaSensor = _sensoresUS[i].obtenerDistanciaObstaculo(DISTANCIA_SEGURIDAD); // amplía la dirección chequeada para encontrar la mejor ruta de escape
-
-    if (distanciaSensor > DISTANCIA_SEGURIDAD) {
-      if (_sensoresUS[i].getDireccionMovimientoHorizontal() == DireccionMovimientoHorizontal::Recta) {
-        rectaLibre = true;
-        continue;    
-      }
-
-      if (distanciaSensor >= distancia) {
-        distancia = distanciaSensor;
-        indiceSensorEscape = i;
-      }
-    }
-  }
-
-  if (indiceSensorEscape >= 0) { // ha encontrado una dirección
-    direccionEscape = _sensoresUS[indiceSensorEscape].getDireccionMovimientoHorizontal(); // los giros tienen preferencia para evitar comportamiento errático
-    return true;
-  } 
-  
-  if (rectaLibre && !evitarRecta) {
-    direccionEscape = DireccionMovimientoHorizontal::Recta;
-    return true;
-  }
-  
-  return false; // no hay escapatoria en la dirección de marcha
 }
 
 void Coche::actualizarEstado() {
@@ -175,18 +146,6 @@ void Coche::pararMotoresPorReversion() {
 #endif
 }
 
-boolean Coche::hayObstaculo(DireccionMovimientoVertical direccionVertical) {  
-  for (int i = 0; i < NUMERO_SENSORES_US; i++)
-    if (_sensoresUS[i].hayObstaculo(direccionVertical))
-      return true;
-    
-  return false;
-}
-
-boolean Coche::estaEvitandoObstaculo() {
-  return _estadoPrevioObstaculo != NULL;
-}
-
 #ifdef LOG
 
 void Coche::print() {
@@ -209,15 +168,10 @@ void Coche::reset() {
   _estadoActual.reset();
   _estadoOrdenado.reset();  
   // sensores de ultrasonidos
-  resetObstaculos();
+  _unidadDeteccionObstaculos.reset();
   // motores
   for (int i = 0; i < NUMERO_MOTORES; i++)
     _motores[i].reset();
-}
-
-void Coche::resetObstaculos() {
-  for (int i = 0; i < NUMERO_SENSORES_US; i++)
-    _sensoresUS[i].setDistanciaObstaculo(DISTANCIA_SEGURIDAD + 1);  
 }
 
 int Coche::comprobarSincronizacionMotores() {
@@ -228,25 +182,6 @@ int Coche::comprobarSincronizacionMotores() {
   return 0;
 }
 
-
-SensorUltraSonidos * Coche::getSensorUltraSonidos(PosicionChasisHorizontal posicionChasisHorizontal, PosicionChasisVertical posicionChasisVertical) {
-  for (int i = 0; i < NUMERO_SENSORES_US; i++)
-    if (_sensoresUS[i].getPosicionChasisHorizontal() == posicionChasisHorizontal &&
-        _sensoresUS[i].getPosicionChasisVertical() == posicionChasisVertical)
-      return &_sensoresUS[i];
-
-  return NULL;
-}
-
-int Coche::getNumeroSensoresUltraSonidos(PosicionChasisVertical posicionChasisVertical) {
-  int resultado = 0;
-  
-  for (int i = 0; i < NUMERO_SENSORES_US; i++)
-    if (_sensoresUS[i].getPosicionChasisVertical() == posicionChasisVertical)
-      resultado++;
-
-  return resultado;
-}
 #endif
 
 
