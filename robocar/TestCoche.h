@@ -14,11 +14,13 @@ class TestCoche {
     void testIrAdelante(Coche &coche, ControlRemoto &controlRemoto);
     void testIrAtras(Coche &coche, ControlRemoto &controlRemoto);
     void testEvitarObstaculo(Coche &coche, ControlRemoto &controlRemoto, DireccionMovimientoVertical direccionVertical);
+    void testColision(Coche &coche, ControlRemoto &controlRemoto);
 
     void inicializar(Coche &coche, ControlRemoto &controlRemoto);
     void iniciarMovimientoHaciaAdelante(Coche &coche, ControlRemoto &controlRemoto);
     bool comprobarSincronizacionMotores(Coche &coche);
     bool establecerObstaculo(Coche &coche, PosicionChasisHorizontal posicionChasisHorizontal, PosicionChasisVertical posicionChasisVertical, long distancia);
+    bool establecerPuntoColision(Coche &coche, PosicionChasisHorizontal posicionChasisHorizontal, PosicionChasisVertical posicionChasisVertical);
     bool evitarObstaculo(Coche &coche, ControlRemoto &controlRemoto, 
                                 DireccionMovimientoVertical direccionVerticalAvance,
                                 PosicionChasisVertical posicionVerticalConObstaculo, 

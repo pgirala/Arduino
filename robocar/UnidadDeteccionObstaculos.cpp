@@ -27,14 +27,31 @@ boolean UnidadDeteccionObstaculos::hayObstaculo(DireccionMovimientoVertical dire
   return false;
 }
 
+boolean UnidadDeteccionObstaculos::hayColision(DireccionMovimientoVertical direccionVertical) {  
+  for (int i = 0; i < NUMERO_SENSORES_US; i++)
+    if (_sensoresUS[i].hayColision(direccionVertical))
+      return true;
+    
+  return false;
+}
+
 boolean UnidadDeteccionObstaculos::encontrarDireccionEscape(DireccionMovimientoHorizontal& direccionEscape, DireccionMovimientoVertical direccionMovimientoVertical, bool evitarRecta = true) {
+  boolean direccionEncontrada = false;
+  
   // primero intenta encontrar una dirección de escape sin obstáculos
-  if (encontrarDireccionEscape(direccionEscape, direccionMovimientoVertical, DISTANCIA_PERIMETRO_SEGURIDAD, evitarRecta))
-    return true;
+  direccionEncontrada = (encontrarDireccionEscape(direccionEscape, direccionMovimientoVertical, DISTANCIA_PERIMETRO_SEGURIDAD, evitarRecta));
+    
   // si no hay, intenta encontrar una dirección de escape a la que, al menos, pueda girar sin chocarse (no hay desplazamiento en vertical)
-  if (encontrarDireccionEscape(direccionEscape, direccionMovimientoVertical, DISTANCIA_MINIMA_ESCAPE, evitarRecta))
-    return true;  
-  return false; // no hay escape, con lo que se recomienda parar
+  //if (!direccionEncontrada) 
+  //  direccionEncontrada = encontrarDireccionEscape(direccionEscape, direccionMovimientoVertical, DISTANCIA_MINIMA_ESCAPE, evitarRecta));
+    
+  // si ha encontrado una dirección de escape que no sea recta tiene que comprobar en la parte diametralmente opuesta del coche puede girar
+  //if (direccionEncontrada && direccionEscape != DireccionMovimientoHorizontal::Recta) {
+  //   SensorUltrasonidos * sensorUS = obtenerSensorDiametralmenteOpuesto(direccionEscape, direccionMovimientoVertical);
+  //   direccionEncontrada = (sensorUS->getDistanciaObstaculo() > DISTANCIA_MINIMA_ESCAPE) && 
+  //}
+  
+  return direccionEncontrada; // no hay escape, con lo que se recomienda parar
 }
 
 boolean UnidadDeteccionObstaculos::encontrarDireccionEscape(DireccionMovimientoHorizontal& direccionEscape, DireccionMovimientoVertical direccionMovimientoVertical, long distanciaPerimetro, bool evitarRecta = true) {  

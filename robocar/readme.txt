@@ -9,10 +9,11 @@ Herramientas necesarias:
 - Modelo físico: fritzing.org
 
 Componentes necesarios:
-- Arduino Mega 2560 (o compatible). Dos, una instalada en el coche y otra conectada al IDE para desarrollar y hacer pruebas.
+- Arduino Mega 2560 (o compatible). 2, una instalada en el coche y otra conectada al IDE para desarrollar y hacer pruebas.
 - Motor shield para cuatro motores DC https://diotronic.com/producte.aspx?nom=arduino-motor-servo-stepper&referencia=27406 (clon del original Adafruit v1)
 - Chasis YIKESHU 4WD Smart Motor Robot.
 - Sensores ultrasonidos HC-SR04. 4 (3 frontales y 1 trasero).
+- Microrruptor con palanca y rodillo. 6, una por si falla cada sensor de ultrasonidos.
 - Sensor de infrarrojos Velleman IO 1838 37.9 khz y mando.
 - Cables (varios tamaños y conectores: macho-macho, macho-hembra).
 - Pequeñas placas de pruebas de 55 pines (Velleman Hobby set of mini breadbroads).
@@ -20,6 +21,7 @@ Componentes necesarios:
 - Baterías de litio recargables EBL 4 unidades 18650 B2300mAh 3.7V de baja autodescarga.
 - Cargador de baterías para cargar 1-4 baterías de litio 18650 EBL 996 
 - Opcional: lápiz de pintura conductiva "BARE conductive electric paint" de 10 ml (evita soldaduras)
+- Opcional: Componente 74HC10 con puertas NAND de tres entradas. 2, una por cada grupo de 3 microrruptores. Permitiría usar solo dos pines de interrupciones para detectar choque frontal o trasero. En la versión inicial la detección del choque es por software.
 
 Próximas acciones:
 
@@ -34,9 +36,7 @@ Próximas acciones:
 			- Conexiones con alguna herramienta que permita realizar diagramas físicos.
 
 - Evolución del proyecto:
-	- Mejorar el algoritmo para evitar obstáculos:
-		- Permitir, en casos extremos, el avance hacia adelante (cuando no sea posible girar en ningún lado, es decir, el giro tiene preferencia).
-		- Ante imposibilidad de avance, ir hacia atrás y encontrar otra vía.
+	- Incorporar detectores de final de recorrido por si los ultrasonidos fallan.
 	- Incorporar fotointerruptores (uno por motor) y giróscopos para permitir que el coche conozca su ubicación y por dónde se ha movido. Posibles utilidades:
 		- Calibración automática de motores.
 		- Evitar obstáculos y retornar a la dirección que se llevaba.

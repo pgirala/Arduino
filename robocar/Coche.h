@@ -37,6 +37,7 @@ class Coche {
     void actualizarEstado();
     void tratarObstaculos();
     bool estaEvitandoObstaculo();
+    void tratarColision();
   public:
     void inicializar();
     void reaccionar(Orden orden);

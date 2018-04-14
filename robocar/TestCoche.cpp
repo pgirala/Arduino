@@ -11,6 +11,7 @@ void TestCoche::ejecutar(Coche &coche, ControlRemoto &controlRemoto) {
   testIrAtras(coche, controlRemoto);
   testEvitarObstaculo(coche, controlRemoto, DireccionMovimientoVertical::Adelante); 
   testEvitarObstaculo(coche, controlRemoto, DireccionMovimientoVertical::Atras);
+  testColision(coche, controlRemoto);
 }
 
 void TestCoche::testParar(Coche &coche, ControlRemoto &controlRemoto) {
@@ -146,6 +147,31 @@ void TestCoche::testIrAtras(Coche &coche, ControlRemoto &controlRemoto) {
     Serial.println("El coche ha cambiado de sentido de marcha");
   else if (coche.getEstadoActual().getDireccionHorizontal() != DireccionMovimientoHorizontal::Recta)
     Serial.println("El coche no se endereza");
+  else if (comprobarSincronizacionMotores(coche))
+    Serial.println("OK");
+}
+
+void TestCoche::testColision(Coche &coche, ControlRemoto &controlRemoto) {
+  Serial.print("\ttestColision\t");
+
+  iniciarMovimientoHaciaAdelante(coche, controlRemoto);
+
+  DireccionMovimientoVertical direccionVerticalAnterior = coche.getEstadoActual().getDireccionVertical();
+
+  establecerPuntoColision(coche, PosicionChasisHorizontal::Izquierda, PosicionChasisVertical::Delante);
+
+#ifdef LOG
+  Serial.println("Se intenta detectar la colision y decidir la nueva dirección...");
+#endif
+
+  coche.reaccionar(Orden::Indefinida); // detecta el obstáculo y actúa inmediatamente revirtiendo la marcha
+  
+  if (coche.getEstadoActual().getDireccionVerticalOpuesta() != direccionVerticalAnterior
+      || coche.getEstadoActual().getDireccionHorizontal() != DireccionMovimientoHorizontal::Recta)
+#ifdef LOG
+    Serial.println("No se revierte la marcha correctamente");
+#endif
+    return false;  
   else if (comprobarSincronizacionMotores(coche))
     Serial.println("OK");
 }
@@ -321,15 +347,27 @@ boolean TestCoche::comprobarSincronizacionMotores(Coche &coche) {
 }
 
 bool TestCoche::establecerObstaculo(Coche &coche, PosicionChasisHorizontal posicionChasisHorizontal, PosicionChasisVertical posicionChasisVertical, long distancia) {
- SensorUltraSonidos * sensorUS = coche.getUnidadDeteccionObstaculos()->getSensorUltraSonidos(posicionChasisHorizontal, posicionChasisVertical);
+  SensorUltraSonidos * sensorUS = coche.getUnidadDeteccionObstaculos()->getSensorUltraSonidos(posicionChasisHorizontal, posicionChasisVertical);
 
   if (sensorUS == NULL) {
     Serial.println("No se encuentra el sensor");
     return false;
   }
-
+  
   sensorUS->setDistanciaObstaculo(distancia);
   return true;
- }
+}
+
+bool TestCoche::establecerPuntoColision(Coche &coche, PosicionChasisHorizontal posicionChasisHorizontal, PosicionChasisVertical posicionChasisVertical) {
+  SensorUltraSonidos * sensorUS = coche.getUnidadDeteccionObstaculos()->getSensorUltraSonidos(posicionChasisHorizontal, posicionChasisVertical);
+
+  if (sensorUS == NULL) {
+    Serial.println("No se encuentra el sensor");
+    return false;
+  }
+  
+  sensorUS->setColision(true);
+  return true;
+}
 
 #endif

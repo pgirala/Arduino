@@ -4,16 +4,18 @@
  
 #include "SensorUltraSonidos.h"
  
-SensorUltraSonidos::SensorUltraSonidos(PosicionChasisHorizontal posicionHorizontal, PosicionChasisVertical posicionVertical, int echoPin, int triggerPin) : 
+SensorUltraSonidos::SensorUltraSonidos(PosicionChasisHorizontal posicionHorizontal, PosicionChasisVertical posicionVertical, int echoPin, int triggerPin, int choquePin) : 
               _posicionHorizontal (posicionHorizontal),
               _posicionVertical (posicionVertical),
               _echoPin (echoPin),
-              _triggerPin (triggerPin) { 
+              _triggerPin (triggerPin),
+              _choquePin (choquePin) { 
 }
 
 void SensorUltraSonidos::inicializar() {
   pinMode(_triggerPin, OUTPUT); // Ultrasonidos
   pinMode(_echoPin, INPUT);
+  pinMode(_choquePin, INPUT);
   _distanciaObstaculo = 0;
 }
 
@@ -25,6 +27,20 @@ void SensorUltraSonidos::escanearObstaculo() {
   Serial.print(" "); Serial.print(posicionesChasisVertical[static_cast<int>(_posicionVertical)]); 
   Serial.print(" "); Serial.print(_distanciaObstaculo); Serial.print(" cm "); Serial.println(hayObstaculo() ? " (OBSTÁCULO DETECTADO)" : "");
 #endif
+}
+
+boolean SensorUltraSonidos::hayColision(DireccionMovimientoVertical direccionVertical) {
+  if (getDireccionMovimientoVertical() == direccionVertical)
+    return hayColision();
+
+  return false;  
+}
+
+boolean SensorUltraSonidos::hayColision() {
+#ifdef TEST
+  return _colision;
+#endif
+  return digitalRead(_choquePin) == HIGH;
 }
 
 boolean SensorUltraSonidos::hayObstaculo(DireccionMovimientoVertical direccionVertical) 
@@ -95,6 +111,10 @@ long SensorUltraSonidos::getDistanciaObstaculo() {
 
 void SensorUltraSonidos::setDistanciaObstaculo(long distanciaObstaculo) {
   _distanciaObstaculo = distanciaObstaculo;
+}
+
+void SensorUltraSonidos::setColision(bool colision) {
+  _colision = colision;
 }
 
 PosicionChasisHorizontal SensorUltraSonidos::getPosicionChasisHorizontal() {

@@ -32,6 +32,15 @@ boolean Coche::estaEvitandoObstaculo() {
 }
 
 void Coche::tratarObstaculos() {
+  // lo más urgente es detectar choques
+  if (_unidadDeteccionObstaculos.hayColision(_estadoActual.getDireccionVertical())) {
+  #ifdef LOG
+      Serial.println("\t\tSe ha detectado una colisión en la dirección de avance");
+  #endif    
+    tratarColision();
+    return;
+  }
+  // tratamento ordinario de detección de obstáculos
   _unidadDeteccionObstaculos.escanearObstaculos(); // primero realiza un ciclo de detección de obstáculos
   
   if (estaEvitandoObstaculo()) {
@@ -39,7 +48,6 @@ void Coche::tratarObstaculos() {
       #ifdef LOG
           Serial.println("\t\tHa desaparecido el obstáculo en la dirección de avance original");
       #endif    
-      _estadoOrdenado.copiar(*_estadoPrevioObstaculo);
       _estadoOrdenado.copiar(*_estadoPrevioObstaculo);
        delete _estadoPrevioObstaculo;
        _estadoPrevioObstaculo = NULL;
@@ -49,6 +57,21 @@ void Coche::tratarObstaculos() {
   
   if (_unidadDeteccionObstaculos.hayObstaculo(_estadoActual.getDireccionVertical()))
     evitarObstaculo(); 
+}
+
+void Coche::tratarColision() {
+  if (!estaEvitandoObstaculo()) {
+    #ifdef LOG
+        Serial.println("\t\tSe guarda el estado original de marcha");
+    #endif
+    _estadoPrevioObstaculo = new EstadoMarcha();
+    _estadoPrevioObstaculo->copiar(_estadoActual);
+  }
+  // no es posible girar ya que no hay margen por lo que revierte la marcha para liberar el bloqueo por colisión
+  _estadoOrdenado.copiar(_estadoActual);
+  _estadoOrdenado.setDireccionHorizontal(DireccionMovimientoHorizontal::Recta);
+  _estadoOrdenado.setDireccionVertical(_estadoOrdenado.getDireccionVerticalOpuesta());
+  actualizarEstado();
 }
 
 void Coche::evitarObstaculo() {

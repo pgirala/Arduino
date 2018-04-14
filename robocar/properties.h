@@ -1,7 +1,7 @@
 #ifndef properties_h
 #define properties_h
  
-//#define TEST // TEST activa el modo de pruebas software; para trazas de ejecución poner LOG
+#define TEST // TEST activa el modo de pruebas software; para trazas de ejecución poner LOG
 //#define LOG
 
 // control remoto
@@ -13,16 +13,22 @@
 #define NUMERO_SENSORES_US 6
 #define ECHO_PIN_DELANTERO_C 33
 #define TRIGGER_PIN_DELANTERO_C 35
+#define CHOQUE_PIN_DELANTERO_C -1
 #define ECHO_PIN_DELANTERO_I 41
 #define TRIGGER_PIN_DELANTERO_I 43
+#define CHOQUE_PIN_DELANTERO_I -1
 #define ECHO_PIN_DELANTERO_D 45
 #define TRIGGER_PIN_DELANTERO_D 47
+#define CHOQUE_PIN_DELANTERO_D -1
 #define ECHO_PIN_TRASERO_C 37
 #define TRIGGER_PIN_TRASERO_C 39
+#define CHOQUE_PIN_TRASERO_C -1
 #define ECHO_PIN_TRASERO_I 27
 #define TRIGGER_PIN_TRASERO_I 29
+#define CHOQUE_PIN_TRASERO_I -1
 #define ECHO_PIN_TRASERO_D 23
 #define TRIGGER_PIN_TRASERO_D 25
+#define CHOQUE_PIN_TRASERO_D -1
 
 #define ALCANCE_MAXIMO 500 // centímetros
 #define DISTANCIA_PERIMETRO_SEGURIDAD 25 // centímetros
