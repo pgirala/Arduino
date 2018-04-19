@@ -27,7 +27,10 @@ class EstadoMarcha {
     void setDireccionVertical(DireccionMovimientoVertical direccionVertical);
     DireccionMovimientoVertical getDireccionVertical();
 
-    DireccionMovimientoVertical getDireccionVerticalOpuesta();    
+    static DireccionMovimientoVertical getDireccionVerticalOpuesta(DireccionMovimientoVertical direccionVertical);
+    static DireccionMovimientoHorizontal getDireccionHorizontalOpuesta(DireccionMovimientoHorizontal direccionHorizontal);
+
+    DireccionMovimientoVertical getDireccionVerticalOpuesta(); 
 
     void actualizar(Orden orden);
 

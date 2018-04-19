@@ -39,19 +39,27 @@ boolean UnidadDeteccionObstaculos::encontrarDireccionEscape(DireccionMovimientoH
   boolean direccionEncontrada = false;
   
   // primero intenta encontrar una dirección de escape sin obstáculos
-  direccionEncontrada = (encontrarDireccionEscape(direccionEscape, direccionMovimientoVertical, DISTANCIA_PERIMETRO_SEGURIDAD, evitarRecta));
+  direccionEncontrada = encontrarDireccionEscape(direccionEscape, direccionMovimientoVertical, DISTANCIA_PERIMETRO_SEGURIDAD, evitarRecta);
     
   // si no hay, intenta encontrar una dirección de escape a la que, al menos, pueda girar sin chocarse (no hay desplazamiento en vertical)
-  //if (!direccionEncontrada) 
-  //  direccionEncontrada = encontrarDireccionEscape(direccionEscape, direccionMovimientoVertical, DISTANCIA_MINIMA_ESCAPE, evitarRecta));
+  if (!direccionEncontrada) 
+    direccionEncontrada = encontrarDireccionEscape(direccionEscape, direccionMovimientoVertical, DISTANCIA_MINIMA_ESCAPE, evitarRecta);
     
   // si ha encontrado una dirección de escape que no sea recta tiene que comprobar en la parte diametralmente opuesta del coche puede girar
-  //if (direccionEncontrada && direccionEscape != DireccionMovimientoHorizontal::Recta) {
-  //   SensorUltrasonidos * sensorUS = obtenerSensorDiametralmenteOpuesto(direccionEscape, direccionMovimientoVertical);
-  //   direccionEncontrada = (sensorUS->getDistanciaObstaculo() > DISTANCIA_MINIMA_ESCAPE) && 
-  //}
+  if (direccionEncontrada && direccionEscape != DireccionMovimientoHorizontal::Recta) {
+     SensorUltraSonidos * sensorUS = obtenerSensorDiametralmenteOpuesto(direccionEscape, direccionMovimientoVertical);
+     direccionEncontrada = (sensorUS->getDistanciaObstaculo() > DISTANCIA_MINIMA_ESCAPE) && !(sensorUS->hayColision());
+  }
   
   return direccionEncontrada; // no hay escape, con lo que se recomienda parar
+}
+
+SensorUltraSonidos * UnidadDeteccionObstaculos::obtenerSensorDiametralmenteOpuesto(DireccionMovimientoHorizontal direccionHorizontal, DireccionMovimientoVertical direccionVertical) {
+  for (int i = 0; i < NUMERO_SENSORES_US; i++)
+    if (_sensoresUS[i].getDireccionMovimientoHorizontal() == EstadoMarcha::getDireccionHorizontalOpuesta(direccionHorizontal) && _sensoresUS[i].getDireccionMovimientoVertical() == EstadoMarcha::getDireccionVerticalOpuesta(direccionVertical))
+      return &_sensoresUS[i];
+    
+  return NULL;
 }
 
 boolean UnidadDeteccionObstaculos::encontrarDireccionEscape(DireccionMovimientoHorizontal& direccionEscape, DireccionMovimientoVertical direccionMovimientoVertical, long distanciaPerimetro, bool evitarRecta = true) {  

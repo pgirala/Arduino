@@ -7,6 +7,7 @@
 
 #include "comun.h"
 #include "SensorUltrasonidos.h"
+#include "EstadoMarcha.h"
 
 class UnidadDeteccionObstaculos {
   private:
@@ -18,6 +19,7 @@ class UnidadDeteccionObstaculos {
                                                            SensorUltraSonidos(PosicionChasisHorizontal::Izquierda, PosicionChasisVertical::Detras, ECHO_PIN_TRASERO_I, TRIGGER_PIN_TRASERO_I, CHOQUE_PIN_TRASERO_I),
                                                            SensorUltraSonidos(PosicionChasisHorizontal::Derecha, PosicionChasisVertical::Detras, ECHO_PIN_TRASERO_D, TRIGGER_PIN_TRASERO_D, CHOQUE_PIN_TRASERO_D)};
     bool encontrarDireccionEscape(DireccionMovimientoHorizontal& direccionEscape, DireccionMovimientoVertical direccionMovimientoVertical, long distanciaPerimetro, bool evitarRecta = true);
+    SensorUltraSonidos * obtenerSensorDiametralmenteOpuesto(DireccionMovimientoHorizontal direccionHorizontal, DireccionMovimientoVertical direccionVertical);
   public:
     void inicializar();
     void escanearObstaculos();

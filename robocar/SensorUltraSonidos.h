@@ -19,7 +19,6 @@ class SensorUltraSonidos {
     #endif
     long _distanciaObstaculo;
     bool hayObstaculo();
-    bool hayColision();
     long obtenerDistanciaObstaculo(long distanciaMaxima);
   public:
     SensorUltraSonidos(PosicionChasisHorizontal posicionHorizontal, PosicionChasisVertical posicionVertical, int echoPin, int triggerPin, int choquePin);
@@ -29,6 +28,7 @@ class SensorUltraSonidos {
     DireccionMovimientoVertical getDireccionMovimientoVertical();
     long getDistanciaObstaculo();
     bool hayObstaculo(DireccionMovimientoVertical direccionVertical);
+    bool hayColision();
     bool hayColision(DireccionMovimientoVertical direccionVertical);
     #ifdef TEST
       void setDistanciaObstaculo(long distanciaObstaculo);

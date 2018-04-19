@@ -167,12 +167,12 @@ void TestCoche::testColision(Coche &coche, ControlRemoto &controlRemoto) {
   coche.reaccionar(Orden::Indefinida); // detecta el obstáculo y actúa inmediatamente revirtiendo la marcha
   
   if (coche.getEstadoActual().getDireccionVerticalOpuesta() != direccionVerticalAnterior
-      || coche.getEstadoActual().getDireccionHorizontal() != DireccionMovimientoHorizontal::Recta)
+      || coche.getEstadoActual().getDireccionHorizontal() != DireccionMovimientoHorizontal::Recta) {
 #ifdef LOG
     Serial.println("No se revierte la marcha correctamente");
 #endif
     return false;  
-  else if (comprobarSincronizacionMotores(coche))
+  } else if (comprobarSincronizacionMotores(coche))
     Serial.println("OK");
 }
 

@@ -38,8 +38,22 @@ DireccionMovimientoVertical EstadoMarcha::getDireccionVertical() {
   return _direccionVertical;
 }
 
+static DireccionMovimientoVertical EstadoMarcha::getDireccionVerticalOpuesta(DireccionMovimientoVertical direccionVertical) {
+  return (direccionVertical == DireccionMovimientoVertical::Adelante ? DireccionMovimientoVertical::Atras : DireccionMovimientoVertical::Adelante);
+}
+
+static DireccionMovimientoHorizontal EstadoMarcha::getDireccionHorizontalOpuesta(DireccionMovimientoHorizontal direccionHorizontal) {
+  if (direccionHorizontal == DireccionMovimientoHorizontal::Izquierda)
+    return DireccionMovimientoHorizontal::Derecha;
+
+  if (direccionHorizontal == DireccionMovimientoHorizontal::Derecha)
+    return DireccionMovimientoHorizontal::Izquierda;
+    
+  return direccionHorizontal;
+}
+
 DireccionMovimientoVertical EstadoMarcha::getDireccionVerticalOpuesta() {
-  return (getDireccionVertical() == DireccionMovimientoVertical::Adelante ? DireccionMovimientoVertical::Atras : DireccionMovimientoVertical::Adelante);
+  return EstadoMarcha::getDireccionVerticalOpuesta(getDireccionVertical());
 }
 
 void EstadoMarcha::actualizar(Orden orden) {
