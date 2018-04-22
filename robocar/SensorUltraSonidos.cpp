@@ -40,7 +40,18 @@ boolean SensorUltraSonidos::hayColision() {
 #ifdef TEST
   return _colision;
 #endif
-  return digitalRead(_choquePin) == HIGH;
+
+  boolean resultado = digitalRead(_choquePin) == HIGH;
+#ifdef LOG  
+  if (resultado) {
+    Serial.print("\t\t");
+    Serial.print(posicionesChasisHorizontal[static_cast<int>(_posicionHorizontal)]);
+    Serial.print(" "); Serial.print(posicionesChasisVertical[static_cast<int>(_posicionVertical)]); 
+    Serial.print(" "); Serial.println(" (¡¡¡¡¡¡¡¡¡COLISIÓN!!!!!!!!!)"); 
+    Serial.println("--------------------------------");
+  }
+#endif
+  return resultado;
 }
 
 boolean SensorUltraSonidos::hayObstaculo(DireccionMovimientoVertical direccionVertical) 
