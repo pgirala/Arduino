@@ -68,10 +68,21 @@ void Coche::tratarColision() {
     _estadoPrevioObstaculo->copiar(_estadoActual);
   }
   // no es posible girar ya que no hay margen por lo que revierte la marcha para liberar el bloqueo por colisión
+  DireccionMovimientoVertical direccionOriginalChoque = _estadoActual.getDireccionVertical();
   _estadoOrdenado.copiar(_estadoActual);
   _estadoOrdenado.setDireccionHorizontal(DireccionMovimientoHorizontal::Recta);
   _estadoOrdenado.setDireccionVertical(_estadoOrdenado.getDireccionVerticalOpuesta());
   actualizarEstado();
+  // se queda en este estado hasta que no se libere de la colisión o detecte otra en el otro sentido, en cuyo caso se para
+  while (_unidadDeteccionObstaculos.hayColision(direccionOriginalChoque))
+    if (_unidadDeteccionObstaculos.hayColision(_estadoActual.getDireccionVertical())) {
+      #ifdef LOG
+          Serial.print("\t\t¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡Obstáculos en las dos direcciones de avance!!!!!!!!!!!!!!!!!!!!!!"); 
+      #endif  
+      pararMotores(); // para los motores para evitar el choque
+      _estadoOrdenado.copiar(_estadoActual);
+      return;      
+    }
 }
 
 void Coche::evitarObstaculo() {

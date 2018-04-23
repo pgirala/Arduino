@@ -11,7 +11,7 @@ void UnidadDeteccionObstaculos::inicializar() {
 }
 
 void UnidadDeteccionObstaculos::escanearObstaculos() {
-  #ifdef LOG
+  #ifdef LOG_EXTRA
   Serial.println("\tSituación de la unidad de detección de obstáculos: ");  
   #endif
 

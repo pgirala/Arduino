@@ -21,7 +21,7 @@ void SensorUltraSonidos::inicializar() {
 
 void SensorUltraSonidos::escanearObstaculo() {
   _distanciaObstaculo = obtenerDistanciaObstaculo(DISTANCIA_PERIMETRO_SEGURIDAD + 5);
-#ifdef LOG  
+#ifdef LOG_EXTRA
   Serial.print("\t\t");
   Serial.print(posicionesChasisHorizontal[static_cast<int>(_posicionHorizontal)]);
   Serial.print(" "); Serial.print(posicionesChasisVertical[static_cast<int>(_posicionVertical)]); 
@@ -83,6 +83,7 @@ long SensorUltraSonidos::obtenerDistanciaObstaculo(long distanciaMaxima) {
    distanceCm = _distanciaObstaculo;
 #else
    distanceCm = duration * 10 / 292/ 2;   //convertimos a distancia, en cm
+
 #endif
    delayMicroseconds(ALCANCE_MAXIMO * 292 * 2 / 10); // para que no interfiera con el siguiente sensor
    return (distanceCm == 0 ? DISTANCIA_PERIMETRO_SEGURIDAD + 1 : distanceCm); // si no se ha logrado ninguna lectura se devuelve una distancia que cae fuera del ámbito de detección de obstáculos

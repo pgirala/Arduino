@@ -1,8 +1,9 @@
 #ifndef properties_h
 #define properties_h
  
-//#define TEST // TEST activa el modo de pruebas software; para trazas de ejecución poner LOG
+//#define TEST // TEST activa el modo de pruebas software; para trazas de ejecución poner LOG; para trazas muy detalladas LOG_EXTRA (además de LOG)
 //#define LOG
+//#define LOG_EXTRA
 
 // control remoto
 
@@ -32,7 +33,7 @@
 
 #define ALCANCE_MAXIMO 500 // centímetros
 #define DISTANCIA_PERIMETRO_SEGURIDAD 25 // centímetros
-#define DISTANCIA_MINIMA_ESCAPE 10 // distancia mínima para permitir el escape por esa vía
+#define DISTANCIA_MINIMA_ESCAPE 5 // distancia mínima para permitir el escape por esa vía
 
 // motores
 
