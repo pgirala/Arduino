@@ -31,3 +31,13 @@ double getAngulo() { // ángulo recorrido desde el último reset
   return 0.0;
 }
 
+#ifdef LOG
+
+void UnidadMedicion::print() {
+  for (int i = 0; i < NUMERO_SENSORES_MOVIMIENTO; i++) {
+    Serial.print("\tSensor movimiento "); Serial.print(i + 1); Serial.print(": ");
+    _sensoresMovimiento[i].print();    
+  }
+}
+
+#endif

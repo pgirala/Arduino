@@ -2,7 +2,7 @@
 #define properties_h
  
 //#define TEST // TEST activa el modo de pruebas software; para trazas de ejecución poner LOG; para trazas muy detalladas LOG_EXTRA (además de LOG)
-//#define LOG
+#define LOG
 //#define LOG_EXTRA
 
 // control remoto

@@ -37,3 +37,10 @@ void SensorMovimiento::incrementarContador() {
   _contador++;
 }
 
+#ifdef LOG
+
+void SensorMovimiento::print() {
+  Serial.print("\t\tContador: "); Serial.println(_contador);
+}
+
+#endif

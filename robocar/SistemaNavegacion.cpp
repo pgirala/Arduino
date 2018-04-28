@@ -12,3 +12,12 @@ UnidadMedicion * SistemaNavegacion::getUnidadMedicion() {
   return &_unidadMedicion;
 }
 
+#ifdef LOG
+
+void SistemaNavegacion::print() {
+  Serial.println("\tEstado del sistema de navegación: ");
+  _unidadMedicion.print();
+}
+
+#endif
+

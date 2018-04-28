@@ -185,12 +185,14 @@ void Coche::pararMotoresPorReversion() {
 void Coche::print() {
   Serial.print("\tEstado actual: ");
   _estadoActual.print();
-  Serial.print("\tEstado orden.: ");
+  Serial.print("\tEstado orden: ");
   _estadoOrdenado.print();
   for (int i = 0; i < NUMERO_MOTORES; i++) {
     Serial.print("\tMotor "); Serial.print(i + 1); Serial.print(": ");
     _motores[i].print();    
   }
+  Serial.println("");
+  _sistemaNavegacion.print();
 }
 
 #endif

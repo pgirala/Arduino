@@ -20,6 +20,9 @@ class UnidadMedicion {
     double getDistancia(); // distancia recorrida desde el último reset
     double getAngulo(); // ángulo recorrido desde el último reset
     SensorMovimiento * getSensorMovimiento(PosicionChasisHorizontal posicionChasisHorizontal, PosicionChasisVertical posicionChasisVertical);
+#ifdef LOG
+    void print();
+#endif
 };
 
 #endif

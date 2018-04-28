@@ -21,6 +21,9 @@ class SensorMovimiento {
     void incrementarContador();
     PosicionChasisHorizontal getPosicionChasisHorizontal();
     PosicionChasisVertical getPosicionChasisVertical();
+#ifdef LOG
+    void print();
+#endif
 };
 
 #endif

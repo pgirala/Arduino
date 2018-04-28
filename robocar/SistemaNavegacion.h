@@ -14,6 +14,9 @@ class SistemaNavegacion {
   public:
     void inicializar();
     UnidadMedicion * getUnidadMedicion();
+#ifdef LOG
+    void print();
+#endif
 };
 
 #endif

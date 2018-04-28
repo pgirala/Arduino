@@ -42,10 +42,10 @@ void setup()
   coche.inicializar();
   
   // manejo de interrupciones asociadas a los sensores de movimiento
-  attachInterrupt(SM_PIN_TRASERO_I, actualizarContadorSMTI, RISING);
-  attachInterrupt(SM_PIN_TRASERO_D, actualizarContadorSMTD, RISING);
-  attachInterrupt(SM_PIN_DELANTERO_D, actualizarContadorSMDD, RISING);
-  attachInterrupt(SM_PIN_DELANTERO_I, actualizarContadorSMDI, RISING);
+  attachInterrupt(digitalPinToInterrupt(SM_PIN_TRASERO_I), actualizarContadorSMTI, RISING);
+  attachInterrupt(digitalPinToInterrupt(SM_PIN_TRASERO_D), actualizarContadorSMTD, RISING);
+  attachInterrupt(digitalPinToInterrupt(SM_PIN_DELANTERO_D), actualizarContadorSMDD, RISING);
+  attachInterrupt(digitalPinToInterrupt(SM_PIN_DELANTERO_I), actualizarContadorSMDI, RISING);
   
   Serial.begin(9600);  
 
