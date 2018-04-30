@@ -46,10 +46,20 @@ void setup()
   attachInterrupt(digitalPinToInterrupt(SM_PIN_TRASERO_D), actualizarContadorSMTD, RISING);
   attachInterrupt(digitalPinToInterrupt(SM_PIN_DELANTERO_D), actualizarContadorSMDD, RISING);
   attachInterrupt(digitalPinToInterrupt(SM_PIN_DELANTERO_I), actualizarContadorSMDI, RISING);
-  
+
   Serial.begin(9600);  
 
   while (! Serial);
+  
+  // chequeo básico
+  if (!coche.preparado() || !controlRemoto.preparado()) {
+    while (true) {
+      digitalWrite(LED_BUILTIN, HIGH); // hay un problema, el led se queda parpadeando
+      delay(1000);
+      digitalWrite(LED_BUILTIN, LOW);
+      delay(500);
+    }
+  }
   
   Serial.println("D (aDelante) T (aTrás) + (acelerar) - (frenar) I (Izquierda) R (deRecha) E (rEcto) P (Pausa /continuar) F (indeFinida) ");
 }

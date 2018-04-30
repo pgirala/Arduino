@@ -4,13 +4,32 @@
  
 #include "Motor.h"
 
-Motor::Motor(int numero, PosicionChasisHorizontal posicionHorizontal, PosicionChasisVertical posicionVertical, int ajuste = 0) : 
+Motor::Motor(int numero, PosicionChasisHorizontal posicionHorizontal, PosicionChasisVertical posicionVertical) : 
               _posicionHorizontal (posicionHorizontal), 
-              _posicionVertical (posicionVertical),
-              _ajuste (ajuste) {
+              _posicionVertical (posicionVertical) {
   _motorReal = new AF_DCMotor(numero, MOTOR34_1KHZ);
   _velocidad = 0; // parado
   _sentidoRotacion = SentidoRotacion::Indefinido;
+}
+
+void Motor::calibrar(UnidadMedicion * unidadMedicion) {
+  SensorMovimiento * sensorMovimiento = unidadMedicion->getSensorMovimiento(_posicionHorizontal, _posicionVertical);
+  
+  if (sensorMovimiento == NULL)
+    return;
+
+  long contadorInicial = sensorMovimiento->getContador();
+  _ajuste = 0;
+  parar();
+  
+  while (_ajuste < VELOCIDAD_MAXIMA_MOTOR && sensorMovimiento->getContador() > contadorInicial + RADIOS_RUEDA) {
+    setSentidoRotacion(SentidoRotacion::Directo);
+    _ajuste += INCREMENTO_VELOCIDAD;
+    setVelocidad(INCREMENTO_VELOCIDAD);
+    delay(200); // espera para ver si se mueve al menos una vuelta de rueda
+    parar();
+  }
+
 }
 
 void Motor::setSentidoRotacion(SentidoRotacion sentidoRotacion) {

@@ -7,7 +7,13 @@
 void UnidadDeteccionObstaculos::inicializar() {
   for (int i = 0; i < NUMERO_SENSORES_US; i++)
     _sensoresUS[i].inicializar();
+}
 
+boolean UnidadDeteccionObstaculos::preparada() {
+  for (int i = 0; i < NUMERO_SENSORES_US; i++)
+    if (!_sensoresUS[i].preparado())
+      return false;
+  return true;
 }
 
 void UnidadDeteccionObstaculos::escanearObstaculos() {

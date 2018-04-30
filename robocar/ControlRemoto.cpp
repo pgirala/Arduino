@@ -12,6 +12,10 @@ void ControlRemoto::inicializar() {
   _receptorIR->enableIRIn(); // Start the IR receiver
 }
 
+boolean ControlRemoto::preparado() {
+  return _receptorIR != NULL;
+}
+
 Orden ControlRemoto::obtenerOrden(int key) {
   Orden orden = Orden::Indefinida;
   

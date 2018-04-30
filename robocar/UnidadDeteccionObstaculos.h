@@ -22,6 +22,7 @@ class UnidadDeteccionObstaculos {
     SensorUltraSonidos * obtenerSensorDiametralmenteOpuesto(DireccionMovimientoHorizontal direccionHorizontal, DireccionMovimientoVertical direccionVertical);
   public:
     void inicializar();
+    boolean preparada();
     void escanearObstaculos();
     bool hayObstaculo(DireccionMovimientoVertical direccionVertical);
     bool hayColision(DireccionMovimientoVertical direccionVertical);

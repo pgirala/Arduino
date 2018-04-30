@@ -16,6 +16,7 @@ class SensorMovimiento {
   public:
     SensorMovimiento(PosicionChasisHorizontal posicionHorizontal, PosicionChasisVertical posicionVertical, int pin);
     void inicializar();
+    boolean preparado();
     void reset(); // pone a cero el contador interno
     long getContador();
     void incrementarContador();

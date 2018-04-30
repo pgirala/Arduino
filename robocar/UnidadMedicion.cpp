@@ -9,6 +9,13 @@ void UnidadMedicion::inicializar() {
     _sensoresMovimiento[i].inicializar();
 }
 
+boolean UnidadMedicion::preparada() {
+  for (int i = 0; i < NUMERO_SENSORES_MOVIMIENTO; i++)
+    if (!_sensoresMovimiento[i].preparado())
+      return false;
+  return true;
+}
+
 void UnidadMedicion::reset() {
   for (int i = 0; i < NUMERO_SENSORES_MOVIMIENTO; i++)
     _sensoresMovimiento[i].reset();

@@ -19,6 +19,10 @@ void SensorUltraSonidos::inicializar() {
   _distanciaObstaculo = 0;
 }
 
+boolean SensorUltraSonidos::preparado() {
+   return medirEco(1000) > 0;
+}
+
 void SensorUltraSonidos::escanearObstaculo() {
   _distanciaObstaculo = obtenerDistanciaObstaculo(DISTANCIA_PERIMETRO_SEGURIDAD + 5);
 #ifdef LOG_EXTRA
@@ -68,6 +72,16 @@ boolean SensorUltraSonidos::hayObstaculo()
   return (cm > 0 and cm <= DISTANCIA_PERIMETRO_SEGURIDAD); // se ha encontrado un obstáculo en el área de control
 }
 
+long SensorUltraSonidos::medirEco(long distanciaMaxima) {
+   digitalWrite(_triggerPin, LOW);  //para generar un pulso limpio ponemos a LOW 4us
+   delayMicroseconds(4);
+   digitalWrite(_triggerPin, HIGH);  //generamos Trigger (disparo) de 10us
+   delayMicroseconds(10);
+   digitalWrite(_triggerPin, LOW);
+
+   return pulseIn(_echoPin, HIGH, distanciaMaxima * 292 * 2 / 10);  //medimos el tiempo entre pulsos, en microsegundos evitando distancias superiores a la de seguridad
+}
+
 long SensorUltraSonidos::obtenerDistanciaObstaculo(long distanciaMaxima) {
    long duration, distanceCm;
    
@@ -77,8 +91,7 @@ long SensorUltraSonidos::obtenerDistanciaObstaculo(long distanciaMaxima) {
    delayMicroseconds(10);
    digitalWrite(_triggerPin, LOW);
 
-   duration = pulseIn(_echoPin, HIGH, distanciaMaxima * 292 * 2 / 10);  //medimos el tiempo entre pulsos, en microsegundos evitando distancias superiores a la de seguridad
-
+   duration = medirEco(distanciaMaxima);
 #ifdef TEST
    distanceCm = _distanciaObstaculo;
 #else

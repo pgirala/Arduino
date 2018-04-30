@@ -16,6 +16,7 @@ class UnidadMedicion {
                                                                         SensorMovimiento(PosicionChasisHorizontal::Derecha, PosicionChasisVertical::Detras, SM_PIN_TRASERO_D)};
   public:
     void inicializar();
+    boolean preparada();
     void reset();
     double getDistancia(); // distancia recorrida desde el último reset
     double getAngulo(); // ángulo recorrido desde el último reset

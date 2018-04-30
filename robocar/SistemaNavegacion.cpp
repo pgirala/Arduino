@@ -8,6 +8,14 @@ void SistemaNavegacion::inicializar() {
   _unidadMedicion.inicializar();
 }
 
+boolean SistemaNavegacion::preparado() {
+  return _unidadMedicion.preparada();
+}
+
+void SistemaNavegacion::reset() {
+  _unidadMedicion.reset();
+}
+
 UnidadMedicion * SistemaNavegacion::getUnidadMedicion() {
   return &_unidadMedicion;
 }

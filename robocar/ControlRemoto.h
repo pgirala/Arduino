@@ -31,6 +31,7 @@ class ControlRemoto {
   public:
     ControlRemoto(int pin);
     void inicializar();
+    boolean preparado();
     Orden obtenerOrden(int key);
     Orden obtenerOrden();
 #ifdef TEST

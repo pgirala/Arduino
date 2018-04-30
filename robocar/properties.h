@@ -2,7 +2,7 @@
 #define properties_h
  
 //#define TEST // TEST activa el modo de pruebas software; para trazas de ejecución poner LOG; para trazas muy detalladas LOG_EXTRA (además de LOG)
-#define LOG
+//#define LOG
 //#define LOG_EXTRA
 
 // control remoto
@@ -41,12 +41,6 @@
 #define TIEMPO_PROTECCION_REVERSION 100 // milisegundos
 #define VELOCIDAD_MAXIMA_MOTOR 200
 
-// equilibrado de la velocidad de los motores
-#define AJUSTE_MOTOR_TRASERO_IZQUIERDO 80
-#define AJUSTE_MOTOR_TRASERO_DERECHO 85
-#define AJUSTE_MOTOR_DELANTERO_DERECHO 90
-#define AJUSTE_MOTOR_DELANTERO_IZQUIERDO 95
-
 // movimiento
 
 #define INCREMENTO_VELOCIDAD 10
@@ -59,5 +53,6 @@
 #define SM_PIN_TRASERO_D 20
 #define SM_PIN_DELANTERO_D 19
 #define SM_PIN_DELANTERO_I 18
+#define RADIOS_RUEDA 12 // TODO comprobar el valor real
 
 #endif

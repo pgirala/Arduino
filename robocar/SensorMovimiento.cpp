@@ -15,6 +15,10 @@ void SensorMovimiento::inicializar() {
   reset();
 }
 
+boolean SensorMovimiento::preparado() {
+  return _contador > 0; // debe realizarse tras una parada de los motores, un reset de los sensores y un encendido de los motores.
+}
+
 // Movimiento
 
 void SensorMovimiento::reset() {

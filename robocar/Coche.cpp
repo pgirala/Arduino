@@ -19,6 +19,33 @@ UnidadDeteccionObstaculos * Coche::getUnidadDeteccionObstaculos() {
 void Coche::inicializar() {
   _unidadDeteccionObstaculos.inicializar();
   _sistemaNavegacion.inicializar();
+  calibrarMotores();
+}
+
+void Coche::calibrarMotores() {
+  for (int i = 0; i < NUMERO_MOTORES; i++) {
+    _motores[i].calibrar(_sistemaNavegacion.getUnidadMedicion());
+  }
+}
+
+boolean Coche::preparado() {
+  if (! _unidadDeteccionObstaculos.preparada())
+    return false;
+    
+  _sistemaNavegacion.reset();
+
+  reaccionar(Orden::Acelerar);
+
+  delay(500);
+
+  reaccionar(Orden::Parar);
+  
+  if (!_sistemaNavegacion.preparado())
+    return false;
+
+  _sistemaNavegacion.reset();
+
+  return true;
 }
 
 void Coche::reaccionar(Orden orden) {

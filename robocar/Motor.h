@@ -8,6 +8,8 @@
 #include "comun.h"
 
 #include <AFMotor.h>
+#include "UnidadMedicion.h"
+#include "SensorMovimiento.h"
 
 class Motor {
   private:
@@ -29,7 +31,7 @@ class Motor {
     static SentidoRotacion obtenerSentidoRotacionContrario(SentidoRotacion sentidoRotacion);
     static int obtenerSentidoRealRotacion(SentidoRotacion sentidoRotacion);
   public:
-    Motor(int numero, PosicionChasisHorizontal posicionHorizontal, PosicionChasisVertical posicionVertical, int ajuste = 0);
+    Motor(int numero, PosicionChasisHorizontal posicionHorizontal, PosicionChasisVertical posicionVertical);
   
     void setSentidoRotacion(SentidoRotacion sentidoRotacion);
     SentidoRotacion getSentidoRotacion();
@@ -40,6 +42,8 @@ class Motor {
     int getVelocidad();
 
     void parar();
+
+    void calibrar(UnidadMedicion * unidadMedicion);
 
 #ifdef LOG
     void print();

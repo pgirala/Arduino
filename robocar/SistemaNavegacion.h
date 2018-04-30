@@ -13,6 +13,8 @@ class SistemaNavegacion {
     UnidadMedicion _unidadMedicion;
   public:
     void inicializar();
+    boolean preparado();
+    void reset();
     UnidadMedicion * getUnidadMedicion();
 #ifdef LOG
     void print();
