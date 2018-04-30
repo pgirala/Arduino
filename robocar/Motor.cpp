@@ -15,20 +15,28 @@ Motor::Motor(int numero, PosicionChasisHorizontal posicionHorizontal, PosicionCh
 void Motor::calibrar(UnidadMedicion * unidadMedicion) {
   SensorMovimiento * sensorMovimiento = unidadMedicion->getSensorMovimiento(_posicionHorizontal, _posicionVertical);
   
-  if (sensorMovimiento == NULL)
+  if (sensorMovimiento == NULL) {
+#ifdef LOG
+    Serial.print("\tNo hay sensor de movimiento ");
+#endif
     return;
+  }
 
   long contadorInicial = sensorMovimiento->getContador();
   _ajuste = 0;
   parar();
-  
-  while (_ajuste < VELOCIDAD_MAXIMA_MOTOR && sensorMovimiento->getContador() > contadorInicial + RADIOS_RUEDA) {
+
+  while ((_ajuste < VELOCIDAD_MAXIMA_MOTOR) && (sensorMovimiento->getContador() < contadorInicial + RADIOS_RUEDA)) {
     setSentidoRotacion(SentidoRotacion::Directo);
     _ajuste += INCREMENTO_VELOCIDAD;
     setVelocidad(INCREMENTO_VELOCIDAD);
     delay(200); // espera para ver si se mueve al menos una vuelta de rueda
     parar();
   }
+
+#ifdef LOG
+    Serial.print(" ajuste "); Serial.print(_ajuste);
+#endif
 
 }
 

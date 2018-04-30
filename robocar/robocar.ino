@@ -38,30 +38,43 @@ void setup()
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, LOW);    // desactiva el led de prueba que, en caso contrario, quedaría encendido
 
-  controlRemoto.inicializar();
-  coche.inicializar();
-  
+  Serial.begin(9600);  
+
+  while (! Serial);
+
   // manejo de interrupciones asociadas a los sensores de movimiento
   attachInterrupt(digitalPinToInterrupt(SM_PIN_TRASERO_I), actualizarContadorSMTI, RISING);
   attachInterrupt(digitalPinToInterrupt(SM_PIN_TRASERO_D), actualizarContadorSMTD, RISING);
   attachInterrupt(digitalPinToInterrupt(SM_PIN_DELANTERO_D), actualizarContadorSMDD, RISING);
   attachInterrupt(digitalPinToInterrupt(SM_PIN_DELANTERO_I), actualizarContadorSMDI, RISING);
 
-  Serial.begin(9600);  
-
-  while (! Serial);
+  controlRemoto.inicializar();
+  coche.inicializar();
   
+  chequear();
+  
+  Serial.println("D (aDelante) T (aTrás) + (acelerar) - (frenar) I (Izquierda) R (deRecha) E (rEcto) P (Pausa /continuar) F (indeFinida) ");
+}
+
+void chequear() {
+#ifdef LOG
+  Serial.println(">>> Chequeo...");
+#endif
   // chequeo básico
   if (!coche.preparado() || !controlRemoto.preparado()) {
+#ifdef LOG
+    Serial.println(">>> Chequeo fallido.");
+#endif
     while (true) {
       digitalWrite(LED_BUILTIN, HIGH); // hay un problema, el led se queda parpadeando
       delay(1000);
       digitalWrite(LED_BUILTIN, LOW);
       delay(500);
     }
-  }
-  
-  Serial.println("D (aDelante) T (aTrás) + (acelerar) - (frenar) I (Izquierda) R (deRecha) E (rEcto) P (Pausa /continuar) F (indeFinida) ");
+  }  
+#ifdef LOG
+    Serial.println(">>> Chequeo OK.");
+#endif
 }
 
 void loop()

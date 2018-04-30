@@ -53,6 +53,6 @@
 #define SM_PIN_TRASERO_D 20
 #define SM_PIN_DELANTERO_D 19
 #define SM_PIN_DELANTERO_I 18
-#define RADIOS_RUEDA 12 // TODO comprobar el valor real
+#define RADIOS_RUEDA 20
 
 #endif

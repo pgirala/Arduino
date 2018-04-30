@@ -23,8 +23,14 @@ void Coche::inicializar() {
 }
 
 void Coche::calibrarMotores() {
+#ifdef LOG
+    Serial.println("Calibración de motores");
+#endif
   for (int i = 0; i < NUMERO_MOTORES; i++) {
+#ifdef LOG
+    Serial.print("\tMotor "); Serial.print(i + 1); Serial.print(": ");
     _motores[i].calibrar(_sistemaNavegacion.getUnidadMedicion());
+#endif
   }
 }
 
@@ -36,7 +42,7 @@ boolean Coche::preparado() {
 
   reaccionar(Orden::Acelerar);
 
-  delay(500);
+  delay(200);
 
   reaccionar(Orden::Parar);
   
