@@ -44,6 +44,7 @@ class Motor {
     void parar();
 
     void calibrar(UnidadMedicion * unidadMedicion);
+    void sincronizar(UnidadMedicion * unidadMedicion);
 
 #ifdef LOG
     void print();

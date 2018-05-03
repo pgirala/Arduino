@@ -13,6 +13,8 @@ class SensorMovimiento {
     PosicionChasisVertical _posicionVertical; // delante o detrás
     int _pin;
     volatile long _contador;
+    boolean _contandoParcialmente;
+    long _cuentaParcial;
   public:
     SensorMovimiento(PosicionChasisHorizontal posicionHorizontal, PosicionChasisVertical posicionVertical, int pin);
     void inicializar();
@@ -22,6 +24,9 @@ class SensorMovimiento {
     void incrementarContador();
     PosicionChasisHorizontal getPosicionChasisHorizontal();
     PosicionChasisVertical getPosicionChasisVertical();
+    void iniciarCuentaParcial();
+    void pararCuentaParcial();
+    long getCuentaParcial();
 #ifdef LOG
     void print();
 #endif

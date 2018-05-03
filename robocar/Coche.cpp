@@ -29,9 +29,30 @@ void Coche::calibrarMotores() {
   for (int i = 0; i < NUMERO_MOTORES; i++) {
 #ifdef LOG
     Serial.print("\tMotor "); Serial.print(i + 1); Serial.print(": ");
-    _motores[i].calibrar(_sistemaNavegacion.getUnidadMedicion());
 #endif
+    _motores[i].calibrar(_sistemaNavegacion.getUnidadMedicion());
   }
+  iniciarCuentaParcialParaSincronizacion();
+}
+
+void Coche::sincronizarMotores() {
+  if (millis() < _momentoSincronizacion)
+    return; // no ha llegado el momento de la sincronización
+    
+  // establece el punto final de la medición
+  _sistemaNavegacion.getUnidadMedicion()->pararCuentaParcial();
+  
+  // actualiza la velocidad de los motores si hay desviación en lo contado (todos deberían haber tenido la misma cuenta)
+  for (int i = 0; i < NUMERO_MOTORES; i++)
+    _motores[i].sincronizar(_sistemaNavegacion.getUnidadMedicion());
+  
+  // prepara la siguiente medición
+  iniciarCuentaParcialParaSincronizacion();
+}
+
+void Coche::iniciarCuentaParcialParaSincronizacion() {
+  _momentoSincronizacion = millis() + PERIODO_SINCRONIZACION;
+  _sistemaNavegacion.getUnidadMedicion()->iniciarCuentaParcial();
 }
 
 boolean Coche::preparado() {
@@ -148,7 +169,7 @@ void Coche::evitarObstaculo() {
 
 void Coche::actualizarEstado() {
   if (_estadoActual.igual(_estadoOrdenado))
-    return;
+    sincronizarMotores();
 
 #ifdef LOG
 
@@ -187,6 +208,8 @@ void Coche::establecerVelocidadMotores() {
 void Coche::establecerVelocidadMotores(int velocidad) {
   for (int i = 0; i < NUMERO_MOTORES; i++)
     _motores[i].setVelocidad(velocidad);
+    
+  iniciarCuentaParcialParaSincronizacion();
 }
 
 void Coche::pararMotores() {

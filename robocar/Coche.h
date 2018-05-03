@@ -27,6 +27,8 @@ class Coche {
     UnidadDeteccionObstaculos _unidadDeteccionObstaculos;
     // sistema de navegacion
     SistemaNavegacion _sistemaNavegacion;
+    // momento usado para sincronizar motores
+    unsigned long _momentoSincronizacion = PERIODO_SINCRONIZACION;
     
     // acciones dirigidas a los motores
     void establecerDireccion();
@@ -39,6 +41,8 @@ class Coche {
     bool estaEvitandoObstaculo();
     void tratarColision();
     void calibrarMotores();
+    void sincronizarMotores();
+    void iniciarCuentaParcialParaSincronizacion();
   public:
     void inicializar();
     boolean preparado();

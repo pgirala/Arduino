@@ -30,6 +30,25 @@ SensorMovimiento * UnidadMedicion::getSensorMovimiento(PosicionChasisHorizontal 
   return NULL;
 }
 
+void UnidadMedicion::iniciarCuentaParcial() {
+  for (int i = 0; i < NUMERO_SENSORES_MOVIMIENTO; i++)
+    _sensoresMovimiento[i].iniciarCuentaParcial();
+}
+
+void UnidadMedicion::pararCuentaParcial() {
+  for (int i = 0; i < NUMERO_SENSORES_MOVIMIENTO; i++)
+    _sensoresMovimiento[i].pararCuentaParcial();
+}
+
+long UnidadMedicion::getCuentaParcialMedia() {
+  long suma = 0;
+  
+  for (int i = 0; i < NUMERO_SENSORES_MOVIMIENTO; i++)
+    suma += _sensoresMovimiento[i].getCuentaParcial();
+
+  return suma / NUMERO_SENSORES_MOVIMIENTO;
+}
+
 double UnidadMedicion::getDistancia() { // distancia recorrida desde el último reset
   return 0.0;
 }

@@ -40,6 +40,7 @@
 #define NUMERO_MOTORES 4
 #define TIEMPO_PROTECCION_REVERSION 100 // milisegundos
 #define VELOCIDAD_MAXIMA_MOTOR 200
+#define PERIODO_SINCRONIZACION 1000 // milisegundos
 
 // movimiento
 

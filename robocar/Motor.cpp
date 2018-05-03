@@ -28,8 +28,8 @@ void Motor::calibrar(UnidadMedicion * unidadMedicion) {
 
   while ((_ajuste < VELOCIDAD_MAXIMA_MOTOR) && (sensorMovimiento->getContador() < contadorInicial + RADIOS_RUEDA)) {
     setSentidoRotacion(SentidoRotacion::Directo);
-    _ajuste += INCREMENTO_VELOCIDAD;
-    setVelocidad(INCREMENTO_VELOCIDAD);
+    _ajuste += 1;
+    setVelocidad(1); // no se pone 0 porque desactivaría el motor
     delay(200); // espera para ver si se mueve al menos una vuelta de rueda
     parar();
   }
@@ -38,6 +38,24 @@ void Motor::calibrar(UnidadMedicion * unidadMedicion) {
     Serial.print(" ajuste "); Serial.print(_ajuste);
 #endif
 
+}
+
+void Motor::sincronizar(UnidadMedicion * unidadMedicion) {
+  SensorMovimiento * sensorMovimiento = unidadMedicion->getSensorMovimiento(_posicionHorizontal, _posicionVertical);
+  
+  if (sensorMovimiento == NULL) {
+#ifdef LOG
+    Serial.print("\tNo hay sensor de movimiento ");
+#endif
+    return;
+  }
+
+  if (sensorMovimiento->getCuentaParcial() < unidadMedicion->getCuentaParcialMedia())
+    _ajuste += 1;
+  else if (sensorMovimiento->getCuentaParcial() > unidadMedicion->getCuentaParcialMedia())
+    _ajuste -= 1;
+  
+  setVelocidad(getVelocidad()); // refresca la velocidad del motor
 }
 
 void Motor::setSentidoRotacion(SentidoRotacion sentidoRotacion) {
