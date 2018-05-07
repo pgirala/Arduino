@@ -87,7 +87,7 @@ boolean UnidadDeteccionObstaculos::encontrarDireccionEscape(DireccionMovimientoH
       }
 
       if (_sensoresUS[i].getDireccionMovimientoHorizontal() == direccionEscape) // si la dirección que llevaba está libre, sigue con ella
-        return;      
+        return true;      
 
       if (distanciaSensor >= distancia) {
         distancia = distanciaSensor;

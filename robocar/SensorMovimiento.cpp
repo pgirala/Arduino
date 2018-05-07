@@ -65,7 +65,7 @@ void SensorMovimiento::print() {
   if (_contandoParcialmente)
     Serial.println(" sí");
   else
-    Serial.print(" no. Contador parcial "); Serial.println(_contadorParcial);
+    Serial.print(" no. Contador parcial "); Serial.println(_contador);
 }
 
 #endif
