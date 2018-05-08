@@ -45,6 +45,9 @@ boolean SensorUltraSonidos::hayColision() {
   return _colision;
 #endif
 
+  if (_choquePin <= 0) // está desactivado
+    return false;
+
   boolean resultado = digitalRead(_choquePin) == HIGH;
 #ifdef LOG  
   if (resultado) {
