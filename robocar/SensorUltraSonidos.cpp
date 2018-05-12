@@ -20,7 +20,14 @@ void SensorUltraSonidos::inicializar() {
 }
 
 boolean SensorUltraSonidos::preparado() {
-   return medirEco(1000) > 0;
+  long medicion = duracion2distancia(medirEco(1000));
+#ifdef LOG
+  Serial.print("\t\t");
+  Serial.print(posicionesChasisHorizontal[static_cast<int>(_posicionHorizontal)]);
+  Serial.print(" "); Serial.print(posicionesChasisVertical[static_cast<int>(_posicionVertical)]); 
+  Serial.print(" "); Serial.print(medicion); Serial.print(" cm "); Serial.println(medicion <= 0 ? " (NO FUNCIONA)" : "");
+#endif
+   return medicion > 0;
 }
 
 void SensorUltraSonidos::escanearObstaculo() {
@@ -75,6 +82,14 @@ boolean SensorUltraSonidos::hayObstaculo()
   return (cm > 0 and cm <= DISTANCIA_PERIMETRO_SEGURIDAD); // se ha encontrado un obstáculo en el área de control
 }
 
+long SensorUltraSonidos::duracion2distancia(long duracion) {
+  return duracion * 10 / 292/ 2;
+}
+
+long SensorUltraSonidos::distancia2duracion(long distancia) {
+  return distancia * 292 * 2 / 10;
+}
+
 long SensorUltraSonidos::medirEco(long distanciaMaxima) {
    digitalWrite(_triggerPin, LOW);  //para generar un pulso limpio ponemos a LOW 4us
    delayMicroseconds(4);
@@ -82,7 +97,7 @@ long SensorUltraSonidos::medirEco(long distanciaMaxima) {
    delayMicroseconds(10);
    digitalWrite(_triggerPin, LOW);
 
-   return pulseIn(_echoPin, HIGH, distanciaMaxima * 292 * 2 / 10);  //medimos el tiempo entre pulsos, en microsegundos evitando distancias superiores a la de seguridad
+   return pulseIn(_echoPin, HIGH, distancia2duracion(distanciaMaxima));  //medimos el tiempo entre pulsos, en microsegundos evitando distancias superiores a la de seguridad
 }
 
 long SensorUltraSonidos::obtenerDistanciaObstaculo(long distanciaMaxima) {
@@ -98,10 +113,10 @@ long SensorUltraSonidos::obtenerDistanciaObstaculo(long distanciaMaxima) {
 #ifdef TEST
    distanceCm = _distanciaObstaculo;
 #else
-   distanceCm = duration * 10 / 292/ 2;   //convertimos a distancia, en cm
+   distanceCm = duracion2distancia(duration);   //convertimos a distancia, en cm
 
 #endif
-   delayMicroseconds(ALCANCE_MAXIMO * 292 * 2 / 10); // para que no interfiera con el siguiente sensor
+   delayMicroseconds(distancia2duracion(ALCANCE_MAXIMO)); // para que no interfiera con el siguiente sensor
    return (distanceCm == 0 ? DISTANCIA_PERIMETRO_SEGURIDAD + 1 : distanceCm); // si no se ha logrado ninguna lectura se devuelve una distancia que cae fuera del ámbito de detección de obstáculos
 }
 

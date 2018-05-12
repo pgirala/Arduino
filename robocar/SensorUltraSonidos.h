@@ -21,6 +21,8 @@ class SensorUltraSonidos {
     bool hayObstaculo();
     long medirEco(long distanciaMaxima);
     long obtenerDistanciaObstaculo(long distanciaMaxima);
+    long duracion2distancia(long duracion);
+    long distancia2duracion(long distancia);
   public:
     SensorUltraSonidos(PosicionChasisHorizontal posicionHorizontal, PosicionChasisVertical posicionVertical, int echoPin, int triggerPin, int choquePin);
     void inicializar();

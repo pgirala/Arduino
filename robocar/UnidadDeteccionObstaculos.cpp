@@ -10,10 +10,11 @@ void UnidadDeteccionObstaculos::inicializar() {
 }
 
 boolean UnidadDeteccionObstaculos::preparada() {
+  boolean resultado = true;
   for (int i = 0; i < NUMERO_SENSORES_US; i++)
     if (!_sensoresUS[i].preparado())
-      return false;
-  return true;
+      resultado = false;
+  return resultado;
 }
 
 void UnidadDeteccionObstaculos::escanearObstaculos() {
