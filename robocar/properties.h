@@ -7,7 +7,7 @@
 
 // control remoto
 
-#define CR_PIN 31
+#define CR_PIN 53
 
 // ultrasonidos
 
