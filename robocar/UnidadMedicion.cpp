@@ -104,7 +104,7 @@ double UnidadMedicion::getAngulo() { // ángulo recorrido. ATENCIÓN (solo es ú
 
 double UnidadMedicion::calcularDistancia(long s) {
   // s es el número de radios contados
-  return 2 * PI * RADIO_RUEDA * s / RADIOS_RUEDA
+  return 2 * PI * RADIO_RUEDA * s / RADIOS_RUEDA;
 }
 
 double UnidadMedicion::calcularAngulo(long s1, long s2) {

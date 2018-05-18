@@ -50,9 +50,9 @@ void Motor::sincronizar(UnidadMedicion * unidadMedicion) {
     return;
   }
 
-  if (sensorMovimiento->getCuentaParcial() < unidadMedicion->getCuentaParcialMedia())
+  if (sensorMovimiento->getCuenta(CUENTA_SINCRONIZACION) < unidadMedicion->getCuentaMediaSincronizacion())
     _ajuste += 1;
-  else if (sensorMovimiento->getCuentaParcial() > unidadMedicion->getCuentaParcialMedia())
+  else if (sensorMovimiento->getCuenta(CUENTA_SINCRONIZACION) > unidadMedicion->getCuentaMediaSincronizacion())
     _ajuste -= 1;
   
   setVelocidad(getVelocidad()); // refresca la velocidad del motor
