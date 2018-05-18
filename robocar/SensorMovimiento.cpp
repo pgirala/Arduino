@@ -41,20 +41,16 @@ void SensorMovimiento::incrementarContador() {
   _contador++;
 }
 
-void SensorMovimiento::iniciarCuentaParcial() {
-  _contandoParcialmente = true;
-  _cuentaParcial = _contador;
+void SensorMovimiento::iniciarCuenta(int indice) {
+  _cuentasMovimiento[indice].iniciar(_contador);
 }
 
-void SensorMovimiento::pararCuentaParcial() {
-  _contandoParcialmente = false;
-  _cuentaParcial -= _contador;
+void SensorMovimiento::pararCuenta(int indice) {
+  _cuentasMovimiento[indice].parar(_contador);
 }
 
-long SensorMovimiento::getCuentaParcial() {
-  if (_contandoParcialmente)
-    return 0;
-  return _cuentaParcial;
+long SensorMovimiento::getCuenta(int indice) {
+  return _cuentasMovimiento[indice].getCuenta();
 }
 
 #ifdef LOG
@@ -65,7 +61,7 @@ void SensorMovimiento::print() {
   if (_contandoParcialmente)
     Serial.println(" sí");
   else
-    Serial.print(" no. Contador parcial "); Serial.println(_contador);
+    Serial.print(" no. Contador parcial "); Serial.println(_contadorParcial);
 }
 
 #endif

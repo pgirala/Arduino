@@ -7,14 +7,15 @@
 
 #include "comun.h"
 
+#include "CuentaMovimiento.h"
+
 class SensorMovimiento {
   private:
     PosicionChasisHorizontal _posicionHorizontal; // izquierda o derecha
     PosicionChasisVertical _posicionVertical; // delante o detrás
     int _pin;
     volatile long _contador;
-    boolean _contandoParcialmente;
-    long _cuentaParcial;
+    CuentaMovimiento _cuentasMovimiento[NUMERO_CUENTAS_MOVIMIENTO] = {CuentaMovimiento()};
   public:
     SensorMovimiento(PosicionChasisHorizontal posicionHorizontal, PosicionChasisVertical posicionVertical, int pin);
     void inicializar();
@@ -24,9 +25,9 @@ class SensorMovimiento {
     void incrementarContador();
     PosicionChasisHorizontal getPosicionChasisHorizontal();
     PosicionChasisVertical getPosicionChasisVertical();
-    void iniciarCuentaParcial();
-    void pararCuentaParcial();
-    long getCuentaParcial();
+    void iniciarCuenta(int indice);
+    void pararCuenta(int indice);
+    long getCuenta(int indice);
 #ifdef LOG
     void print();
 #endif
