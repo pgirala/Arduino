@@ -28,7 +28,7 @@ void Motor::calibrar(UnidadMedicion * unidadMedicion) {
 
   while ((_ajuste < VELOCIDAD_MAXIMA_MOTOR) && (sensorMovimiento->getContador() < contadorInicial + RADIOS_RUEDA)) {
     setSentidoRotacion(SentidoRotacion::Directo);
-    _ajuste += 1;
+    _ajuste += INCREMENTO_VELOCIDAD;
     setVelocidad(1); // no se pone 0 porque desactivaría el motor
     delay(200); // espera para ver si se mueve al menos una vuelta de rueda
     parar();
