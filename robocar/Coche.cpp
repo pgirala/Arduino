@@ -40,7 +40,7 @@ void Coche::sincronizarMotores() {
     return; // no ha llegado el momento de la sincronización
     
   // establece el punto final de la medición
-  _sistemaNavegacion.getUnidadMedicion()->pararCuentaParcial();
+  _sistemaNavegacion.getUnidadMedicion()->pararCuentaSincronizacion();
   
   // actualiza la velocidad de los motores si hay desviación en lo contado (todos deberían haber tenido la misma cuenta)
   for (int i = 0; i < NUMERO_MOTORES; i++)
@@ -52,7 +52,7 @@ void Coche::sincronizarMotores() {
 
 void Coche::iniciarCuentaParcialParaSincronizacion() {
   _momentoSincronizacion = millis() + PERIODO_SINCRONIZACION;
-  _sistemaNavegacion.getUnidadMedicion()->iniciarCuentaParcial();
+  _sistemaNavegacion.getUnidadMedicion()->iniciarCuentaSincronizacion();
 }
 
 boolean Coche::preparado() {
