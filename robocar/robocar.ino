@@ -1,5 +1,16 @@
 #include "comun.h"
 
+// habilitación de interrupciones diferentes a las de por defecto
+#define EI_NOTINT0
+#define EI_NOTINT1
+#define EI_NOTINT2
+#define EI_NOTINT3
+#define EI_NOTINT4
+#define EI_NOTINT5
+#define EI_NOTINT6
+#define EI_NOTINT7
+#include "EnableInterrupt.h"
+
 #include "Coche.h"
 #include "ControlRemoto.h"
 
@@ -42,9 +53,9 @@ void setup()
 
   while (! Serial);
 
-  // manejo de interrupciones asociadas a los sensores de movimiento
-  attachInterrupt(digitalPinToInterrupt(SM_PIN_TRASERO_I), actualizarContadorSMTI, RISING);
-  attachInterrupt(digitalPinToInterrupt(SM_PIN_TRASERO_D), actualizarContadorSMTD, RISING);
+  // manejo de interrupciones asociadas a los sensores de movimiento; se usan los pines A14 y A15 para no interferir con el protocolo usado por el sensor LIDAR que usa el 20 y 21
+  enableInterrupt(SM_PIN_TRASERO_I, actualizarContadorSMTI, RISING);
+  enableInterrupt(SM_PIN_TRASERO_D, actualizarContadorSMTD, RISING);
   attachInterrupt(digitalPinToInterrupt(SM_PIN_DELANTERO_D), actualizarContadorSMDD, RISING);
   attachInterrupt(digitalPinToInterrupt(SM_PIN_DELANTERO_I), actualizarContadorSMDI, RISING);
 

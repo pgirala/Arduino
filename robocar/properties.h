@@ -56,8 +56,8 @@
 // sensores de movimiento (los PIN se corresponden con las interrupciones INT2, INT3, INT4, INT5 de MEGA 2560 (21, 20, 19, 18)
 
 #define NUMERO_SENSORES_MOVIMIENTO 4
-#define SM_PIN_TRASERO_I 21
-#define SM_PIN_TRASERO_D 20
+#define SM_PIN_TRASERO_I A14  // evita el uso del pin 20 necesario para el LIDAR
+#define SM_PIN_TRASERO_D A15  // idem para el 21
 #define SM_PIN_DELANTERO_D 19
 #define SM_PIN_DELANTERO_I 18
 #define RADIO_RUEDA 5 // TODO medirlo

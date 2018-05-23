@@ -56,12 +56,7 @@ long SensorMovimiento::getCuenta(int indice) {
 #ifdef LOG
 
 void SensorMovimiento::print() {
-  Serial.print("\t\tContador: "); Serial.print(_contador);  
-  Serial.print(" contando parcialmente: ");
-  if (_contandoParcialmente)
-    Serial.println(" sí");
-  else
-    Serial.print(" no. Contador parcial "); Serial.println(_contadorParcial);
+  Serial.print("\t\tContador: "); Serial.println(_contador); 
 }
 
 #endif
