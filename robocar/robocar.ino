@@ -1,5 +1,6 @@
 #include "comun.h"
 
+// tratamiento de interrupciones
 // habilitación de interrupciones diferentes a las de por defecto
 #define EI_NOTINT0
 #define EI_NOTINT1
@@ -10,6 +11,20 @@
 #define EI_NOTINT6
 #define EI_NOTINT7
 #include "EnableInterrupt.h"
+
+// tratamiento de threads
+#include <Thread.h>
+#include <ThreadController.h>
+ThreadController controladorHilos = ThreadController();
+Thread hiloGiroUnidadDeteccionObstaculos = Thread();
+
+// servo de la unidad de detección de obstáculos
+
+#include "ServoMotor.h"
+
+ServoMotor servoMotor;
+
+// coche
 
 #include "Coche.h"
 #include "ControlRemoto.h"
@@ -60,10 +75,17 @@ void setup()
   attachInterrupt(digitalPinToInterrupt(SM_PIN_DELANTERO_I), actualizarContadorSMDI, RISING);
 
   controlRemoto.inicializar();
+  servoMotor.inicializar();
   coche.inicializar();
   
-  chequear();
+  // configurar hilo de detección de obstaculos
+  hiloGiroUnidadDeteccionObstaculos.onRun(girarUnidadDeteccionObstaculos);
+  hiloGiroUnidadDeteccionObstaculos.setInterval(150);
+  controladorHilos.add(&hiloGiroUnidadDeteccionObstaculos);
   
+  // chequeo final
+  chequear();
+
   Serial.println("D (aDelante) T (aTrás) + (acelerar) - (frenar) I (Izquierda) R (deRecha) E (rEcto) P (Pausa /continuar) F (indeFinida) ");
 }
 
@@ -90,6 +112,7 @@ void chequear() {
 
 void loop()
 {
+  controladorHilos.run();
   coche.reaccionar(recibirOrden());
 }
 
@@ -159,5 +182,10 @@ void actualizarContadorSMDD() {
 
 void actualizarContadorSMDI() {
   coche.getSistemaNavegacion()->getUnidadMedicion()->getSensorMovimiento(PosicionChasisHorizontal::Izquierda, PosicionChasisVertical::Delante)->incrementarContador();
+}
+
+// manejadores de eventos asociados a hilos
+void girarUnidadDeteccionObstaculos() {
+  servoMotor.girar();
 }
 
