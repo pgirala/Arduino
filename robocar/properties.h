@@ -9,6 +9,10 @@
 
 #define CR_PIN 53
 
+// servo
+#define SERVO_MOTOR_PIN 9 // asocia el servo al pin 9 (SERVO_2 en el Motor Drive Shield)
+#define PASO_SERVO_MOTOR 10
+
 // ultrasonidos
 
 #define NUMERO_SENSORES_US 6

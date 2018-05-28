@@ -9,14 +9,15 @@ ServoMotor::ServoMotor() {
 }
 
 void ServoMotor::inicializar() {
+  _servoReal->attach(SERVO_MOTOR_PIN);  
   setAngulo(90);
-  setSentidoRotacion(SentidoRotacion::Directo);
+  setSentidoRotacion(SentidoRotacion::Directo); -
 }
 
 void ServoMotor::setAngulo(int angulo) {
   _angulo = angulo;
-  
   _servoReal->write(_angulo);
+  delay(90);
 }
 
 int ServoMotor::getAngulo() {
@@ -24,11 +25,18 @@ int ServoMotor::getAngulo() {
 }
 
 void ServoMotor::girar() {
-  int nuevoAngulo = getAngulo() + (getSentidoRotacion() == SentidoRotacion::Reverso ? -1 : 1);
-  if (nuevoAngulo < 0)
+  int nuevoAngulo = getAngulo() + (getSentidoRotacion() == SentidoRotacion::Reverso ? -1 : 1) * PASO_SERVO_MOTOR;
+  
+  if (nuevoAngulo < 0) {
     nuevoAngulo = 0;
-  if (nuevoAngulo > 180)
+    setSentidoRotacion(SentidoRotacion::Directo);
+  }
+  
+  if (nuevoAngulo > 180) {
     nuevoAngulo = 180;
+    setSentidoRotacion(SentidoRotacion::Reverso);
+  }
+
   setAngulo(nuevoAngulo);
 }
 
